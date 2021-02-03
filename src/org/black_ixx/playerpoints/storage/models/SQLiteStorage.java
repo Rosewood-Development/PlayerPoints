@@ -1,9 +1,5 @@
 package org.black_ixx.playerpoints.storage.models;
 
-import lib.PatPeter.SQLibrary.SQLite;
-import org.black_ixx.playerpoints.PlayerPoints;
-import org.black_ixx.playerpoints.storage.DatabaseStorage;
-
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -11,9 +7,14 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.logging.Level;
 
+import lib.PatPeter.SQLibrary.SQLite;
+
+import org.black_ixx.playerpoints.PlayerPoints;
+import org.black_ixx.playerpoints.storage.DatabaseStorage;
+
 /**
  * Storage handler for SQLite.
- *
+ * 
  * @author Mitsugaru
  */
 public class SQLiteStorage extends DatabaseStorage {
@@ -25,8 +26,9 @@ public class SQLiteStorage extends DatabaseStorage {
 
     /**
      * Constructor.
-     *
-     * @param plugin - PlayerPoints instance.
+     * 
+     * @param plugin
+     *            - PlayerPoints instance.
      */
     public SQLiteStorage(PlayerPoints plugin) {
         super(plugin);
@@ -34,7 +36,7 @@ public class SQLiteStorage extends DatabaseStorage {
                 .getAbsolutePath(), "storage");
         sqlite.open();
         SetupQueries("playerpoints");
-        if (!sqlite.isTable("playerpoints")) {
+        if(!sqlite.isTable("playerpoints")) {
             build();
         }
     }
@@ -42,7 +44,7 @@ public class SQLiteStorage extends DatabaseStorage {
     @Override
     public int getPoints(String name) {
         int points = 0;
-        if (name == null || name.equals("")) {
+        if(name == null || name.equals("")) {
             return points;
         }
         PreparedStatement statement = null;
@@ -51,10 +53,10 @@ public class SQLiteStorage extends DatabaseStorage {
             statement = sqlite.prepare(GET_POINTS);
             statement.setString(1, name);
             result = sqlite.query(statement);
-            if (result != null && result.next()) {
+            if(result != null && result.next()) {
                 points = result.getInt("points");
             }
-        } catch (SQLException e) {
+        } catch(SQLException e) {
             plugin.getLogger().log(Level.SEVERE,
                     "Could not create getter statement.", e);
         } finally {
@@ -66,14 +68,14 @@ public class SQLiteStorage extends DatabaseStorage {
     @Override
     public boolean setPoints(String name, int points) {
         boolean value = false;
-        if (name == null || name.equals("")) {
-            return false;
+        if(name == null || name.equals("")) {
+            return value;
         }
         final boolean exists = playerEntryExists(name);
         PreparedStatement statement = null;
         ResultSet result = null;
         try {
-            if (exists) {
+            if(exists) {
                 statement = sqlite.prepare(UPDATE_PLAYER);
             } else {
                 statement = sqlite.prepare(INSERT_PLAYER);
@@ -82,7 +84,7 @@ public class SQLiteStorage extends DatabaseStorage {
             statement.setString(2, name);
             result = sqlite.query(statement);
             value = true;
-        } catch (SQLException e) {
+        } catch(SQLException e) {
             plugin.getLogger().log(Level.SEVERE,
                     "Could not create setter statement.", e);
         } finally {
@@ -94,7 +96,7 @@ public class SQLiteStorage extends DatabaseStorage {
     @Override
     public boolean playerEntryExists(String name) {
         boolean has = false;
-        if (name == null || name.equals("")) {
+        if(name == null || name.equals("")) {
             return false;
         }
         PreparedStatement statement = null;
@@ -103,10 +105,10 @@ public class SQLiteStorage extends DatabaseStorage {
             statement = sqlite.prepare(GET_POINTS);
             statement.setString(1, name);
             result = sqlite.query(statement);
-            if (result.next()) {
+            if(result.next()) {
                 has = true;
             }
-        } catch (SQLException e) {
+        } catch(SQLException e) {
             plugin.getLogger().log(Level.SEVERE,
                     "Could not create player check statement.", e);
         } finally {
@@ -114,11 +116,11 @@ public class SQLiteStorage extends DatabaseStorage {
         }
         return has;
     }
-
+    
     @Override
     public boolean removePlayer(String id) {
         boolean deleted = false;
-        if (id == null || id.equals("")) {
+        if(id == null || id.equals("")) {
             return false;
         }
         PreparedStatement statement = null;
@@ -128,7 +130,7 @@ public class SQLiteStorage extends DatabaseStorage {
             statement.setString(1, id);
             result = sqlite.query(statement);
             deleted = true;
-        } catch (SQLException e) {
+        } catch(SQLException e) {
             plugin.getLogger().log(Level.SEVERE,
                     "Could not create player remove statement.", e);
         } finally {
@@ -147,13 +149,13 @@ public class SQLiteStorage extends DatabaseStorage {
             statement = sqlite.prepare(GET_PLAYERS);
             result = sqlite.query(statement);
 
-            while (result.next()) {
+            while(result.next()) {
                 String name = result.getString("playername");
-                if (name != null) {
+                if(name != null) {
                     players.add(name);
                 }
             }
-        } catch (SQLException e) {
+        } catch(SQLException e) {
             plugin.getLogger().log(Level.SEVERE,
                     "Could not create get players statement.", e);
         } finally {
@@ -170,7 +172,7 @@ public class SQLiteStorage extends DatabaseStorage {
         try {
             sqlite.query("DROP TABLE playerpoints;");
             success = true;
-        } catch (SQLException e) {
+        } catch(SQLException e) {
             plugin.getLogger().log(Level.SEVERE,
                     "Could not drop SQLite table.", e);
         }
@@ -184,10 +186,11 @@ public class SQLiteStorage extends DatabaseStorage {
         try {
             sqlite.query("CREATE TABLE playerpoints (id INTEGER PRIMARY KEY, playername varchar(36) NOT NULL, points INTEGER NOT NULL, UNIQUE(playername));");
             success = true;
-        } catch (SQLException e) {
+        } catch(SQLException e) {
             plugin.getLogger().log(Level.SEVERE,
                     "Could not create SQLite table.", e);
         }
         return success;
     }
+
 }

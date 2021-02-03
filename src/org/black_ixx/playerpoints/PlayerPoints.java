@@ -130,10 +130,8 @@ public class PlayerPoints extends JavaPlugin {
      * Unregister a module from the API.
      *
      * @param clazz - Class of the instance.
-     * @return Module that was removed from the API. Returns null if no instance
-     * of the module is registered with the API.
      */
-    public <T extends IModule> T deregisterModuleForClass(Class<T> clazz) {
+    public <T extends IModule> void deregisterModuleForClass(Class<T> clazz) {
         // Check arguments.
         if (clazz == null) {
             throw new IllegalArgumentException("Class cannot be null");
@@ -143,7 +141,6 @@ public class PlayerPoints extends JavaPlugin {
         if (module != null) {
             module.closing();
         }
-        return module;
     }
 
     /**

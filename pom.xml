@@ -1,10 +1,10 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<!-- Project properties. -->
 	<groupId>org.black_ixx</groupId>
 	<artifactId>PlayerPoints</artifactId>
-	<version>2.1.5-SNAPSHOT</version>
+	<version>2.1.9</version>
 	<name>PlayerPoints</name>
 	<description>Player points system for Bukkit</description>
 	<!-- Source code management URL. -->
@@ -80,30 +80,6 @@
 			<version>7.1</version>
 		</dependency>
 	</dependencies>
-	<!-- Reporting -->
-	<reporting>
-		<plugins>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>findbugs-maven-plugin</artifactId>
-				<version>2.3.2</version>
-				<configuration>
-					<effort>Max</effort>
-					<findbugsXmlWithMessages>true</findbugsXmlWithMessages>
-					<xmlOutput>true</xmlOutput>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-pmd-plugin</artifactId>
-				<version>2.7.1</version>
-				<configuration>
-					<minimumTokens>50</minimumTokens>
-					<ignoreIdentifiers>true</ignoreIdentifiers>
-				</configuration>
-			</plugin>
-		</plugins>
-	</reporting>
 	<!-- Build. -->
 	<build>
 		<defaultGoal>compile package</defaultGoal>
@@ -123,39 +99,10 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>2.0.2</version>
+				<version>3.7.0</version>
 				<configuration>
-					<source>1.7</source>
-					<target>1.7</target>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-site-plugin</artifactId>
-				<version>3.0-beta-3</version>
-				<configuration>
-					<reportPlugins>
-						<plugin>
-							<groupId>org.codehaus.mojo</groupId>
-							<artifactId>jxr-maven-plugin</artifactId>
-							<version>2.0-beta-1</version>
-						</plugin>
-						<plugin>
-							<groupId>org.apache.maven.plugins</groupId>
-							<artifactId>maven-javadoc-plugin</artifactId>
-							<version>2.7</version>
-							<configuration>
-								<linksource>true</linksource>
-							</configuration>
-							<reportSets>
-								<reportSet>
-									<reports>
-										<report>javadoc</report>
-									</reports>
-								</reportSet>
-							</reportSets>
-						</plugin>
-					</reportPlugins>
+					<source>1.8</source>
+					<target>1.8</target>
 				</configuration>
 			</plugin>
 		</plugins>

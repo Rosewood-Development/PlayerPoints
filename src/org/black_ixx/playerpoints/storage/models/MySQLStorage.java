@@ -27,7 +27,7 @@ public class MySQLStorage extends DatabaseStorage {
     /**
      * Number of attempts to reconnect before completely failing an operation.
      */
-    private int retryLimit;
+    private final int retryLimit;
     /**
      * The table name to use.
      */
@@ -121,7 +121,7 @@ public class MySQLStorage extends DatabaseStorage {
         PreparedStatement statement = null;
         ResultSet result = null;
         try {
-            if (exists) {
+            if(exists) {
                 statement = mysql.prepare(UPDATE_PLAYER);
             } else {
                 statement = mysql.prepare(INSERT_PLAYER);
@@ -142,7 +142,7 @@ public class MySQLStorage extends DatabaseStorage {
             cleanup(result, statement);
         }
         retryCount = 0;
-        if (config.debugDatabase) {
+        if(config.debugDatabase) {
         	plugin.getLogger().info("setPoints() result - " + value);
         }
         return value;
@@ -156,7 +156,7 @@ public class MySQLStorage extends DatabaseStorage {
             if(config.debugDatabase) {
             	plugin.getLogger().info("playerEntryExists() - bad ID");
             }
-            return false;
+            return has;
         }
         if(config.debugDatabase) {
         	plugin.getLogger().info("playerEntryExists("+ id + ")");
@@ -192,7 +192,7 @@ public class MySQLStorage extends DatabaseStorage {
     public boolean removePlayer(String id) {
         boolean deleted = false;
         if(id == null || id.equals("")) {
-            return false;
+            return deleted;
         }
         PreparedStatement statement = null;
         ResultSet result = null;
@@ -225,7 +225,7 @@ public class MySQLStorage extends DatabaseStorage {
 
     @Override
     public Collection<String> getPlayers() {
-        Collection<String> players = new HashSet<>();
+        Collection<String> players = new HashSet<String>();
 
         RootConfig config = plugin.getModuleForClass(RootConfig.class);
         if(config.debugDatabase) {
@@ -325,4 +325,5 @@ public class MySQLStorage extends DatabaseStorage {
         }
         return success;
     }
+
 }
