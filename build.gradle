@@ -1,0 +1,87 @@
+import org.apache.tools.ant.filters.ReplaceTokens
+
+plugins {
+    id 'com.github.johnrengelman.shadow' version '5.1.0'
+    id 'java'
+    id 'maven-publish'
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+compileJava.options.encoding = 'UTF-8'
+group = 'org.black_ixx'
+version = '3.0.0'
+
+repositories {
+    mavenCentral()
+    jcenter()
+
+    maven { url = 'https://repo.rosewooddev.io/repository/public/' }
+    maven { url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
+    maven { url = 'https://oss.sonatype.org/content/repositories/snapshots/' }
+    maven { url = 'http://nexus.hc.to/content/repositories/pub_releases' }
+    maven { url = 'http://repo.extendedclip.com/content/repositories/placeholderapi/' }
+    maven { url = 'https://repo.dakanilabs.com/repository/public' }
+    maven { url = 'https://dl.bintray.com/ichbinjoe/public/' }
+    maven { url = 'http://repo.maven.apache.org/maven2' }
+    maven { url = 'https://jitpack.io' }
+}
+
+dependencies {
+    compile 'dev.rosewood:rosegarden:1.0.5-SNAPSHOT'
+
+    compileOnly 'org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT'
+    compileOnly 'com.github.milkbowl:vault:1.7.3'
+    compileOnly 'com.vexsoftware:nuvotifier-universal:2.6.0'
+    compileOnly 'me.clip:placeholderapi:2.10.9'
+    compileOnly 'org.jetbrains:annotations:16.0.2'
+}
+
+compileJava {
+    options.compilerArgs += ['-parameters']
+    options.fork = true
+    options.forkOptions.executable = 'javac'
+    options.encoding = 'UTF-8'
+}
+
+processResources {
+    from (sourceSets.main.resources.srcDirs) {
+        include '**/*.yml'
+        filter ReplaceTokens, tokens: ["version": project.property("version")]
+    }
+}
+
+shadowJar {
+    archiveClassifier.set(null)
+    minimize()
+
+    relocate('dev.rosewood.rosegarden', 'org.black_ixx.playerpoints.libs.rosegarden')
+}
+
+publishing {
+    publications {
+        shadow(MavenPublication) { publication ->
+            project.shadow.component(publication)
+            artifactId = 'playerpoints'
+            pom {
+                name = 'playerpoints'
+            }
+        }
+    }
+    repositories {
+        if (project.hasProperty('mavenUser') && project.hasProperty('mavenPassword')) {
+            maven {
+                credentials {
+                    username project.mavenUser
+                    password project.mavenPassword
+                }
+
+                def releasesRepoUrl = 'https://repo.rosewooddev.io/repository/public-releases/'
+                def snapshotsRepoUrl = 'https://repo.rosewooddev.io/repository/public-snapshots/'
+                url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+            }
+        }
+    }
+}
+
+build.dependsOn shadowJar

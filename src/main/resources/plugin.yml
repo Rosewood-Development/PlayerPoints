@@ -1,0 +1,56 @@
+name: PlayerPoints
+version: '@version@'
+authors: [Esophose, Black_ixx]
+website: 'https://www.spigotmc.org/resources/playerpoints.80745/'
+description: Player points system for Bukkit servers
+main: org.black_ixx.playerpoints.PlayerPoints
+api-version: '1.13'
+softdepend: [Vault, Votifier, PlaceholderAPI]
+commands:
+  points:
+    aliases: [p]
+    description: Root command for PlayerPoints
+    usage: /points <param>
+permissions:
+  playerpoints.*:
+    description: Gives access to all PlayerPoints commands
+    children:
+      playerpoints.give: true
+      playerpoints.giveall: true
+      playerpoints.take: true
+      playerpoints.look: true
+      playerpoints.pay: true
+      playerpoints.set: true
+      playerpoints.reset: true
+      playerpoints.lead: true
+      playerpoints.reload: true
+  playerpoints.give:
+    description: Gives access to the give command
+    default: op
+  playerpoints.giveall:
+    description: Gives access to the giveall command
+    default: op
+  playerpoints.take:
+    description: Gives access to the take command
+    default: op
+  playerpoints.look:
+    description: Gives access to the look command
+    default: op
+  playerpoints.pay:
+    description: Gives access to the pay command
+    default: op
+  playerpoints.broadcast:
+    description: Gives access to the broadcast command
+    default: op
+  playerpoints.set:
+    description: Gives access to the set command
+    default: op
+  playerpoints.reset:
+    description: Gives access to the reset command
+    default: op
+  playerpoints.lead:
+    description: Gives access to the lead command
+    default: op
+  playerpoints.reload:
+    description: Gives access to the reload command
+    default: op
