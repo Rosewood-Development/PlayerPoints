@@ -5,21 +5,19 @@ import java.util.Collections;
 import java.util.List;
 import org.black_ixx.playerpoints.PlayerPoints;
 import org.black_ixx.playerpoints.manager.LocaleManager;
-import org.black_ixx.playerpoints.permissions.PermissionNode;
 import org.black_ixx.playerpoints.util.PointsUtils;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 
-public class ResetCommand implements PointsCommand {
+public class ResetCommand extends PointsCommand {
+
+    public ResetCommand() {
+        super("reset");
+    }
 
     @Override
     public void execute(PlayerPoints plugin, CommandSender sender, String[] args) {
         LocaleManager localeManager = plugin.getManager(LocaleManager.class);
-        if (!PermissionNode.RESET.check(sender)) {
-            localeManager.sendMessage(sender, "no-permission");
-            return;
-        }
-
         if (args.length < 1) {
             localeManager.sendMessage(sender, "command-reset-usage");
             return;

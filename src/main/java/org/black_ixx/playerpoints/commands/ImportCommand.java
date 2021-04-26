@@ -12,23 +12,21 @@ import org.black_ixx.playerpoints.PlayerPoints;
 import org.black_ixx.playerpoints.manager.DataManager;
 import org.black_ixx.playerpoints.manager.LocaleManager;
 import org.black_ixx.playerpoints.models.SortedPlayer;
-import org.black_ixx.playerpoints.permissions.PermissionNode;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-public class ImportCommand implements PointsCommand {
+public class ImportCommand extends PointsCommand {
+
+    public ImportCommand() {
+        super("import");
+    }
 
     @Override
     public void execute(PlayerPoints plugin, CommandSender sender, String[] args) {
         LocaleManager localeManager = plugin.getManager(LocaleManager.class);
-        if (!PermissionNode.IMPORT.check(sender)) {
-            localeManager.sendMessage(sender, "no-permission");
-            return;
-        }
-
         File file = new File(plugin.getDataFolder(), "storage.yml");
         if (!file.exists()) {
             localeManager.sendMessage(sender, "command-import-no-backup");

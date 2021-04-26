@@ -12,11 +12,11 @@ import org.black_ixx.playerpoints.manager.ConfigurationManager.Setting;
 import org.black_ixx.playerpoints.manager.DataManager;
 import org.black_ixx.playerpoints.manager.LocaleManager;
 import org.black_ixx.playerpoints.models.SortedPlayer;
-import org.black_ixx.playerpoints.permissions.PermissionNode;
 import org.black_ixx.playerpoints.util.PointsUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.permissions.Permissible;
 
 /**
  * Handles the leader board commands.
@@ -42,11 +42,6 @@ public class LeadCommand extends CommandHandler {
     @Override
     public void noArgs(CommandSender sender) {
         LocaleManager localeManager = this.plugin.getManager(LocaleManager.class);
-        if (!PermissionNode.GIVE.check(sender)) {
-            localeManager.sendMessage(sender, "no-permission");
-            return;
-        }
-
         int limit = Setting.LEADERBOARD_PER_PAGE.getInt();
 
         this.plugin.getManager(DataManager.class).getAllPoints().thenAccept(leaders -> {
@@ -121,6 +116,11 @@ public class LeadCommand extends CommandHandler {
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         return args.length == 1 ? Arrays.asList("next", "prev", "1") : Collections.emptyList();
+    }
+
+    @Override
+    public boolean hasPermission(Permissible permissible) {
+        return permissible.hasPermission("playerpoints.lead");
     }
 
 }

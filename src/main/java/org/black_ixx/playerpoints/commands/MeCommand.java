@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.List;
 import org.black_ixx.playerpoints.PlayerPoints;
 import org.black_ixx.playerpoints.manager.LocaleManager;
-import org.black_ixx.playerpoints.permissions.PermissionNode;
 import org.black_ixx.playerpoints.util.PointsUtils;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -15,18 +14,17 @@ import org.bukkit.entity.Player;
  *
  * @author Mitsugaru
  */
-public class MeCommand implements PointsCommand {
+public class MeCommand extends PointsCommand {
+
+    public MeCommand() {
+        super("me");
+    }
 
     @Override
     public void execute(PlayerPoints plugin, CommandSender sender, String[] args) {
         LocaleManager localeManager = plugin.getManager(LocaleManager.class);
         if (!(sender instanceof Player)) {
             localeManager.sendMessage(sender, "no-console");
-            return;
-        }
-
-        if (!PermissionNode.ME.check(sender)) {
-            localeManager.sendMessage(sender, "no-permission");
             return;
         }
 

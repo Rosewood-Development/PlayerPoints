@@ -21,7 +21,7 @@ public class Commander extends CommandHandler {
         super(plugin, "points");
 
         // Register commands.
-        this.registerCommand("help", new HelpCommand());
+        this.registerCommand("help", new HelpCommand(this));
         this.registerCommand("give", new GiveCommand());
         this.registerCommand("giveall", new GiveAllCommand());
         this.registerCommand("take", new TakeCommand());

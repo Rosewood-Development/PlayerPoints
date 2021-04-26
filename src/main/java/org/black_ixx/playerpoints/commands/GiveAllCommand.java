@@ -5,22 +5,20 @@ import java.util.Collections;
 import java.util.List;
 import org.black_ixx.playerpoints.PlayerPoints;
 import org.black_ixx.playerpoints.manager.LocaleManager;
-import org.black_ixx.playerpoints.permissions.PermissionNode;
 import org.black_ixx.playerpoints.util.PointsUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class GiveAllCommand implements PointsCommand {
+public class GiveAllCommand extends PointsCommand {
+
+    public GiveAllCommand() {
+        super("giveall");
+    }
 
     @Override
     public void execute(PlayerPoints plugin, CommandSender sender, String[] args) {
         LocaleManager localeManager = plugin.getManager(LocaleManager.class);
-        if (!PermissionNode.GIVEALL.check(sender)) {
-            localeManager.sendMessage(sender, "no-permission");
-            return;
-        }
-
         if (args.length < 1) {
             localeManager.sendMessage(sender, "command-giveall-usage");
             return;
