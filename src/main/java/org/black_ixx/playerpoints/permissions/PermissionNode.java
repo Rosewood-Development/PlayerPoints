@@ -20,7 +20,9 @@ public enum PermissionNode {
     ME("me"),
     LEAD("lead"),
     RELOAD("reload"),
-    BROADCAST("broadcast");
+    BROADCAST("broadcast"),
+    EXPORT("export"),
+    IMPORT("import");
 
     /**
      * Permission prefix.

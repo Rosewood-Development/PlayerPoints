@@ -55,7 +55,7 @@ public class PlayerPointsVaultLayer implements Economy {
     public String format(double amount) {
         StringBuilder sb = new StringBuilder();
         int points = (int) amount;
-        sb.append(points).append(" ");
+        sb.append(PointsUtils.formatPoints(points)).append(" ");
         if (points == 1) {
             sb.append(this.currencyNameSingular());
         } else {

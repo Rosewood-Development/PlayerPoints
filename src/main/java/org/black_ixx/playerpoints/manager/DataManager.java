@@ -96,6 +96,29 @@ public class DataManager extends AbstractDataManager {
         });
     }
 
+    public CompletableFuture<Void> importData(SortedSet<SortedPlayer> data) {
+        return CompletableFuture.supplyAsync(() -> {
+            this.databaseConnector.connect(connection -> {
+                String purgeQuery = "DELETE FROM " + this.getTablePrefix() + "points";
+                try (Statement statement = connection.createStatement()) {
+                    statement.executeUpdate(purgeQuery);
+                    this.pointsCacheManager.reset();
+                }
+
+                String batchInsert = "INSERT INTO " + this.getTablePrefix() + "points (uuid, points) VALUES (?, ?)";
+                try (PreparedStatement statement = connection.prepareStatement(batchInsert)) {
+                    for (SortedPlayer playerData : data) {
+                        statement.setString(1, playerData.getUniqueId().toString());
+                        statement.setInt(2, playerData.getPoints());
+                        statement.addBatch();
+                    }
+                    statement.executeBatch();
+                }
+            });
+            return null;
+        });
+    }
+
     private void createEntry(UUID playerId, int value) {
         this.databaseConnector.connect(connection -> {
             String insert = "INSERT INTO " + this.getTablePrefix() + "points (uuid, points) VALUES (?, ?)";

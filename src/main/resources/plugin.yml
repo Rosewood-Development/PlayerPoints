@@ -10,7 +10,6 @@ commands:
   points:
     aliases: [p]
     description: Root command for PlayerPoints
-    usage: /points <param>
 permissions:
   playerpoints.*:
     description: Gives access to all PlayerPoints commands
@@ -22,8 +21,12 @@ permissions:
       playerpoints.pay: true
       playerpoints.set: true
       playerpoints.reset: true
+      playerpoints.me: true
       playerpoints.lead: true
       playerpoints.reload: true
+      playerpoints.broadcast: true
+      playerpoints.export: true
+      playerpoints.import: true
   playerpoints.give:
     description: Gives access to the give command
     default: op
@@ -39,18 +42,27 @@ permissions:
   playerpoints.pay:
     description: Gives access to the pay command
     default: op
-  playerpoints.broadcast:
-    description: Gives access to the broadcast command
-    default: op
   playerpoints.set:
     description: Gives access to the set command
     default: op
   playerpoints.reset:
     description: Gives access to the reset command
     default: op
+  playerpoints.me:
+    description: Gives access to the me command
+    default: op
   playerpoints.lead:
     description: Gives access to the lead command
     default: op
   playerpoints.reload:
     description: Gives access to the reload command
+    default: op
+  playerpoints.broadcast:
+    description: Gives access to the broadcast command
+    default: op
+  playerpoints.export:
+    description: Gives access to the export command
+    default: op
+  playerpoints.import:
+    description: Gives access to the import command
     default: op

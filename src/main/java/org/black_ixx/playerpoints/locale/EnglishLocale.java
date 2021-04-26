@@ -33,6 +33,7 @@ public class EnglishLocale implements Locale {
             this.put("invalid-amount", "&cAmount must be a positive whole number.");
             this.put("unknown-player", "&cPlayer could not be found: &b%player%");
             this.put("unknown-command", "&cUnknown command: &b%input%");
+            this.put("votifier-voted", "&eThanks for voting on %service%! &b%amount% &ehas been added to your balance.");
 
             this.put("#3", "Base Command Message");
             this.put("base-command-color", "&e");
@@ -102,8 +103,20 @@ public class EnglishLocale implements Locale {
             this.put("command-reload-usage", "&cUsage: &e/points reload");
             this.put("command-reload-success", "&aConfiguration and locale files were reloaded.");
 
-            this.put("#16", "Votifier Messages");
-            this.put("votifier-voted", "&eThanks for voting on %service%! &b%amount% &ehas been added to your balance.");
+            this.put("#16", "Export Command");
+            this.put("command-export-description", "&8 - &d/points export &7- Exports the data to storage.yml");
+            this.put("command-export-usage", "&cUsage: &e/points export");
+            this.put("command-export-success", "&aSave data has been exported to storage.yml.");
+            this.put("command-export-warning", "&cNotice: A storage.yml file already exists. If you would like to overwrite it, use &b/points export confirm&c.");
+
+            this.put("#17", "Import Command");
+            this.put("command-import-description", "&8 - &d/points import &7- Imports the data from storage.yml");
+            this.put("command-import-usage", "&cUsage: &e/points import");
+            this.put("command-import-success", "&aSave data has been imported from storage.yml.");
+            this.put("command-import-no-backup", "&cUnable to import, storage.yml does not exist. You can generate one with &b/points export &cand use it to transfer data between database types.");
+            this.put("command-import-warning", "&cNotice: This operation will delete all data from the active database and replace it with the contents of storage.yml. " +
+                    "&cThe currently active database type is &b&o&l%type%&c. " +
+                    "&cIf you are absolutely sure about this, use &b/points import confirm&c.");
         }};
     }
 

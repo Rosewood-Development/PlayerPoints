@@ -18,8 +18,11 @@ public class HelpCommand implements PointsCommand {
 
         // Send message for each command the sender can use
         if (PermissionNode.BROADCAST.check(sender)) localeManager.sendSimpleMessage(sender, "command-broadcast-description");
+        if (PermissionNode.EXPORT.check(sender)) localeManager.sendSimpleMessage(sender, "command-export-description");
         if (PermissionNode.GIVE.check(sender)) localeManager.sendSimpleMessage(sender, "command-give-description");
         if (PermissionNode.GIVEALL.check(sender)) localeManager.sendSimpleMessage(sender, "command-giveall-description");
+        localeManager.sendSimpleMessage(sender, "command-help-description");
+        if (PermissionNode.IMPORT.check(sender)) localeManager.sendSimpleMessage(sender, "command-import-description");
         if (PermissionNode.LEAD.check(sender)) localeManager.sendSimpleMessage(sender, "command-lead-description");
         if (PermissionNode.LOOK.check(sender)) localeManager.sendSimpleMessage(sender, "command-look-description");
         if (PermissionNode.ME.check(sender)) localeManager.sendSimpleMessage(sender, "command-me-description");

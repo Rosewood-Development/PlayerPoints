@@ -31,7 +31,7 @@ public class PointsCacheManager extends Manager implements Listener {
 
     @Override
     public void disable() {
-        this.pointsCache.clear();
+        this.reset();
     }
 
     /**
@@ -57,6 +57,13 @@ public class PointsCacheManager extends Manager implements Listener {
      */
     public void updatePoints(UUID playerId, int amount) {
         this.pointsCache.put(playerId, amount);
+    }
+
+    /**
+     * Clears all cached data
+     */
+    public void reset() {
+        this.pointsCache.clear();
     }
 
     @EventHandler
