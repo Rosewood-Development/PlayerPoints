@@ -62,7 +62,7 @@ public class EnglishLocale implements Locale {
 
             this.put("#8", "Look Command");
             this.put("command-look-description", "&8 - &d/points look &7- View a player's points");
-            this.put("command-look-usage", "&cUsage: &e/points look [player]");
+            this.put("command-look-usage", "&cUsage: &e/points look <player>");
             this.put("command-look-success", "&b%player% &ehas &b%amount% &e%currency%.");
 
             this.put("#9", "Pay Command");
