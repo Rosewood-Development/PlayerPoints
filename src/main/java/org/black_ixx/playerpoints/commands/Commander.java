@@ -34,6 +34,7 @@ public class Commander extends CommandHandler {
         this.registerCommand("reload", new ReloadCommand());
         this.registerCommand("export", new ExportCommand());
         this.registerCommand("import", new ImportCommand());
+        this.registerCommand("convert", new ConvertCommand());
 
         // Register handlers
         this.registerHandler(new LeadCommand(plugin));

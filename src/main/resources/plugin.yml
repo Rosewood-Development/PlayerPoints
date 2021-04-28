@@ -5,7 +5,7 @@ website: 'https://www.spigotmc.org/resources/playerpoints.80745/'
 description: Player points system for Bukkit servers
 main: org.black_ixx.playerpoints.PlayerPoints
 api-version: '1.13'
-softdepend: [Vault, Votifier, PlaceholderAPI]
+softdepend: [Vault, Votifier, PlaceholderAPI, TokenManager]
 commands:
   points:
     aliases: [p]

@@ -117,6 +117,16 @@ public class EnglishLocale implements Locale {
             this.put("command-import-warning", "&cNotice: This operation will delete all data from the active database and replace it with the contents of storage.yml. " +
                     "&cThe currently active database type is &b&o&l%type%&c. " +
                     "&cIf you are absolutely sure about this, use &b/points import confirm&c.");
+
+            this.put("#18", "Convert Command");
+            this.put("command-convert-description", "&8 - &d/points convert &7- Loads currency data from another plugin");
+            this.put("command-convert-usage", "&cUsage: &e/points convert <plugin>");
+            this.put("command-convert-invalid", "&b%plugin% &cis not a convertible currency plugin name.");
+            this.put("command-convert-success", "&aCurrency data from &b%plugin% &ahas been converted.");
+            this.put("command-convert-failure", "&cAn error occurred while attempting to convert the data. " +
+                    "Please check your console and report any errors to the PlayerPoints plugin author.");
+            this.put("command-convert-warning", "&cNotice: This operation will delete all data from the active database and replace it with the data from &b%plugin%&c. " +
+                    "&cIf you are absolutely sure about this, use &b/points convert %plugin% confirm&c.");
         }};
     }
 
