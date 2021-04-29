@@ -33,7 +33,7 @@ public class ExportCommand extends PointsCommand {
 
         plugin.getManager(DataManager.class).getAllPoints().thenAccept(data -> {
             FileConfiguration configuration = YamlConfiguration.loadConfiguration(file);
-            ConfigurationSection section = configuration.createSection("Players");
+            ConfigurationSection section = configuration.createSection("Points");
             for (SortedPlayer playerData : data)
                 section.set(playerData.getUniqueId().toString(), playerData.getPoints());
 

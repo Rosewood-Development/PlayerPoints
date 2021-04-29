@@ -70,7 +70,10 @@ public class _1_Create_Tables extends DataMigration {
         if (dataManager.getAllPoints().join().isEmpty() && file.exists() && connector instanceof SQLiteConnector) {
             try {
                 FileConfiguration configuration = YamlConfiguration.loadConfiguration(file);
-                ConfigurationSection section = configuration.getConfigurationSection("Players");
+                ConfigurationSection section = configuration.getConfigurationSection("Points");
+                if (section == null)
+                    section = configuration.getConfigurationSection("Players");
+
                 if (section == null) {
                     plugin.getLogger().warning("Malformed storage.yml file.");
                     return;

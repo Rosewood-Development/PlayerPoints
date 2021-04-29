@@ -41,7 +41,10 @@ public class ImportCommand extends PointsCommand {
 
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             FileConfiguration configuration = YamlConfiguration.loadConfiguration(file);
-            ConfigurationSection section = configuration.getConfigurationSection("Players");
+            ConfigurationSection section = configuration.getConfigurationSection("Points");
+            if (section == null)
+                section = configuration.getConfigurationSection("Players");
+
             if (section == null) {
                 plugin.getLogger().warning("Malformed storage.yml file.");
                 return;
