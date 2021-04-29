@@ -62,14 +62,18 @@ public class PlayerPoints extends RosePlugin {
 
         if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI"))
             new PointsPlaceholderExpansion(this).register();
-
-        PointsUtils.setFormatter(this.getManager(LocaleManager.class).getLocaleMessage("currency-separator"));
     }
 
     @Override
     public void disable() {
         if (this.vaultLayer != null)
             Bukkit.getServicesManager().unregister(Economy.class, this.vaultLayer);
+    }
+
+    @Override
+    public void reload() {
+        super.reload();
+        PointsUtils.setFormatter(this.getManager(LocaleManager.class).getLocaleMessage("currency-separator"));
     }
 
     @Override

@@ -17,17 +17,25 @@ public final class PointsUtils {
     private static NumberFormat formatter = NumberFormat.getInstance();
 
     public static String formatPoints(long points) {
-        return formatter.format(points);
+        if (formatter != null) {
+            return formatter.format(points);
+        } else {
+            return String.valueOf(points);
+        }
     }
 
     public static void setFormatter(String separator) {
         DecimalFormat decimalFormat = new DecimalFormat();
         DecimalFormatSymbols symbols = decimalFormat.getDecimalFormatSymbols();
-        symbols.setGroupingSeparator(!separator.isEmpty() ? separator.charAt(0) : ',');
-        decimalFormat.setDecimalFormatSymbols(symbols);
-        decimalFormat.setGroupingUsed(true);
-        decimalFormat.setGroupingSize(3);
-        formatter = decimalFormat;
+        if (!separator.isEmpty()) {
+            symbols.setGroupingSeparator(separator.charAt(0));
+            decimalFormat.setGroupingUsed(true);
+            decimalFormat.setGroupingSize(3);
+            decimalFormat.setDecimalFormatSymbols(symbols);
+            formatter = decimalFormat;
+        } else {
+            formatter = null;
+        }
     }
 
     /**
