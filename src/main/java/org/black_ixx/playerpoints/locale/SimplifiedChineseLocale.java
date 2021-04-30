@@ -45,41 +45,41 @@ public class SimplifiedChineseLocale implements Locale {
 
             this.put("#5", "给予命令");
             this.put("command-give-description", "&8 - &d/points give &7- 给一名玩家点劵");
-            this.put("command-give-usage", "&c用法: &e/points give <player> <amount>");
+            this.put("command-give-usage", "&c用法: &e/points give <玩家> <数值>");
             this.put("command-give-success", "&b%player% &a被给予了 &b%amount% &e%currency%。");
             this.put("command-give-received", "&e您被给予了 &b%amount% &e%currency%。");
 
             this.put("#6", "给予全体命令");
             this.put("command-giveall-description", "&8 - &d/points giveall &7- 给予所有在线玩家点劵");
-            this.put("command-giveall-usage", "&c用法: &e/points giveall <amount>");
+            this.put("command-giveall-usage", "&c用法: &e/points giveall <数值>");
             this.put("command-giveall-success", "&a已成功给予 &b%amount% &a%currency% 给所有在线玩家。");
 
             this.put("#7", "拿去命令");
             this.put("command-take-description", "&8 - &d/points take &7- 从玩家那取走点劵");
-            this.put("command-take-usage", "&c用法: &e/points take <player> <amount>");
+            this.put("command-take-usage", "&c用法: &e/points take <玩家> <数值>");
             this.put("command-take-success", "&a成功从玩家 &b%player% 那拿走 &b%amount% &a%currency% 。");
             this.put("command-take-lacking-funds", "&b%player% &c没有足够的点劵 %currency% 来被拿走, 所以账户余额已设为 0。");
 
             this.put("#8", "查看命令");
             this.put("command-look-description", "&8 - &d/points look &7- 查看一名玩家的点卷数");
-            this.put("command-look-usage", "&c用法: &e/points look <player>");
+            this.put("command-look-usage", "&c用法: &e/points look <玩家>");
             this.put("command-look-success", "&b%player% &e有 &b%amount% &e%currency%。");
 
             this.put("#9", "转账命令");
             this.put("command-pay-description", "&8 - &d/points pay &7- 给一名玩家转账");
-            this.put("command-pay-usage", "&c用法: &e/points pay <player> <amount>");
+            this.put("command-pay-usage", "&c用法: &e/points pay <玩家> <数值>");
             this.put("command-pay-sent", "&a您向玩家 &b%player% 转账了 %amount% &a%currency%。");
             this.put("command-pay-received", "&e您收到了来自玩家 &b%player% &e的 &b%amount% &e%currency% 。");
             this.put("command-pay-lacking-funds", "&c您没有多于 %currency% 的点劵来那么做。");
 
             this.put("#10", "设置命令");
             this.put("command-set-description", "&8 - &d/points set &7- 设置一名玩家的点劵");
-            this.put("command-set-usage", "&c用法: &e/points set <player> <amount>");
+            this.put("command-set-usage", "&c用法: &e/points set <玩家> <数值>");
             this.put("command-set-success", "&a已设置玩家 &b%player% &a的 %currency% 至 &b%amount%&a。");
 
             this.put("#11", "重置命令");
             this.put("command-reset-description", "&8 - &d/points reset &7- 重置一名玩家的点劵");
-            this.put("command-reset-usage", "&c用法: &e/points reset <player>");
+            this.put("command-reset-usage", "&c用法: &e/points reset <玩家>");
             this.put("command-reset-success", "&a已重置 &b%player% &a的 %currency% 。");
 
             this.put("#12", "自查命令");
@@ -95,7 +95,7 @@ public class SimplifiedChineseLocale implements Locale {
 
             this.put("#14", "广播命令");
             this.put("command-broadcast-description", "&8 - &d/points broadcast &7- 广播一名玩家的点劵");
-            this.put("command-broadcast-usage", "&c用法: &e/points broadcast <player>");
+            this.put("command-broadcast-usage", "&c用法: &e/points broadcast <玩家>");
             this.put("command-broadcast-message", "&b%player% &e有 &b%amount% &e%currency%。");
 
             this.put("#15", "重载命令");
@@ -120,7 +120,7 @@ public class SimplifiedChineseLocale implements Locale {
 
             this.put("#18", "迁移命令");
             this.put("command-convert-description", "&8 - &d/points convert &7- 从另一个插件迁移数据");
-            this.put("command-convert-usage", "&c用法: &e/points convert <plugin>");
+            this.put("command-convert-usage", "&c用法: &e/points convert <插件名称>");
             this.put("command-convert-invalid", "&b%plugin% &c不是一个可转换的插件名。");
             this.put("command-convert-success", "&a来自 &b%plugin% &a的货币数据已被迁移。");
             this.put("command-convert-failure", "&c尝试迁移数据时发生了错误。" +
