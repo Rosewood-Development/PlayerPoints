@@ -4,7 +4,7 @@ import dev.rosewood.rosegarden.locale.Locale;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class EnglishLocale implements Locale {
+public class SimplifiedChineseLocale implements Locale {
 
     @Override
     public String getLocaleName() {
