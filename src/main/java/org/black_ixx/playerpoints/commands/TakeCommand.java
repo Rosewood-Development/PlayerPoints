@@ -48,6 +48,13 @@ public class TakeCommand extends PointsCommand {
 
         plugin.getAPI().takeAsync(player.getUniqueId(), amount).thenAccept(success -> {
             if (success) {
+                // Send message to to taked player
+                if (player.isOnline()) {
+                    localeManager.sendMessage((Player) player, "command-take-taken", StringPlaceholders.builder("amount", PointsUtils.formatPoints(amount))
+                            .addPlaceholder("currency", localeManager.getCurrencyName(amount))
+                            .build());
+                }
+                // Send message to receiver
                 localeManager.sendMessage(sender, "command-take-success", StringPlaceholders.builder("player", player.getName())
                         .addPlaceholder("currency", localeManager.getCurrencyName(amount))
                         .addPlaceholder("amount", PointsUtils.formatPoints(amount))
