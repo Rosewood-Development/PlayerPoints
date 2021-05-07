@@ -25,7 +25,16 @@ public class PointsPlaceholderExpansion extends PlaceholderExpansion {
             return PointsUtils.formatPoints(this.pointsCacheManager.getPoints(player.getUniqueId()));
         }
 
+        if (placeholder.startsWith("player_")) {
+            return getPlayer(placeholder);
+        }
+
         return null;
+    }
+    private String getPlayer(String placeholder) {
+        String playerr = placeholder.split("player_")[1];
+        OfflinePlayer player = Bukkit.getOfflinePlayer(playerr);
+        return PointsUtils.formatPoints(this.pointsCacheManager.getPoints(player.getUniqueId()));
     }
 
     @Override
