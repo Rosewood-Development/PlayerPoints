@@ -58,6 +58,7 @@ public class EnglishLocale implements Locale {
             this.put("command-take-description", "&8 - &d/points take &7- Take points from a player");
             this.put("command-take-usage", "&cUsage: &e/points take <player> <amount>");
             this.put("command-take-success", "&aTook &b%amount% &a%currency% from &b%player%&a.");
+            this.put("command-took-taken", "&b%amount% &e%currency% has been taken.");
             this.put("command-take-lacking-funds", "&b%player% &cdoes not have enough %currency% for that, so their balance was set to 0.");
 
             this.put("#8", "Look Command");
