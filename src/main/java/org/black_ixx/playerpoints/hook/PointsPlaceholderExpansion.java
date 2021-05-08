@@ -21,8 +21,11 @@ public class PointsPlaceholderExpansion extends PlaceholderExpansion {
         if (player == null)
             return null;
 
-        if (placeholder.equalsIgnoreCase("points")) {
-            return PointsUtils.formatPoints(this.pointsCacheManager.getPoints(player.getUniqueId()));
+        switch (placeholder.toLowerCase()) {
+            case "points":
+                return String.valueOf(this.pointsCacheManager.getPoints(player.getUniqueId()));
+            case "points_formatted":
+                return PointsUtils.formatPoints(this.pointsCacheManager.getPoints(player.getUniqueId()));
         }
 
         return null;
