@@ -31,19 +31,21 @@ public class GiveAllCommand extends PointsCommand {
                 return;
             }
 
-            for (Player player : Bukkit.getOnlinePlayers()) {
-                plugin.getAPI().giveAsync(player.getUniqueId(), amount).thenAccept(success -> {
-                    if (success) {
-                        localeManager.sendMessage(player, "command-give-received", StringPlaceholders.builder("amount", PointsUtils.formatPoints(amount))
-                                .addPlaceholder("currency", localeManager.getCurrencyName(amount))
-                                .build());
-                    }
-                });
-            }
+            Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+                for (Player player : Bukkit.getOnlinePlayers()) {
+                    plugin.getAPI().giveAsync(player.getUniqueId(), amount).thenAccept(success -> {
+                        if (success) {
+                            localeManager.sendMessage(player, "command-give-received", StringPlaceholders.builder("amount", PointsUtils.formatPoints(amount))
+                                    .addPlaceholder("currency", localeManager.getCurrencyName(amount))
+                                    .build());
+                        }
+                    });
+                }
 
-            localeManager.sendMessage(sender, "command-giveall-success", StringPlaceholders.builder("amount", PointsUtils.formatPoints(amount))
-                    .addPlaceholder("currency", localeManager.getCurrencyName(amount))
-                    .build());
+                localeManager.sendMessage(sender, "command-giveall-success", StringPlaceholders.builder("amount", PointsUtils.formatPoints(amount))
+                        .addPlaceholder("currency", localeManager.getCurrencyName(amount))
+                        .build());
+            });
         } catch (NumberFormatException e) {
             localeManager.sendMessage(sender, "invalid-amount");
         }

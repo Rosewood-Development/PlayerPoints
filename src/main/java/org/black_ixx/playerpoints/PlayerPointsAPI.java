@@ -6,6 +6,7 @@ import java.util.concurrent.CompletableFuture;
 import org.black_ixx.playerpoints.event.PlayerPointsChangeEvent;
 import org.black_ixx.playerpoints.event.PlayerPointsResetEvent;
 import org.black_ixx.playerpoints.manager.DataManager;
+import org.black_ixx.playerpoints.manager.PointsCacheManager;
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 
@@ -181,11 +182,11 @@ public class PlayerPointsAPI {
      *
      * @param playerId Player UUID
      * @return Points that the player has
-     * @deprecated Use {@link #lookAsync(UUID)} as this will run on the main thread
+     * @deprecated Use {@link #lookAsync(UUID)} as this will use a cached value
      */
     @Deprecated
     public int look(@NotNull UUID playerId) {
-        return this.lookAsync(playerId).join();
+        return this.plugin.getManager(PointsCacheManager.class).getPoints(playerId);
     }
 
     /**
