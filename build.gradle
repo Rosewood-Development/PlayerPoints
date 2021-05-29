@@ -9,7 +9,7 @@ plugins {
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 group = 'org.black_ixx'
-version = '3.0.1'
+version = '3.0.2'
 
 repositories {
     mavenCentral()
