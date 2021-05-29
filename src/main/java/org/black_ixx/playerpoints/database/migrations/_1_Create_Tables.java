@@ -39,14 +39,18 @@ public class _1_Create_Tables extends DataMigration {
             query = "SHOW TABLES LIKE ?";
         }
 
-        // Check if table already exists, if it does then try renaming the old 'playername' column to 'uuid'
+        // Check if the old table already exists, if it does then try renaming the table to playerpoints_points and the 'playername' column to 'uuid'
         boolean exists;
         try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setString(1, tablePrefix + "points");
+            statement.setString(1, "playerpoints");
             exists = statement.executeQuery().next();
         }
 
         if (exists) {
+            try (Statement statement = connection.createStatement()) {
+                statement.executeUpdate("ALTER TABLE playerpoints RENAME TO " + tablePrefix + "points");
+            } catch (Exception ignored) { }
+
             try (Statement statement = connection.createStatement()) {
                 statement.executeUpdate("ALTER TABLE " + tablePrefix + "points RENAME COLUMN playername TO uuid");
             } catch (Exception ignored) { }
