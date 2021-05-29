@@ -1,35 +1,33 @@
 import org.apache.tools.ant.filters.ReplaceTokens
 
 plugins {
-    id 'com.github.johnrengelman.shadow' version '5.1.0'
-    id 'java'
+    id 'com.github.johnrengelman.shadow' version '7.0.0'
+    id 'java-library'
     id 'maven-publish'
 }
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
-compileJava.options.encoding = 'UTF-8'
 group = 'org.black_ixx'
 version = '3.0.1'
 
 repositories {
     mavenCentral()
-    jcenter()
 
     maven { url = 'https://repo.rosewooddev.io/repository/public/' }
     maven { url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
     maven { url = 'https://oss.sonatype.org/content/repositories/snapshots/' }
-    maven { url = 'http://nexus.hc.to/content/repositories/pub_releases' }
-    maven { url = 'http://repo.extendedclip.com/content/repositories/placeholderapi/' }
+    maven { url = 'https://nexus.hc.to/content/repositories/pub_releases' }
+    maven { url = 'https://repo.extendedclip.com/content/repositories/placeholderapi/' }
     maven { url = 'https://repo.dakanilabs.com/repository/public' }
-    maven { url = 'http://repo.maven.apache.org/maven2' }
+    maven { url = 'https://repo.maven.apache.org/maven2' }
     maven { url = 'https://jitpack.io' }
 }
 
 dependencies {
-    compile 'dev.rosewood:rosegarden:1.0.5-SNAPSHOT'
+    api 'dev.rosewood:rosegarden:1.0.7-SNAPSHOT'
 
-    compileOnly 'org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT'
+    compileOnly 'org.spigotmc:spigot:1.16.5'
     compileOnly 'com.github.milkbowl:vault:1.7.3'
     compileOnly 'com.vexsoftware:votifier:2.7.2'
     compileOnly 'me.clip:placeholderapi:2.10.9'
@@ -48,6 +46,7 @@ processResources {
     from (sourceSets.main.resources.srcDirs) {
         include '**/*.yml'
         filter ReplaceTokens, tokens: ["version": project.property("version")]
+        duplicatesStrategy DuplicatesStrategy.INCLUDE
     }
 }
 
