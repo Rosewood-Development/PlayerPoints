@@ -26,7 +26,7 @@ public class BroadcastCommand extends PointsCommand {
         }
 
         OfflinePlayer player = PointsUtils.getPlayerByName(args[0]);
-        if (!player.hasPlayedBefore()) {
+        if (!player.hasPlayedBefore() && !player.isOnline()) {
             localeManager.sendMessage(sender, "unknown-player", StringPlaceholders.single("player", args[0]));
             return;
         }
