@@ -35,7 +35,7 @@ public class PayCommand extends PointsCommand {
         }
 
         OfflinePlayer target = PointsUtils.getPlayerByName(args[0]);
-        if (!target.hasPlayedBefore()) {
+        if (!target.hasPlayedBefore() && !target.isOnline()) {
             localeManager.sendMessage(sender, "unknown-player", StringPlaceholders.single("player", args[0]));
             return;
         }
