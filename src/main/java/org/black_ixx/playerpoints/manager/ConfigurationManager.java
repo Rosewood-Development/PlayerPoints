@@ -4,12 +4,16 @@ import dev.rosewood.rosegarden.RosePlugin;
 import dev.rosewood.rosegarden.config.CommentedFileConfiguration;
 import dev.rosewood.rosegarden.config.RoseSetting;
 import dev.rosewood.rosegarden.manager.AbstractConfigurationManager;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 import org.black_ixx.playerpoints.PlayerPoints;
+import org.bukkit.plugin.ServicePriority;
 
 public class ConfigurationManager extends AbstractConfigurationManager {
 
     public enum Setting implements RoseSetting {
         VAULT("vault", false, "Should register with Vault as a currency manager?"),
+        VAULT_PRIORITY("vault-priority", "Low", "The priority level to use for the Vault hook", "Higher priorities will allow PlayerPoints to load before other economy plugins", "Valid values: [" + Arrays.stream(ServicePriority.values()).map(Enum::name).collect(Collectors.joining(", ")) + "]"),
         LEADERBOARD_PER_PAGE("leaderboard-per-page", 10, "How many players should be displayed per page on the leaderboard?"),
         VOTE("vote", null, "Votifier hook settings"),
         VOTE_ENABLED("vote.enabled", false, "If the votifier hook should be enabled"),

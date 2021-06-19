@@ -41,7 +41,23 @@ public class PlayerPoints extends RosePlugin {
 
         if (Setting.VAULT.getBoolean()) {
             this.vaultLayer = new PlayerPointsVaultLayer(this);
-            Bukkit.getServicesManager().register(Economy.class, this.vaultLayer, this, ServicePriority.Low);
+
+            // Check valid values for the service
+            ServicePriority priority = null;
+            String desiredPriority = Setting.VAULT_PRIORITY.getString();
+            for (ServicePriority value : ServicePriority.values()) {
+                if (value.name().equalsIgnoreCase(desiredPriority)) {
+                    priority = value;
+                    break;
+                }
+            }
+
+            if (priority == null) {
+                this.getLogger().warning("vault-priority value in the config.yml is invalid, defaulting to Low.");
+                priority = ServicePriority.Low;
+            }
+
+            Bukkit.getServicesManager().register(Economy.class, this.vaultLayer, this, priority);
         }
 
         // Register commands
