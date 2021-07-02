@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import org.black_ixx.playerpoints.PlayerPoints;
+import org.black_ixx.playerpoints.manager.CommandManager;
 import org.black_ixx.playerpoints.manager.LocaleManager;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -41,36 +42,32 @@ public abstract class CommandHandler implements TabExecutor, NamedExecutor {
     protected String cmd;
 
     /**
+     * Command aliases.
+     */
+    protected CommandManager.CommandAliases aliases;
+
+    /**
      * Constructor.
      *
      * @param plugin - Root plugin.
      */
-    public CommandHandler(PlayerPoints plugin, String cmd) {
+    public CommandHandler(PlayerPoints plugin, String cmd, CommandManager.CommandAliases aliases) {
         this.plugin = plugin;
         this.cmd = cmd;
+        this.aliases = aliases;
     }
 
     /**
      * Register a command with an execution handler.
      *
-     * @param label   - Command to listen for.
-     * @param command - Execution handler that will handle the logic behind the
-     *                command.
+     * @param command - Execution handler that will handle the logic behind the command.
      */
-    public void registerCommand(String label, PointsCommand command) {
-        if (this.registeredCommands.containsKey(label)) {
-            this.plugin.getLogger().warning("Replacing existing command for: " + label);
+    public void registerCommand(PointsCommand command) {
+        for (String alias : command.getAliases()) {
+            if (this.registeredCommands.containsKey(alias))
+                this.plugin.getLogger().warning("Conflicting command aliases for '" + alias + "', overwriting.");
+            this.registeredCommands.put(alias, command);
         }
-        this.registeredCommands.put(label, command);
-    }
-
-    /**
-     * Unregister a command for this handler.
-     *
-     * @param label - Command to stop handling.
-     */
-    public void unregisterCommand(String label) {
-        this.registeredCommands.remove(label);
     }
 
     /**
@@ -79,19 +76,11 @@ public abstract class CommandHandler implements TabExecutor, NamedExecutor {
      * @param handler - Command handler.
      */
     public void registerHandler(CommandHandler handler) {
-        if (this.registeredHandlers.containsKey(handler.getCommand())) {
-            this.plugin.getLogger().warning("Replacing existing handler for: " + handler.getCommand());
+        for (String alias : handler.getAliases()) {
+            if (this.registeredCommands.containsKey(alias))
+                this.plugin.getLogger().warning("Conflicting handler aliases for '" + alias + "', overwriting.");
+            this.registeredHandlers.put(alias, handler);
         }
-        this.registeredHandlers.put(handler.getCommand(), handler);
-    }
-
-    /**
-     * Unregister a subcommand.
-     *
-     * @param label - Subcommand to remove.
-     */
-    public void unregisterHandler(String label) {
-        this.registeredHandlers.remove(label);
     }
 
     /**
@@ -214,6 +203,16 @@ public abstract class CommandHandler implements TabExecutor, NamedExecutor {
     }
 
     @Override
+    public List<String> getAliases() {
+        List<String> aliases = this.aliases.get();
+        if (aliases.isEmpty()) {
+            return Collections.singletonList(this.cmd);
+        } else {
+            return aliases;
+        }
+    }
+
+    @Override
     public boolean hasPermission(Permissible permissible) {
         return true;
     }
@@ -232,12 +231,4 @@ public abstract class CommandHandler implements TabExecutor, NamedExecutor {
         return argList.toArray(new String[0]);
     }
 
-    /**
-     * Get the command for this handler.
-     *
-     * @return Command
-     */
-    public String getCommand() {
-        return this.cmd;
-    }
 }

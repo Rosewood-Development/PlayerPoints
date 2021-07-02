@@ -6,6 +6,7 @@ description: Player points system for Bukkit servers
 main: org.black_ixx.playerpoints.PlayerPoints
 api-version: '1.13'
 softdepend: [Vault, Votifier, PlaceholderAPI, TokenManager]
+loadbefore: [mcMMO]
 commands:
   points:
     aliases: [p]

@@ -3,6 +3,7 @@ package org.black_ixx.playerpoints.commands;
 import java.util.Collections;
 import java.util.List;
 import org.black_ixx.playerpoints.PlayerPoints;
+import org.black_ixx.playerpoints.manager.CommandManager;
 import org.black_ixx.playerpoints.manager.LocaleManager;
 import org.bukkit.command.CommandSender;
 import org.bukkit.permissions.Permissible;
@@ -12,7 +13,7 @@ public class HelpCommand extends PointsCommand {
     private final CommandHandler commandHandler;
 
     public HelpCommand(CommandHandler commandHandler) {
-        super("help");
+        super("help", CommandManager.CommandAliases.HELP);
         this.commandHandler = commandHandler;
     }
 

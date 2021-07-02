@@ -1,7 +1,10 @@
 package org.black_ixx.playerpoints.commands;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import org.black_ixx.playerpoints.PlayerPoints;
+import org.black_ixx.playerpoints.manager.CommandManager;
 import org.bukkit.command.CommandSender;
 import org.bukkit.permissions.Permissible;
 
@@ -13,9 +16,11 @@ import org.bukkit.permissions.Permissible;
 public abstract class PointsCommand implements NamedExecutor {
 
     private final String name;
+    private final CommandManager.CommandAliases aliases;
 
-    public PointsCommand(String name) {
+    public PointsCommand(String name, CommandManager.CommandAliases aliases) {
         this.name = name;
+        this.aliases = aliases;
     }
 
     /**
@@ -39,6 +44,16 @@ public abstract class PointsCommand implements NamedExecutor {
     @Override
     public String getName() {
         return this.name;
+    }
+
+    @Override
+    public List<String> getAliases() {
+        List<String> aliases = this.aliases.get();
+        if (aliases.isEmpty()) {
+            return Collections.singletonList(this.name);
+        } else {
+            return aliases;
+        }
     }
 
     @Override

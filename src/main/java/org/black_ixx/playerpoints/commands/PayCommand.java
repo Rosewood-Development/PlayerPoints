@@ -4,6 +4,7 @@ import dev.rosewood.rosegarden.utils.StringPlaceholders;
 import java.util.Collections;
 import java.util.List;
 import org.black_ixx.playerpoints.PlayerPoints;
+import org.black_ixx.playerpoints.manager.CommandManager;
 import org.black_ixx.playerpoints.manager.LocaleManager;
 import org.black_ixx.playerpoints.util.PointsUtils;
 import org.bukkit.OfflinePlayer;
@@ -18,7 +19,7 @@ import org.bukkit.entity.Player;
 public class PayCommand extends PointsCommand {
 
     public PayCommand() {
-        super("pay");
+        super("pay", CommandManager.CommandAliases.PAY);
     }
 
     @Override

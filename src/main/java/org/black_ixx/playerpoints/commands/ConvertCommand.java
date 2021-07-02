@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.black_ixx.playerpoints.PlayerPoints;
 import org.black_ixx.playerpoints.conversion.CurrencyPlugin;
+import org.black_ixx.playerpoints.manager.CommandManager;
 import org.black_ixx.playerpoints.manager.ConversionManager;
 import org.black_ixx.playerpoints.manager.LocaleManager;
 import org.bukkit.command.CommandSender;
@@ -15,7 +16,7 @@ import org.bukkit.util.StringUtil;
 public class ConvertCommand extends PointsCommand {
 
     public ConvertCommand() {
-        super("convert");
+        super("convert", CommandManager.CommandAliases.CONVERT);
     }
 
     @Override

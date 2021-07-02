@@ -1,7 +1,9 @@
 package org.black_ixx.playerpoints.commands;
 
+import dev.rosewood.rosegarden.RosePlugin;
 import dev.rosewood.rosegarden.utils.StringPlaceholders;
 import org.black_ixx.playerpoints.PlayerPoints;
+import org.black_ixx.playerpoints.manager.CommandManager;
 import org.black_ixx.playerpoints.manager.LocaleManager;
 import org.bukkit.command.CommandSender;
 
@@ -18,23 +20,23 @@ public class Commander extends CommandHandler {
      * @param plugin - Plugin instance.
      */
     public Commander(PlayerPoints plugin) {
-        super(plugin, "points");
+        super(plugin, "points", CommandManager.CommandAliases.ROOT);
 
         // Register commands.
-        this.registerCommand("help", new HelpCommand(this));
-        this.registerCommand("give", new GiveCommand());
-        this.registerCommand("giveall", new GiveAllCommand());
-        this.registerCommand("take", new TakeCommand());
-        this.registerCommand("look", new LookCommand());
-        this.registerCommand("pay", new PayCommand());
-        this.registerCommand("set", new SetCommand());
-        this.registerCommand("broadcast", new BroadcastCommand());
-        this.registerCommand("reset", new ResetCommand());
-        this.registerCommand("me", new MeCommand());
-        this.registerCommand("reload", new ReloadCommand());
-        this.registerCommand("export", new ExportCommand());
-        this.registerCommand("import", new ImportCommand());
-        this.registerCommand("convert", new ConvertCommand());
+        this.registerCommand(new HelpCommand(this));
+        this.registerCommand(new GiveCommand());
+        this.registerCommand(new GiveAllCommand());
+        this.registerCommand(new TakeCommand());
+        this.registerCommand(new LookCommand());
+        this.registerCommand(new PayCommand());
+        this.registerCommand(new SetCommand());
+        this.registerCommand(new BroadcastCommand());
+        this.registerCommand(new ResetCommand());
+        this.registerCommand(new MeCommand());
+        this.registerCommand(new ReloadCommand());
+        this.registerCommand(new ExportCommand());
+        this.registerCommand(new ImportCommand());
+        this.registerCommand(new ConvertCommand());
 
         // Register handlers
         this.registerHandler(new LeadCommand(plugin));

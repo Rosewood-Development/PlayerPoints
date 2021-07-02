@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import org.black_ixx.playerpoints.PlayerPoints;
+import org.black_ixx.playerpoints.manager.CommandManager;
 import org.black_ixx.playerpoints.manager.ConfigurationManager.Setting;
 import org.black_ixx.playerpoints.manager.DataManager;
 import org.black_ixx.playerpoints.manager.LocaleManager;
@@ -36,7 +37,7 @@ public class LeadCommand extends CommandHandler {
      * @param plugin - Plugin instance.
      */
     public LeadCommand(PlayerPoints plugin) {
-        super(plugin, "lead");
+        super(plugin, "lead", CommandManager.CommandAliases.LEAD);
     }
 
     @Override

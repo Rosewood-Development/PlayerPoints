@@ -3,6 +3,7 @@ package org.black_ixx.playerpoints;
 import dev.rosewood.rosegarden.RosePlugin;
 import dev.rosewood.rosegarden.database.DataMigration;
 import dev.rosewood.rosegarden.manager.Manager;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import net.milkbowl.vault.economy.Economy;
@@ -10,6 +11,7 @@ import org.black_ixx.playerpoints.commands.Commander;
 import org.black_ixx.playerpoints.database.migrations._1_Create_Tables;
 import org.black_ixx.playerpoints.hook.PointsPlaceholderExpansion;
 import org.black_ixx.playerpoints.listeners.VotifierListener;
+import org.black_ixx.playerpoints.manager.CommandManager;
 import org.black_ixx.playerpoints.manager.ConfigurationManager;
 import org.black_ixx.playerpoints.manager.ConfigurationManager.Setting;
 import org.black_ixx.playerpoints.manager.DataManager;
@@ -60,12 +62,6 @@ public class PlayerPoints extends RosePlugin {
             Bukkit.getServicesManager().register(Economy.class, this.vaultLayer, this, priority);
         }
 
-        // Register commands
-        Commander commander = new Commander(this);
-        PluginCommand command = this.getCommand("points");
-        if (command != null)
-            command.setExecutor(commander);
-
         // Register votifier listener, if applicable
         if (Setting.VOTE_ENABLED.getBoolean()) {
             Plugin votifier = Bukkit.getPluginManager().getPlugin("Votifier");
@@ -94,8 +90,9 @@ public class PlayerPoints extends RosePlugin {
 
     @Override
     protected List<Class<? extends Manager>> getManagerLoadPriority() {
-        return Collections.singletonList(
-                PointsCacheManager.class
+        return Arrays.asList(
+                PointsCacheManager.class,
+                CommandManager.class
         );
     }
 
