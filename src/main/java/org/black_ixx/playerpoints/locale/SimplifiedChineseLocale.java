@@ -51,7 +51,7 @@ public class SimplifiedChineseLocale implements Locale {
 
             this.put("#6", "给予全体命令");
             this.put("command-giveall-description", "&8 - &d/points giveall &7- 给予所有在线玩家点劵");
-            this.put("command-giveall-usage", "&c用法: &e/points giveall <数值>");
+            this.put("command-giveall-usage", "&c用法: &e/points giveall <数值> [*]");
             this.put("command-giveall-success", "&a已成功给予 &b%amount% &a%currency% 给所有在线玩家。");
 
             this.put("#7", "拿去命令");
@@ -127,6 +127,16 @@ public class SimplifiedChineseLocale implements Locale {
                     "请检查您的控制台并将您所看到的报告给 PlayerPoint 作者。");
             this.put("command-convert-warning", "&c注意: 这个操作会删除所有现存的数据并使用来自插件 &b%plugin%&c 的数据结构。 " +
                     "&c如果您知道您在做什么，请使用 &b/points convert %plugin% confirm&c 来确认操作。");
+
+            this.put("#19", "Import Legacy Command");
+            this.put("command-importlegacy-description", "&8 - &d/points importlegacy &7- 导入一个遗留的表格");
+            this.put("command-importlegacy-usage", "&c用法: &e/points importlegacy <table>");
+            this.put("command-importlegacy-success", "&a成功地从&b%table%&a导入遗留数据。");
+            this.put("command-importlegacy-failure", "&c从&b%table%&c导入遗留数据失败。该表是否存在？");
+            this.put("command-importlegacy-only-mysql", "&c这个命令只有在你启用了MySQL后才可用。");
+
+            this.put("#20", "Version Command");
+            this.put("command-version-description", "&8 - &d/points version &7- 显示版本信息 PlayerPoints");
         }};
     }
 

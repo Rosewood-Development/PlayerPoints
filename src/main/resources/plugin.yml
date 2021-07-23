@@ -28,6 +28,9 @@ permissions:
       playerpoints.broadcast: true
       playerpoints.export: true
       playerpoints.import: true
+      playerpoints.convert: true
+      playerpoints.importlegacy: true
+      playerpoints.version: true
   playerpoints.give:
     description: Gives access to the give command
     default: op
@@ -66,4 +69,13 @@ permissions:
     default: op
   playerpoints.import:
     description: Gives access to the import command
+    default: op
+  playerpoints.convert:
+    description: Gives access to the convert command
+    default: op
+  playerpoints.importlegacy:
+    description: Gives access to the importlegacy command
+    default: op
+  playerpoints.version:
+    description: Gives access to the version command
     default: op

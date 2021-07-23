@@ -51,7 +51,7 @@ public class JapaneseLocale implements Locale {
 
             this.put("#6", "Give All コマンド");
             this.put("command-giveall-description", "&8 - &d/points giveall &7- 鯖内の全プレイヤーにポイントを付与する。");
-            this.put("command-giveall-usage", "&c構文: &e/points giveall <amount>");
+            this.put("command-giveall-usage", "&c構文: &e/points giveall <amount> [*]");
             this.put("command-giveall-success", "&a現在ログインしている全プレイヤーに &b%amount% &a%currency% 付与しました。");
 
             this.put("#7", "Take コマンド");
@@ -123,6 +123,16 @@ public class JapaneseLocale implements Locale {
             this.put("command-convert-success", "&b%plugin% &aから通貨データが読み込まれました。");
             this.put("command-convert-failure", "&cデータの読み込み中にエラーが発生しました。コンソールでエラーを確認し、PlayerPointsの作者に報告してください。");
             this.put("command-convert-warning", "&c注意：この処理は現在使用中のデータベースのデータを削除し、&b%plugin%&cの中身で置き換えます。 &cデータのバックアップを取ったうえで本当にこの処理を実行したい場合のみ &b/points convert %plugin% confirm&cコマンドを使用してください。");
+
+            this.put("#19", "Import Legacy Command");
+            this.put("command-importlegacy-description", "&8 - &d/points importlegacy &7- レガシーテーブルをインポートします");
+            this.put("command-importlegacy-usage", "&c構文: &e/points importlegacy <table>");
+            this.put("command-importlegacy-success", "&b%table%&aからレガシーのデータを首尾よくインポートしました。");
+            this.put("command-importlegacy-failure", "&b%table%&aからレガシーのデータのインポートに失敗しました。そのテーブルはありますか？");
+            this.put("command-importlegacy-only-mysql", "&cMySQLはエネブルたらこのコマンドは使用可能。");
+
+            this.put("#20", "Version Command");
+            this.put("command-version-description", "&8 - &d/points version &7- バージョン情報の表示 PlayerPoints");
         }};
     }
 

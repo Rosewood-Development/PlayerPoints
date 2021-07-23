@@ -10,11 +10,8 @@ import org.bukkit.event.HandlerList;
  * Events extending this may run on either the main thread or an async thread as needed. Always assume it is being run
  * async, do not perform operations that should not be done in an async environment.
  */
-public class PlayerPointsEvent extends Event implements Cancellable {
-    /**
-     * Handler list.
-     */
-    private static final HandlerList handlers = new HandlerList();
+public abstract class PlayerPointsEvent extends Event implements Cancellable {
+
     /**
      * Player whose points is changing.
      */
@@ -78,20 +75,6 @@ public class PlayerPointsEvent extends Event implements Cancellable {
     @Override
     public void setCancelled(boolean cancelled) {
         this.cancelled = cancelled;
-    }
-
-    /**
-     * Static method to get HandlerList.
-     *
-     * @return HandlerList.
-     */
-    public static HandlerList getHandlerList() {
-        return handlers;
-    }
-
-    @Override
-    public HandlerList getHandlers() {
-        return handlers;
     }
 
 }

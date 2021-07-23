@@ -51,7 +51,7 @@ public class VietnameseLocale implements Locale {
 
             this.put("#6", "Give All Command");
             this.put("command-giveall-description", "&8 - &d/points giveall &7- Trao cho tất cả người chơi trực tuyến points");
-            this.put("command-giveall-usage", "&cSử dụng: &e/points giveall <số lượng>");
+            this.put("command-giveall-usage", "&cSử dụng: &e/points giveall <số lượng> [*]");
             this.put("command-giveall-success", "&aTrao &b%amount% &a%currency% cho tất cả người chơi trực tuyến.");
 
             this.put("#7", "Take Command");
@@ -124,6 +124,15 @@ public class VietnameseLocale implements Locale {
             this.put("command-convert-failure", "&cĐã xảy ra lỗi khi cố gắng chuyển đổi dữ liệu. Vui lòng kiểm tra bảng điều khiển của bạn và báo cáo bất kỳ lỗi nào cho tác giả plugin PlayerPoints.");
             this.put("command-convert-warning", "&cLưu ý: Thao tác này sẽ xóa tất cả dữ liệu khỏi cơ sở dữ liệu đang hoạt động và thay thế bằng dữ liệu từ &b%plugin%&c. &cNếu bạn hoàn toàn chắc chắn về điều này, hãy sử dụng &b/points convert %plugin% confirm&c.");
 
+            this.put("#19", "Import Legacy Command");
+            this.put("command-importlegacy-description", "&8 - &d/points importlegacy &7- Nhập một bảng kế thừa");
+            this.put("command-importlegacy-usage", "&cSử dụng: &e/points importlegacy <table>");
+            this.put("command-importlegacy-success", "&aĐã nhập thành công dữ liệu kế thừa từ &b%table%&a.");
+            this.put("command-importlegacy-failure", "&cKhông thể nhập dữ liệu cũ từ &b%table%&c. Bảng có tồn tại không?");
+            this.put("command-importlegacy-only-mysql", "&cLệnh này chỉ khả dụng khi bạn đã bật MySQL.");
+
+            this.put("#20", "Version Command");
+            this.put("command-version-description", "&8 - &d/points version &7- Hiển thị thông tin phiên bản cho PlayerPoints");
         }};
     }
 

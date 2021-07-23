@@ -9,7 +9,7 @@ plugins {
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 group = 'org.black_ixx'
-version = '3.0.3'
+version = '3.0.4-SNAPSHOT'
 
 repositories {
     mavenCentral()
@@ -25,9 +25,9 @@ repositories {
 }
 
 dependencies {
-    api 'dev.rosewood:rosegarden:1.0.7-SNAPSHOT'
+    api 'dev.rosewood:rosegarden:1.0.7'
 
-    compileOnly 'org.spigotmc:spigot:1.16.5'
+    compileOnly 'org.spigotmc:spigot:1.17.1'
     compileOnly 'com.github.milkbowl:vault:1.7.3'
     compileOnly 'com.vexsoftware:votifier:2.7.2'
     compileOnly 'me.clip:placeholderapi:2.10.9'

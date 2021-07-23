@@ -36,4 +36,5 @@ public class PlayerPointsChangeEvent extends PlayerPointsEvent {
     public HandlerList getHandlers() {
         return handlers;
     }
+
 }

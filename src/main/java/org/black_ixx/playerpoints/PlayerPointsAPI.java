@@ -1,5 +1,8 @@
 package org.black_ixx.playerpoints;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -20,7 +23,7 @@ public class PlayerPointsAPI {
 
     private final PlayerPoints plugin;
 
-    PlayerPointsAPI(PlayerPoints plugin) {
+    public PlayerPointsAPI(PlayerPoints plugin) {
         this.plugin = plugin;
     }
 
@@ -44,6 +47,29 @@ public class PlayerPointsAPI {
             int total = points + event.getChange();
             return this.plugin.getManager(DataManager.class).setPoints(playerId, total);
         });
+    }
+
+    @NotNull
+    public CompletableFuture<Boolean> giveAllAsync(@NotNull Collection<UUID> playerIds, int amount) {
+        Objects.requireNonNull(playerIds);
+
+        List<UUID> players = new ArrayList<>(playerIds);
+        for (UUID playerId : playerIds) {
+            PlayerPointsChangeEvent event = new PlayerPointsChangeEvent(playerId, amount);
+            Bukkit.getPluginManager().callEvent(event);
+            if (event.isCancelled())
+                players.remove(playerId);
+
+            if (event.getChange() != amount) {
+                players.remove(playerId);
+                this.giveAsync(playerId, event.getChange());
+            }
+        }
+
+        if (players.isEmpty())
+            return CompletableFuture.completedFuture(true);
+
+        return this.plugin.getManager(DataManager.class).offsetPoints(players, amount);
     }
 
     /**

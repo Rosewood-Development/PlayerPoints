@@ -51,7 +51,7 @@ public class EnglishLocale implements Locale {
 
             this.put("#6", "Give All Command");
             this.put("command-giveall-description", "&8 - &d/points giveall &7- Gives all online players points");
-            this.put("command-giveall-usage", "&cUsage: &e/points giveall <amount>");
+            this.put("command-giveall-usage", "&cUsage: &e/points giveall <amount> [*]");
             this.put("command-giveall-success", "&aGave &b%amount% &a%currency% to all online players.");
 
             this.put("#7", "Take Command");
@@ -127,6 +127,16 @@ public class EnglishLocale implements Locale {
                     "Please check your console and report any errors to the PlayerPoints plugin author.");
             this.put("command-convert-warning", "&cNotice: This operation will delete all data from the active database and replace it with the data from &b%plugin%&c. " +
                     "&cIf you are absolutely sure about this, use &b/points convert %plugin% confirm&c.");
+
+            this.put("#19", "Import Legacy Command");
+            this.put("command-importlegacy-description", "&8 - &d/points importlegacy &7- Import a legacy table");
+            this.put("command-importlegacy-usage", "&cUsage: &e/points importlegacy <table>");
+            this.put("command-importlegacy-success", "&aSuccessfully imported legacy data from &b%table%&a.");
+            this.put("command-importlegacy-failure", "&cFailed to import legacy data from &b%table%&c. Does the table exist?");
+            this.put("command-importlegacy-only-mysql", "&cThis command is only available when you have MySQL enabled.");
+
+            this.put("#20", "Version Command");
+            this.put("command-version-description", "&8 - &d/points version &7- Display the version info for PlayerPoints");
         }};
     }
 

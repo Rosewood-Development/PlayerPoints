@@ -18,7 +18,11 @@ public class ConfigurationManager extends AbstractConfigurationManager {
         VOTE("vote", null, "Votifier hook settings"),
         VOTE_ENABLED("vote.enabled", false, "If the votifier hook should be enabled"),
         VOTE_AMOUNT("vote.amount", 100, "How many points should be awarded per vote"),
-        VOTE_ONLINE("vote.online", false, "Should points only be awarded when the player who voted is online?");
+        VOTE_ONLINE("vote.online", false, "Should points only be awarded when the player who voted is online?"),
+        BASE_COMMAND_REDIRECT("base-command-redirect", "", "Which command should we redirect to when using '/points' with no subcommand specified?", "You can use a value here such as 'me' to show the output of '/points me'", "If you have any aliases defined, do not use them here", "If left as blank, the default behavior of showing '/points version' with bypassed permissions will be used"),
+        LEGACY_DATABASE("legacy-database-mode", null, "Are you upgrading from a much older version of PlayerPoints?", "If you have done anything special with the database settings previously, you may need this", "WARNING: This setting may be removed in the future. Try to get your database updated to use the new format!"),
+        LEGACY_DATABASE_MODE("legacy-database-mode.enabled", false, "Should we use legacy database mode?"),
+        LEGACY_DATABASE_NAME("legacy-database-mode.table-name", "playerpoints", "The name of the legacy database table");
 
         private final String key;
         private final Object defaultValue;

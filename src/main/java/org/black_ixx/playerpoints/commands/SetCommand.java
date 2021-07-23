@@ -38,7 +38,7 @@ public class SetCommand extends PointsCommand {
         int amount;
         try {
             amount = Integer.parseInt(args[1]);
-            if (amount <= 0) {
+            if (amount < 0) {
                 localeManager.sendMessage(sender, "invalid-amount");
                 return;
             }

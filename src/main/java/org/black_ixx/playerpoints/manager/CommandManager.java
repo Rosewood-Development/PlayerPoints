@@ -28,6 +28,7 @@ public class CommandManager extends Manager {
         GIVE,
         HELP,
         IMPORT,
+        IMPORTLEGACY,
         LEAD,
         LOOK,
         ME,
@@ -35,7 +36,8 @@ public class CommandManager extends Manager {
         RELOAD,
         RESET,
         SET,
-        TAKE;
+        TAKE,
+        VERSION;
 
         private List<String> aliases;
 

@@ -35,4 +35,5 @@ public class PlayerPointsResetEvent extends PlayerPointsEvent {
     public HandlerList getHandlers() {
         return handlers;
     }
+
 }

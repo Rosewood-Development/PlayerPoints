@@ -51,7 +51,7 @@ public class TaiwaneseMandarinLocale implements Locale {
 
             this.put("#6", "Give All Command");
             this.put("command-giveall-description", "&8 - &d/points giveall <數量> &7- 給予所有玩家點數");
-            this.put("command-giveall-usage", "&c用法: &e/points giveall <數量>");
+            this.put("command-giveall-usage", "&c用法: &e/points giveall <數量> [*]");
             this.put("command-giveall-success", "&a給予所有玩家 &b%amount% &a點&a%currency%.");
 
             this.put("#7", "Take Command");
@@ -123,6 +123,16 @@ public class TaiwaneseMandarinLocale implements Locale {
             this.put("command-convert-success", "&a來自 &b%plugin% &a的數據庫已成功轉移.");
             this.put("command-convert-failure", "&c嘗試轉換數據庫時發生錯誤. 請檢查你的控制台並且回報錯誤給 PlayerPoints 的作者.");
             this.put("command-convert-warning", "&c警告: 此動作將會刪除數據庫內所有資料, 並將數據庫替換為 &b%plugin%&c 的資料. &c如果你確定要繼續, 請使用 &b/points convert %plugin% confirm&c.");
+
+            this.put("#19", "Import Legacy Command");
+            this.put("command-importlegacy-description", "&8 - &d/points importlegacy &7- 導入舊表");
+            this.put("command-importlegacy-usage", "&c用法: &e/points importlegacy <table>");
+            this.put("command-importlegacy-success", "&a成功地从&b%table%&a导入遗留数据。");
+            this.put("command-importlegacy-failure", "&c从&b%table%&c导入遗留数据失败。该表是否存在？");
+            this.put("command-importlegacy-only-mysql", "&c这个命令只有在你启用了MySQL后才可用。");
+
+            this.put("#20", "Version Command");
+            this.put("command-version-description", "&8 - &d/points version &7- 显示版本信息 PlayerPoints");
         }};
     }
 
