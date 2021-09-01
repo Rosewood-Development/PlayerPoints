@@ -3,25 +3,20 @@ package org.black_ixx.playerpoints;
 import dev.rosewood.rosegarden.RosePlugin;
 import dev.rosewood.rosegarden.database.DataMigration;
 import dev.rosewood.rosegarden.manager.Manager;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 import net.milkbowl.vault.economy.Economy;
-import org.black_ixx.playerpoints.commands.Commander;
 import org.black_ixx.playerpoints.database.migrations._1_Create_Tables;
 import org.black_ixx.playerpoints.hook.PointsPlaceholderExpansion;
 import org.black_ixx.playerpoints.listeners.VotifierListener;
-import org.black_ixx.playerpoints.manager.CommandManager;
-import org.black_ixx.playerpoints.manager.ConfigurationManager;
+import org.black_ixx.playerpoints.manager.*;
 import org.black_ixx.playerpoints.manager.ConfigurationManager.Setting;
-import org.black_ixx.playerpoints.manager.DataManager;
-import org.black_ixx.playerpoints.manager.LocaleManager;
-import org.black_ixx.playerpoints.manager.PointsCacheManager;
 import org.black_ixx.playerpoints.util.PointsUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.ServicePriority;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Main plugin class for PlayerPoints.

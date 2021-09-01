@@ -3,26 +3,24 @@ package org.black_ixx.playerpoints.manager;
 import dev.rosewood.rosegarden.RosePlugin;
 import dev.rosewood.rosegarden.database.SQLiteConnector;
 import dev.rosewood.rosegarden.manager.AbstractDataManager;
+import org.black_ixx.playerpoints.models.SortedPlayer;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.SortedSet;
-import java.util.TreeSet;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
-import org.black_ixx.playerpoints.models.SortedPlayer;
 
 public class DataManager extends AbstractDataManager {
 
+    private final ExecutorManager executorManager;
     private final PointsCacheManager pointsCacheManager;
 
     public DataManager(RosePlugin rosePlugin) {
         super(rosePlugin);
+        this.executorManager = rosePlugin.getManager(ExecutorManager.class);
         this.pointsCacheManager = rosePlugin.getManager(PointsCacheManager.class);
     }
 
@@ -43,7 +41,7 @@ public class DataManager extends AbstractDataManager {
             });
             this.pointsCacheManager.updatePoints(playerId, value.get());
             return value.get();
-        });
+        }, executorManager.getExecutor());
     }
 
     public CompletableFuture<Boolean> setPoints(UUID playerId, int amount) {
@@ -65,7 +63,7 @@ public class DataManager extends AbstractDataManager {
                 }
             });
             return true;
-        });
+        }, executorManager.getExecutor());
     }
 
     public CompletableFuture<Boolean> offsetPoints(List<UUID> playerIds, int amount) {
@@ -87,7 +85,7 @@ public class DataManager extends AbstractDataManager {
                 this.pointsCacheManager.reset();
             });
             return true;
-        });
+        }, executorManager.getExecutor());
     }
 
     public CompletableFuture<Boolean> offsetAllPoints(int amount) {
@@ -105,7 +103,7 @@ public class DataManager extends AbstractDataManager {
                 this.pointsCacheManager.reset();
             });
             return true;
-        });
+        }, executorManager.getExecutor());
     }
 
     public CompletableFuture<Boolean> playerEntryExists(UUID playerId) {
@@ -137,7 +135,7 @@ public class DataManager extends AbstractDataManager {
                 }
             });
             return players;
-        });
+        }, executorManager.getExecutor());
     }
 
     public CompletableFuture<Void> importData(SortedSet<SortedPlayer> data) {
@@ -160,7 +158,7 @@ public class DataManager extends AbstractDataManager {
                 }
             });
             return null;
-        });
+        }, executorManager.getExecutor());
     }
 
     public CompletableFuture<Boolean> importLegacyTable(String tableName) {
@@ -199,7 +197,7 @@ public class DataManager extends AbstractDataManager {
                 }
             });
             return value.get();
-        });
+        }, executorManager.getExecutor());
     }
 
     private void createEntry(UUID playerId, int value) {
