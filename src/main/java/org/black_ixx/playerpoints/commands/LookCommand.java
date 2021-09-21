@@ -7,14 +7,10 @@ import org.black_ixx.playerpoints.PlayerPoints;
 import org.black_ixx.playerpoints.manager.CommandManager;
 import org.black_ixx.playerpoints.manager.LocaleManager;
 import org.black_ixx.playerpoints.util.PointsUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 
-/**
- * Handles the look command.
- *
- * @author Mitsugaru
- */
 public class LookCommand extends PointsCommand {
 
     public LookCommand() {
@@ -29,13 +25,14 @@ public class LookCommand extends PointsCommand {
             return;
         }
 
-        OfflinePlayer player = PointsUtils.getPlayerByName(args[0]);
-        if (!player.hasPlayedBefore() && !player.isOnline()) {
-            localeManager.sendMessage(sender, "unknown-player", StringPlaceholders.single("player", args[0]));
-            return;
-        }
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+            OfflinePlayer player = PointsUtils.getPlayerByName(args[0]);
+            if (!player.hasPlayedBefore() && !player.isOnline()) {
+                localeManager.sendMessage(sender, "unknown-player", StringPlaceholders.single("player", args[0]));
+                return;
+            }
 
-        plugin.getAPI().lookAsync(player.getUniqueId()).thenAccept(amount -> {
+            int amount = plugin.getAPI().look(player.getUniqueId());
             localeManager.sendMessage(sender, "command-look-success", StringPlaceholders.builder("player", player.getName())
                     .addPlaceholder("amount", PointsUtils.formatPoints(amount))
                     .addPlaceholder("currency", localeManager.getCurrencyName(amount))

@@ -7,15 +7,11 @@ import org.black_ixx.playerpoints.PlayerPoints;
 import org.black_ixx.playerpoints.manager.CommandManager;
 import org.black_ixx.playerpoints.manager.LocaleManager;
 import org.black_ixx.playerpoints.util.PointsUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-/**
- * Handles the pay command.
- *
- * @author Mitsugaru
- */
 public class PayCommand extends PointsCommand {
 
     public PayCommand() {
@@ -35,27 +31,27 @@ public class PayCommand extends PointsCommand {
             return;
         }
 
-        OfflinePlayer target = PointsUtils.getPlayerByName(args[0]);
-        if (!target.hasPlayedBefore() && !target.isOnline()) {
-            localeManager.sendMessage(sender, "unknown-player", StringPlaceholders.single("player", args[0]));
-            return;
-        }
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+            OfflinePlayer target = PointsUtils.getPlayerByName(args[0]);
+            if (!target.hasPlayedBefore() && !target.isOnline()) {
+                localeManager.sendMessage(sender, "unknown-player", StringPlaceholders.single("player", args[0]));
+                return;
+            }
 
-        int amount;
-        try {
-            amount = Integer.parseInt(args[1]);
-            if (amount <= 0) {
+            int amount;
+            try {
+                amount = Integer.parseInt(args[1]);
+                if (amount <= 0) {
+                    localeManager.sendMessage(sender, "invalid-amount");
+                    return;
+                }
+            } catch (NumberFormatException e) {
                 localeManager.sendMessage(sender, "invalid-amount");
                 return;
             }
-        } catch (NumberFormatException notnumber) {
-            localeManager.sendMessage(sender, "invalid-amount");
-            return;
-        }
 
-        Player player = (Player) sender;
-        plugin.getAPI().payAsync(player.getUniqueId(), target.getUniqueId(), amount).thenAccept(success -> {
-            if (success) {
+            Player player = (Player) sender;
+            if (plugin.getAPI().pay(player.getUniqueId(), target.getUniqueId(), amount)) {
                 // Send success message to sender
                 localeManager.sendMessage(sender, "command-pay-sent", StringPlaceholders.builder("amount", PointsUtils.formatPoints(amount))
                         .addPlaceholder("currency", localeManager.getCurrencyName(amount))

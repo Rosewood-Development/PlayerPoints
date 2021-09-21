@@ -80,7 +80,7 @@ public class EnglishLocale implements Locale {
             this.put("#11", "Reset Command");
             this.put("command-reset-description", "&8 - &d/points reset &7- Reset a player's points");
             this.put("command-reset-usage", "&cUsage: &e/points reset <player>");
-            this.put("command-reset-success", "&aReset the %currency% for &b%player% &a.");
+            this.put("command-reset-success", "&aReset the %currency% for &b%player%&a.");
 
             this.put("#12", "Me Command");
             this.put("command-me-description", "&8 - &d/points me &7- View your points");

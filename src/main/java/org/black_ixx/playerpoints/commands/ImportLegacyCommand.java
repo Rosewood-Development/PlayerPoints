@@ -29,13 +29,11 @@ public class ImportLegacyCommand extends PointsCommand {
             return;
         }
 
-        plugin.getManager(DataManager.class).importLegacyTable(args[0]).thenAccept(success -> {
-            if (success) {
-                localeManager.sendMessage(sender, "command-importlegacy-success", StringPlaceholders.single("table", args[0]));
-            } else {
-                localeManager.sendMessage(sender, "command-importlegacy-failure", StringPlaceholders.single("table", args[0]));
-            }
-        });
+        if (plugin.getManager(DataManager.class).importLegacyTable(args[0])) {
+            localeManager.sendMessage(sender, "command-importlegacy-success", StringPlaceholders.single("table", args[0]));
+        } else {
+            localeManager.sendMessage(sender, "command-importlegacy-failure", StringPlaceholders.single("table", args[0]));
+        }
     }
 
     @Override

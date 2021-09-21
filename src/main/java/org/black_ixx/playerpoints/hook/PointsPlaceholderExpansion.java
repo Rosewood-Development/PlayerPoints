@@ -2,18 +2,18 @@ package org.black_ixx.playerpoints.hook;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.black_ixx.playerpoints.PlayerPoints;
-import org.black_ixx.playerpoints.manager.PointsCacheManager;
+import org.black_ixx.playerpoints.manager.DataManager;
 import org.black_ixx.playerpoints.util.PointsUtils;
 import org.bukkit.OfflinePlayer;
 
 public class PointsPlaceholderExpansion extends PlaceholderExpansion {
 
     private final PlayerPoints playerPoints;
-    private final PointsCacheManager pointsCacheManager;
+    private final DataManager dataManager;
 
     public PointsPlaceholderExpansion(PlayerPoints playerPoints) {
         this.playerPoints = playerPoints;
-        this.pointsCacheManager = playerPoints.getManager(PointsCacheManager.class);
+        this.dataManager = playerPoints.getManager(DataManager.class);
     }
 
     @Override
@@ -23,9 +23,9 @@ public class PointsPlaceholderExpansion extends PlaceholderExpansion {
 
         switch (placeholder.toLowerCase()) {
             case "points":
-                return String.valueOf(this.pointsCacheManager.getPoints(player.getUniqueId()));
+                return String.valueOf(this.dataManager.getEffectivePoints(player.getUniqueId()));
             case "points_formatted":
-                return PointsUtils.formatPoints(this.pointsCacheManager.getPoints(player.getUniqueId()));
+                return PointsUtils.formatPoints(this.dataManager.getEffectivePoints(player.getUniqueId()));
         }
 
         return null;

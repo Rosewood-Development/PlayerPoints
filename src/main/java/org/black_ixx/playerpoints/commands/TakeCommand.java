@@ -7,14 +7,10 @@ import org.black_ixx.playerpoints.PlayerPoints;
 import org.black_ixx.playerpoints.manager.CommandManager;
 import org.black_ixx.playerpoints.manager.LocaleManager;
 import org.black_ixx.playerpoints.util.PointsUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 
-/**
- * Handles the take command.
- *
- * @author Mitsugaru
- */
 public class TakeCommand extends PointsCommand {
 
     public TakeCommand() {
@@ -29,26 +25,26 @@ public class TakeCommand extends PointsCommand {
             return;
         }
 
-        OfflinePlayer player = PointsUtils.getPlayerByName(args[0]);
-        if (!player.hasPlayedBefore() && !player.isOnline()) {
-            localeManager.sendMessage(sender, "unknown-player", StringPlaceholders.single("player", args[0]));
-            return;
-        }
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+            OfflinePlayer player = PointsUtils.getPlayerByName(args[0]);
+            if (!player.hasPlayedBefore() && !player.isOnline()) {
+                localeManager.sendMessage(sender, "unknown-player", StringPlaceholders.single("player", args[0]));
+                return;
+            }
 
-        int amount;
-        try {
-            amount = Integer.parseInt(args[1]);
-            if (amount <= 0) {
+            int amount;
+            try {
+                amount = Integer.parseInt(args[1]);
+                if (amount <= 0) {
+                    localeManager.sendMessage(sender, "invalid-amount");
+                    return;
+                }
+            } catch (NumberFormatException e) {
                 localeManager.sendMessage(sender, "invalid-amount");
                 return;
             }
-        } catch (NumberFormatException notnumber) {
-            localeManager.sendMessage(sender, "invalid-amount");
-            return;
-        }
 
-        plugin.getAPI().takeAsync(player.getUniqueId(), amount).thenAccept(success -> {
-            if (success) {
+            if (plugin.getAPI().take(player.getUniqueId(), amount)) {
                 localeManager.sendMessage(sender, "command-take-success", StringPlaceholders.builder("player", player.getName())
                         .addPlaceholder("currency", localeManager.getCurrencyName(amount))
                         .addPlaceholder("amount", PointsUtils.formatPoints(amount))

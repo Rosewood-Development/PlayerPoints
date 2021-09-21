@@ -40,7 +40,7 @@ public class VotifierListener implements Listener {
             pay = true;
         }
         if (pay) {
-            this.plugin.getAPI().giveAsync(offlinePlayer.getUniqueId(), amount);
+            this.plugin.getAPI().give(offlinePlayer.getUniqueId(), amount);
         }
     }
 }

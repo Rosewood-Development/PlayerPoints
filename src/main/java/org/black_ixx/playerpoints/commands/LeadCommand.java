@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedSet;
 import java.util.stream.Collectors;
 import org.black_ixx.playerpoints.PlayerPoints;
 import org.black_ixx.playerpoints.manager.CommandManager;
@@ -19,11 +20,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.permissions.Permissible;
 
-/**
- * Handles the leader board commands.
- *
- * @author Mitsugaru
- */
 public class LeadCommand extends CommandHandler {
 
     /**
@@ -31,11 +27,6 @@ public class LeadCommand extends CommandHandler {
      */
     private final Map<String, Integer> pageMap = new HashMap<>();
 
-    /**
-     * Constructor.
-     *
-     * @param plugin - Plugin instance.
-     */
     public LeadCommand(PlayerPoints plugin) {
         super(plugin, "lead", CommandManager.CommandAliases.LEAD);
     }
@@ -45,7 +36,8 @@ public class LeadCommand extends CommandHandler {
         LocaleManager localeManager = this.plugin.getManager(LocaleManager.class);
         int limit = Setting.LEADERBOARD_PER_PAGE.getInt();
 
-        this.plugin.getManager(DataManager.class).getAllPoints().thenAccept(leaders -> {
+        Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> {
+            SortedSet<SortedPlayer> leaders = this.plugin.getManager(DataManager.class).getAllPoints();
             int currentPage = this.pageMap.getOrDefault(sender.getName(), 0);
             int numPages = (int) Math.ceil(leaders.size() / (double) limit);
 

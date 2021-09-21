@@ -10,6 +10,7 @@ import org.black_ixx.playerpoints.conversion.CurrencyPlugin;
 import org.black_ixx.playerpoints.manager.CommandManager;
 import org.black_ixx.playerpoints.manager.ConversionManager;
 import org.black_ixx.playerpoints.manager.LocaleManager;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.util.StringUtil;
 
@@ -39,11 +40,13 @@ public class ConvertCommand extends PointsCommand {
             return;
         }
 
-        if (conversionManager.convert(currencyPlugin)) {
-            localeManager.sendMessage(sender, "command-convert-success", StringPlaceholders.single("plugin", args[0]));
-        } else {
-            localeManager.sendMessage(sender, "command-convert-failure");
-        }
+        Bukkit.getScheduler().runTaskAsynchronously(PlayerPoints.getInstance(), () -> {
+            if (conversionManager.convert(currencyPlugin)) {
+                localeManager.sendMessage(sender, "command-convert-success", StringPlaceholders.single("plugin", args[0]));
+            } else {
+                localeManager.sendMessage(sender, "command-convert-failure");
+            }
+        });
     }
 
     @Override

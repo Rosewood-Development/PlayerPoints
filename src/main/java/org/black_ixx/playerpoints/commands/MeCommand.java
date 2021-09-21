@@ -7,14 +7,10 @@ import org.black_ixx.playerpoints.PlayerPoints;
 import org.black_ixx.playerpoints.manager.CommandManager;
 import org.black_ixx.playerpoints.manager.LocaleManager;
 import org.black_ixx.playerpoints.util.PointsUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-/**
- * Handles the me command.
- *
- * @author Mitsugaru
- */
 public class MeCommand extends PointsCommand {
 
     public MeCommand() {
@@ -29,7 +25,8 @@ public class MeCommand extends PointsCommand {
             return;
         }
 
-        plugin.getAPI().lookAsync(((Player) sender).getUniqueId()).thenAccept(amount -> {
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+            int amount = plugin.getAPI().look(((Player) sender).getUniqueId());
             localeManager.sendMessage(sender, "command-me-success", StringPlaceholders.builder("amount", PointsUtils.formatPoints(amount))
                     .addPlaceholder("currency", localeManager.getCurrencyName(amount))
                     .build());

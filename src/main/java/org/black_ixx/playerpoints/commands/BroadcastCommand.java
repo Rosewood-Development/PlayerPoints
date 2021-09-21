@@ -1,6 +1,5 @@
 package org.black_ixx.playerpoints.commands;
 
-import dev.rosewood.rosegarden.RosePlugin;
 import dev.rosewood.rosegarden.utils.StringPlaceholders;
 import java.util.Collections;
 import java.util.List;
@@ -27,13 +26,14 @@ public class BroadcastCommand extends PointsCommand {
             return;
         }
 
-        OfflinePlayer player = PointsUtils.getPlayerByName(args[0]);
-        if (!player.hasPlayedBefore() && !player.isOnline()) {
-            localeManager.sendMessage(sender, "unknown-player", StringPlaceholders.single("player", args[0]));
-            return;
-        }
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+            OfflinePlayer player = PointsUtils.getPlayerByName(args[0]);
+            if (!player.hasPlayedBefore() && !player.isOnline()) {
+                localeManager.sendMessage(sender, "unknown-player", StringPlaceholders.single("player", args[0]));
+                return;
+            }
 
-        plugin.getAPI().lookAsync(player.getUniqueId()).thenAccept(points -> {
+            int points = plugin.getAPI().look(player.getUniqueId());
             for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
                 localeManager.sendMessage(onlinePlayer, "command-broadcast-message", StringPlaceholders.builder("player", player.getName())
                         .addPlaceholder("amount", PointsUtils.formatPoints(points))

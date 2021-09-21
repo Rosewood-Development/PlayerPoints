@@ -4,7 +4,6 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
-import org.bukkit.event.HandlerList;
 
 /**
  * Events extending this may run on either the main thread or an async thread as needed. Always assume it is being run

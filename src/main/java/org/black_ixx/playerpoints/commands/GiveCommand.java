@@ -7,15 +7,11 @@ import org.black_ixx.playerpoints.PlayerPoints;
 import org.black_ixx.playerpoints.manager.CommandManager;
 import org.black_ixx.playerpoints.manager.LocaleManager;
 import org.black_ixx.playerpoints.util.PointsUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-/**
- * Handles the give command.
- *
- * @author Mitsugaru
- */
 public class GiveCommand extends PointsCommand {
 
     public GiveCommand() {
@@ -30,21 +26,21 @@ public class GiveCommand extends PointsCommand {
             return;
         }
 
-        OfflinePlayer player = PointsUtils.getPlayerByName(args[0]);
-        if (!player.hasPlayedBefore() && !player.isOnline()) {
-            localeManager.sendMessage(sender, "unknown-player", StringPlaceholders.single("player", args[0]));
-            return;
-        }
-
-        try {
-            int amount = Integer.parseInt(args[1]);
-            if (amount <= 0) {
-                localeManager.sendMessage(sender, "invalid-amount");
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+            OfflinePlayer player = PointsUtils.getPlayerByName(args[0]);
+            if (!player.hasPlayedBefore() && !player.isOnline()) {
+                localeManager.sendMessage(sender, "unknown-player", StringPlaceholders.single("player", args[0]));
                 return;
             }
 
-            plugin.getAPI().giveAsync(player.getUniqueId(), amount).thenAccept(success -> {
-                if (success) {
+            try {
+                int amount = Integer.parseInt(args[1]);
+                if (amount <= 0) {
+                    localeManager.sendMessage(sender, "invalid-amount");
+                    return;
+                }
+
+                if (plugin.getAPI().give(player.getUniqueId(), amount)) {
                     // Send message to receiver
                     if (player.isOnline()) {
                         localeManager.sendMessage((Player) player, "command-give-received", StringPlaceholders.builder("amount", PointsUtils.formatPoints(amount))
@@ -53,17 +49,15 @@ public class GiveCommand extends PointsCommand {
                     }
 
                     // Send message to sender
-                    plugin.getAPI().lookAsync(player.getUniqueId()).thenAccept(total -> {
-                        localeManager.sendMessage(sender, "command-give-success", StringPlaceholders.builder("amount", PointsUtils.formatPoints(amount))
-                                .addPlaceholder("currency", localeManager.getCurrencyName(amount))
-                                .addPlaceholder("player", player.getName())
-                                .build());
-                    });
+                    localeManager.sendMessage(sender, "command-give-success", StringPlaceholders.builder("amount", PointsUtils.formatPoints(amount))
+                            .addPlaceholder("currency", localeManager.getCurrencyName(amount))
+                            .addPlaceholder("player", player.getName())
+                            .build());
                 }
-            });
-        } catch (NumberFormatException notnumber) {
-            localeManager.sendMessage(sender, "invalid-amount");
-        }
+            } catch (NumberFormatException e) {
+                localeManager.sendMessage(sender, "invalid-amount");
+            }
+        });
     }
 
     @Override

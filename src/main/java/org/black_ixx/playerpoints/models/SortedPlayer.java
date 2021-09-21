@@ -4,14 +4,14 @@ import java.util.UUID;
 
 /**
  * Holder class that will sort based on the points and by the name. Note, this
- * sorts by order of highest points first and uses player name for any matches.
+ * sorts by order of highest points first and uses the UUID for any matches.
  *
  * @author Mitsugaru
  */
 public class SortedPlayer implements Comparable<SortedPlayer> {
 
     /**
-     * Player name.
+     * Player UUID.
      */
     final UUID uuid;
 
@@ -20,20 +20,12 @@ public class SortedPlayer implements Comparable<SortedPlayer> {
      */
     final int points;
 
-    /**
-     * Constructor.
-     *
-     * @param uuid   - Player UUID.
-     * @param points - Point amount.
-     */
     public SortedPlayer(UUID uuid, int points) {
         this.uuid = uuid;
         this.points = points;
     }
 
     /**
-     * Get the player UUID.
-     *
      * @return UUID of the player.
      */
     public UUID getUniqueId() {
@@ -41,8 +33,6 @@ public class SortedPlayer implements Comparable<SortedPlayer> {
     }
 
     /**
-     * Get the player points.
-     *
      * @return Point amount.
      */
     public int getPoints() {

@@ -4,7 +4,6 @@ import dev.rosewood.rosegarden.utils.StringPlaceholders;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import org.black_ixx.playerpoints.PlayerPoints;
 import org.black_ixx.playerpoints.manager.CommandManager;
@@ -33,7 +32,15 @@ public class GiveAllCommand extends PointsCommand {
             int amount = Integer.parseInt(args[0]);
             boolean includeOffline = args.length > 1 && args[1].equals("*");
 
-            Consumer<Boolean> finish = success -> {
+            Bukkit.getScheduler().runTaskAsynchronously(PlayerPoints.getInstance(), () -> {
+                boolean success;
+                if (includeOffline) {
+                    success = plugin.getManager(DataManager.class).offsetAllPoints(amount);
+                } else {
+                    List<UUID> playerIds = Bukkit.getOnlinePlayers().stream().map(Player::getUniqueId).collect(Collectors.toList());
+                    success = plugin.getAPI().giveAll(playerIds, amount);
+                }
+
                 if (success) {
                     for (Player player : Bukkit.getOnlinePlayers()) {
                         localeManager.sendMessage(player, "command-give-received", StringPlaceholders.builder("amount", PointsUtils.formatPoints(amount))
@@ -45,15 +52,7 @@ public class GiveAllCommand extends PointsCommand {
                             .addPlaceholder("currency", localeManager.getCurrencyName(amount))
                             .build());
                 }
-            };
-
-            if (includeOffline) {
-                plugin.getManager(DataManager.class).offsetAllPoints(amount).thenAccept(finish);
-            } else {
-                List<UUID> playerIds = Bukkit.getOnlinePlayers().stream().map(Player::getUniqueId).collect(Collectors.toList());
-                plugin.getAPI().giveAllAsync(playerIds, amount).thenAccept(finish);
-            }
-
+            });
         } catch (NumberFormatException e) {
             localeManager.sendMessage(sender, "invalid-amount");
         }

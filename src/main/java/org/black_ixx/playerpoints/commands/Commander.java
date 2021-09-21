@@ -14,11 +14,6 @@ import org.bukkit.command.CommandSender;
  */
 public class Commander extends CommandHandler {
 
-    /**
-     * Constructor.
-     *
-     * @param plugin - Plugin instance.
-     */
     public Commander(PlayerPoints plugin) {
         super(plugin, "points", CommandManager.CommandAliases.ROOT);
 

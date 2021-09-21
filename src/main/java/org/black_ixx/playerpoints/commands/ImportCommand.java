@@ -55,7 +55,8 @@ public class ImportCommand extends PointsCommand {
             for (String uuid : section.getKeys(false))
                 data.add(new SortedPlayer(UUID.fromString(uuid), section.getInt(uuid)));
 
-            plugin.getManager(DataManager.class).importData(data).thenRun(() -> localeManager.sendMessage(sender, "command-import-success"));
+            plugin.getManager(DataManager.class).importData(data);
+            localeManager.sendMessage(sender, "command-import-success");
         });
     }
 

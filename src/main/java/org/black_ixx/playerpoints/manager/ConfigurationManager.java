@@ -15,6 +15,7 @@ public class ConfigurationManager extends AbstractConfigurationManager {
         VAULT("vault", false, "Should register with Vault as a currency manager?"),
         VAULT_PRIORITY("vault-priority", "Low", "The priority level to use for the Vault hook", "Higher priorities will allow PlayerPoints to load before other economy plugins", "Valid values: [" + Arrays.stream(ServicePriority.values()).map(Enum::name).collect(Collectors.joining(", ")) + "]"),
         LEADERBOARD_PER_PAGE("leaderboard-per-page", 10, "How many players should be displayed per page on the leaderboard?"),
+        CACHE_DURATION("cache-duration", 30, "How many seconds to hold a player's points in cache before being released"),
         VOTE("vote", null, "Votifier hook settings"),
         VOTE_ENABLED("vote.enabled", false, "If the votifier hook should be enabled"),
         VOTE_AMOUNT("vote.amount", 100, "How many points should be awarded per vote"),

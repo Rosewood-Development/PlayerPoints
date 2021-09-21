@@ -71,7 +71,7 @@ public class _1_Create_Tables extends DataMigration {
         PlayerPoints plugin = PlayerPoints.getInstance();
         DataManager dataManager = plugin.getManager(DataManager.class);
         File file = new File(plugin.getDataFolder(), "storage.yml");
-        if (dataManager.getAllPoints().join().isEmpty() && file.exists() && connector instanceof SQLiteConnector) {
+        if (dataManager.getAllPoints().isEmpty() && file.exists() && connector instanceof SQLiteConnector) {
             try {
                 FileConfiguration configuration = YamlConfiguration.loadConfiguration(file);
                 ConfigurationSection section = configuration.getConfigurationSection("Points");
@@ -87,7 +87,8 @@ public class _1_Create_Tables extends DataMigration {
                 for (String uuid : section.getKeys(false))
                     data.add(new SortedPlayer(UUID.fromString(uuid), section.getInt(uuid)));
 
-                plugin.getManager(DataManager.class).importData(data).thenRun(() -> plugin.getLogger().warning("Imported legacy data from storage.yml"));
+                plugin.getManager(DataManager.class).importData(data);
+                plugin.getLogger().warning("Imported legacy data from storage.yml");
             } catch (Exception e) {
                 e.printStackTrace();
             }
