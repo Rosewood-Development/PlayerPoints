@@ -22,7 +22,10 @@ import org.black_ixx.playerpoints.models.PointsValue;
 import org.black_ixx.playerpoints.models.SortedPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 
 public class DataManager extends AbstractDataManager implements Listener {
 
@@ -64,6 +67,14 @@ public class DataManager extends AbstractDataManager implements Listener {
         // Remove stale cache entries
         synchronized (this.pointsCache) {
             this.pointsCache.values().removeIf(PointsValue::isStale);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onPlayerJoin(AsyncPlayerPreLoginEvent event) {
+        if (event.getLoginResult() == AsyncPlayerPreLoginEvent.Result.ALLOWED) {
+            this.pointsCache.remove(event.getUniqueId());
+            this.getPoints(event.getUniqueId());
         }
     }
 
