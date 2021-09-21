@@ -72,10 +72,8 @@ public class DataManager extends AbstractDataManager implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerJoin(AsyncPlayerPreLoginEvent event) {
-        if (event.getLoginResult() == AsyncPlayerPreLoginEvent.Result.ALLOWED) {
-            this.pointsCache.remove(event.getUniqueId());
-            this.getPoints(event.getUniqueId());
-        }
+        if (event.getLoginResult() == AsyncPlayerPreLoginEvent.Result.ALLOWED)
+            this.pointsCache.put(event.getUniqueId(), new PointsValue(this.getPoints(event.getUniqueId())));
     }
 
     public void resetCache() {
@@ -100,6 +98,7 @@ public class DataManager extends AbstractDataManager implements Listener {
             points = this.pointsCache.get(playerId).getValue();
         } else {
             points = this.getPoints(playerId);
+            this.pointsCache.put(playerId, new PointsValue(points));
         }
 
         // Apply any pending transactions
