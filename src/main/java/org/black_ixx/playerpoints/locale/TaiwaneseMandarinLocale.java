@@ -26,6 +26,9 @@ public class TaiwaneseMandarinLocale implements Locale {
             this.put("currency-singular", "點數");
             this.put("currency-plural", "點數");
             this.put("currency-separator", ",");
+            this.put("number-abbreviation-thousands", "k");
+            this.put("number-abbreviation-millions", "m");
+            this.put("number-abbreviation-billions", "b");
 
             this.put("#2", "Misc");
             this.put("no-permission", "&c你沒有權限!");

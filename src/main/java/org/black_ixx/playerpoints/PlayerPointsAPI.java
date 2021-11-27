@@ -7,6 +7,7 @@ import java.util.concurrent.CompletableFuture;
 import org.black_ixx.playerpoints.event.PlayerPointsChangeEvent;
 import org.black_ixx.playerpoints.event.PlayerPointsResetEvent;
 import org.black_ixx.playerpoints.manager.DataManager;
+import org.black_ixx.playerpoints.util.PointsUtils;
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 
@@ -187,6 +188,30 @@ public class PlayerPointsAPI {
     }
 
     /**
+     * Looks at the number of points a player has formatted with number separators
+     *
+     * @param playerId The player to give points to
+     * @return the amount of points a player has
+     */
+    public String lookFormatted(@NotNull UUID playerId) {
+        Objects.requireNonNull(playerId);
+
+        return PointsUtils.formatPoints(this.plugin.getManager(DataManager.class).getEffectivePoints(playerId));
+    }
+
+    /**
+     * Looks at the number of points a player has formatted as shorthand notation
+     *
+     * @param playerId The player to give points to
+     * @return the amount of points a player has
+     */
+    public String lookShorthand(@NotNull UUID playerId) {
+        Objects.requireNonNull(playerId);
+
+        return PointsUtils.formatPointsShorthand(this.plugin.getManager(DataManager.class).getEffectivePoints(playerId));
+    }
+
+    /**
      * Takes points from a source player and gives them to a target player
      *
      * @param source The player to take points from
@@ -217,6 +242,8 @@ public class PlayerPointsAPI {
      * @return true if the transaction was successful, false otherwise
      */
     public boolean set(@NotNull UUID playerId, int amount) {
+        Objects.requireNonNull(playerId);
+
         DataManager dataManager = this.plugin.getManager(DataManager.class);
         int points = dataManager.getEffectivePoints(playerId);
         PlayerPointsChangeEvent event = new PlayerPointsChangeEvent(playerId, amount - points);
@@ -234,6 +261,8 @@ public class PlayerPointsAPI {
      * @return true if the transaction was successful, false otherwise
      */
     public boolean reset(@NotNull UUID playerId) {
+        Objects.requireNonNull(playerId);
+
         PlayerPointsResetEvent event = new PlayerPointsResetEvent(playerId);
         Bukkit.getPluginManager().callEvent(event);
         if (event.isCancelled())

@@ -26,6 +26,9 @@ public class FrenchLocale implements Locale {
             this.put("currency-singular", "Point");
             this.put("currency-plural", "Points");
             this.put("currency-separator", ",");
+            this.put("number-abbreviation-thousands", "k");
+            this.put("number-abbreviation-millions", "m");
+            this.put("number-abbreviation-billions", "b");
 
             this.put("#2", "Misc");
             this.put("no-permission", "&cVous n'avez pas la permission pour ça!");

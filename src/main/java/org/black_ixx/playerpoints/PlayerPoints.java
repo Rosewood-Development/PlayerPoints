@@ -83,7 +83,7 @@ public class PlayerPoints extends RosePlugin {
     @Override
     public void reload() {
         super.reload();
-        PointsUtils.setFormatter(this.getManager(LocaleManager.class).getLocaleMessage("currency-separator"));
+        PointsUtils.setCachedValues(this);
     }
 
     @Override

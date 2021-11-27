@@ -1,11 +1,17 @@
 package org.black_ixx.playerpoints.util;
 
+import dev.rosewood.rosegarden.RosePlugin;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.NavigableMap;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
+import org.black_ixx.playerpoints.manager.ConfigurationManager.Setting;
+import org.black_ixx.playerpoints.manager.LocaleManager;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -15,6 +21,7 @@ import org.bukkit.util.StringUtil;
 public final class PointsUtils {
 
     private static NumberFormat formatter = NumberFormat.getInstance();
+    private static NavigableMap<Long, String> suffixes = new TreeMap<>();
 
     public static String formatPoints(long points) {
         if (formatter != null) {
@@ -24,7 +31,24 @@ public final class PointsUtils {
         }
     }
 
-    public static void setFormatter(String separator) {
+    public static String formatPointsShorthand(long points) {
+        if (points == Long.MIN_VALUE) return formatPointsShorthand(Long.MIN_VALUE + 1);
+        if (points < 0) return "-" + formatPointsShorthand(-points);
+        if (points < 1000) return Long.toString(points); //deal with easy case
+
+        Map.Entry<Long, String> e = suffixes.floorEntry(points);
+        Long divideBy = e.getKey();
+        String suffix = e.getValue();
+
+        long truncated = points / (divideBy / 10); //the number part of the output times 10
+        boolean hasDecimal = truncated < 100 && (truncated / 10D) != (truncated / 10);
+        return hasDecimal ? (truncated / 10D) + suffix : (truncated / 10) + suffix;
+    }
+
+    public static void setCachedValues(RosePlugin rosePlugin) {
+        LocaleManager localeManager = rosePlugin.getManager(LocaleManager.class);
+
+        String separator = localeManager.getLocaleMessage("currency-separator");
         DecimalFormat decimalFormat = new DecimalFormat();
         DecimalFormatSymbols symbols = decimalFormat.getDecimalFormatSymbols();
         if (!separator.isEmpty()) {
@@ -36,6 +60,11 @@ public final class PointsUtils {
         } else {
             formatter = null;
         }
+
+        suffixes.clear();
+        suffixes.put(1_000L, localeManager.getLocaleMessage("number-abbreviation-thousands"));
+        suffixes.put(1_000_000L, localeManager.getLocaleMessage("number-abbreviation-millions"));
+        suffixes.put(1_000_000_000L, localeManager.getLocaleMessage("number-abbreviation-billions"));
     }
 
     /**

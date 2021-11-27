@@ -26,6 +26,8 @@ public class PointsPlaceholderExpansion extends PlaceholderExpansion {
                 return String.valueOf(this.dataManager.getEffectivePoints(player.getUniqueId()));
             case "points_formatted":
                 return PointsUtils.formatPoints(this.dataManager.getEffectivePoints(player.getUniqueId()));
+            case "points_shorthand":
+                return PointsUtils.formatPointsShorthand(this.dataManager.getEffectivePoints(player.getUniqueId()));
         }
 
         return null;
