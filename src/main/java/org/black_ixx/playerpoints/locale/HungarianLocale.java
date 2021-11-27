@@ -26,6 +26,7 @@ public class HungarianLocale implements Locale {
             this.put("currency-singular", "Pont");
             this.put("currency-plural", "Pont");
             this.put("currency-separator", ",");
+            this.put("currency-decimal", ".");
             this.put("number-abbreviation-thousands", "k");
             this.put("number-abbreviation-millions", "m");
             this.put("number-abbreviation-billions", "b");

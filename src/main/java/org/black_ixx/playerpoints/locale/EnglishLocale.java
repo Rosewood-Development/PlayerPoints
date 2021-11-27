@@ -26,6 +26,7 @@ public class EnglishLocale implements Locale {
             this.put("currency-singular", "Point");
             this.put("currency-plural", "Points");
             this.put("currency-separator", ",");
+            this.put("currency-decimal", ".");
             this.put("number-abbreviation-thousands", "k");
             this.put("number-abbreviation-millions", "m");
             this.put("number-abbreviation-billions", "b");

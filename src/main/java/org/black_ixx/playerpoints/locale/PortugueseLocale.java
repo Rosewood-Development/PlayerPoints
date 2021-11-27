@@ -26,6 +26,7 @@ public class PortugueseLocale implements Locale {
             this.put("currency-singular", "Ponto");
             this.put("currency-plural", "Pontos");
             this.put("currency-separator", ",");
+            this.put("currency-decimal", ".");
             this.put("number-abbreviation-thousands", "k");
             this.put("number-abbreviation-millions", "m");
             this.put("number-abbreviation-billions", "b");

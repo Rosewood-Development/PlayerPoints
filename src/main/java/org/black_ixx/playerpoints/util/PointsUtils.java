@@ -9,8 +9,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.NavigableMap;
 import java.util.TreeMap;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import org.black_ixx.playerpoints.manager.ConfigurationManager.Setting;
 import org.black_ixx.playerpoints.manager.LocaleManager;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -21,8 +21,15 @@ import org.bukkit.util.StringUtil;
 public final class PointsUtils {
 
     private static NumberFormat formatter = NumberFormat.getInstance();
-    private static NavigableMap<Long, String> suffixes = new TreeMap<>();
+    private static String decimal;
+    private static final NavigableMap<Long, String> suffixes = new TreeMap<>();
 
+    /**
+     * Formats a number from 1100 to 1,100
+     *
+     * @param points The points value to format
+     * @return The formatted shorthand value
+     */
     public static String formatPoints(long points) {
         if (formatter != null) {
             return formatter.format(points);
@@ -31,18 +38,24 @@ public final class PointsUtils {
         }
     }
 
+    /**
+     * Formats a number from 1100 to 1.1k
+     * Adapted from <a>https://stackoverflow.com/questions/4753251/how-to-go-about-formatting-1200-to-1-2k-in-java</a>
+     *
+     * @param points The points value to format
+     * @return The formatted shorthand value
+     */
     public static String formatPointsShorthand(long points) {
         if (points == Long.MIN_VALUE) return formatPointsShorthand(Long.MIN_VALUE + 1);
         if (points < 0) return "-" + formatPointsShorthand(-points);
-        if (points < 1000) return Long.toString(points); //deal with easy case
+        if (points < 1000) return Long.toString(points);
 
-        Map.Entry<Long, String> e = suffixes.floorEntry(points);
-        Long divideBy = e.getKey();
-        String suffix = e.getValue();
+        Map.Entry<Long, String> entry = suffixes.floorEntry(points);
+        Long divideBy = entry.getKey();
+        String suffix = entry.getValue();
 
-        long truncated = points / (divideBy / 10); //the number part of the output times 10
-        boolean hasDecimal = truncated < 100 && (truncated / 10D) != (truncated / 10);
-        return hasDecimal ? (truncated / 10D) + suffix : (truncated / 10) + suffix;
+        long truncated = points / (divideBy / 10);
+        return ((truncated / 10D) + suffix).replaceFirst(Pattern.quote("."), decimal);
     }
 
     public static void setCachedValues(RosePlugin rosePlugin) {
@@ -65,6 +78,7 @@ public final class PointsUtils {
         suffixes.put(1_000L, localeManager.getLocaleMessage("number-abbreviation-thousands"));
         suffixes.put(1_000_000L, localeManager.getLocaleMessage("number-abbreviation-millions"));
         suffixes.put(1_000_000_000L, localeManager.getLocaleMessage("number-abbreviation-billions"));
+        decimal = localeManager.getLocaleMessage("currency-decimal");
     }
 
     /**

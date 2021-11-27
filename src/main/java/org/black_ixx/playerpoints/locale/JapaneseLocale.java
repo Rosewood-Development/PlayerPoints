@@ -26,6 +26,7 @@ public class JapaneseLocale implements Locale {
             this.put("currency-singular", "ポイント");
             this.put("currency-plural", "ポイント");
             this.put("currency-separator", ",");
+            this.put("currency-decimal", ".");
             this.put("number-abbreviation-thousands", "k");
             this.put("number-abbreviation-millions", "m");
             this.put("number-abbreviation-billions", "b");

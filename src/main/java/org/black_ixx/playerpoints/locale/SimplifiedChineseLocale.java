@@ -26,6 +26,7 @@ public class SimplifiedChineseLocale implements Locale {
             this.put("currency-singular", "个点劵");
             this.put("currency-plural", "多个点劵");
             this.put("currency-separator", ",");
+            this.put("currency-decimal", ".");
             this.put("number-abbreviation-thousands", "k");
             this.put("number-abbreviation-millions", "m");
             this.put("number-abbreviation-billions", "b");
