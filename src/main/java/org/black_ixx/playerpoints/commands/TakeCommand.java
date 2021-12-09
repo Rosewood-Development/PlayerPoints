@@ -53,6 +53,7 @@ public class TakeCommand extends PointsCommand {
                 localeManager.sendMessage(sender, "command-take-lacking-funds", StringPlaceholders.builder("player", player.getName())
                         .addPlaceholder("currency", localeManager.getCurrencyName(amount))
                         .build());
+                plugin.getAPI().reset(player.getUniqueId());
             }
         });
     }
