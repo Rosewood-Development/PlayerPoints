@@ -9,7 +9,7 @@ plugins {
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 group = 'org.black_ixx'
-version = '3.1.0'
+version = '3.1.1'
 
 repositories {
     mavenCentral()
@@ -25,7 +25,7 @@ repositories {
 }
 
 dependencies {
-    api 'dev.rosewood:rosegarden:1.0.8-SNAPSHOT'
+    api 'dev.rosewood:rosegarden:1.0.9'
 
     compileOnly 'org.spigotmc:spigot:1.17.1'
     compileOnly 'com.github.milkbowl:vault:1.7.3'
