@@ -5,8 +5,10 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 import org.black_ixx.playerpoints.PlayerPoints;
 import org.black_ixx.playerpoints.manager.CommandManager;
@@ -190,11 +192,12 @@ public abstract class CommandHandler implements TabExecutor, NamedExecutor {
      * @return a combination of all executable commands and handlers sorted by name
      */
     public List<NamedExecutor> getExecutables() {
-        List<NamedExecutor> executors = new ArrayList<>();
+        Set<NamedExecutor> executors = new HashSet<>();
         executors.addAll(this.registeredHandlers.values());
         executors.addAll(this.registeredCommands.values());
-        executors.sort(Comparator.comparing(NamedExecutor::getName));
-        return executors;
+        List<NamedExecutor> sortedExecutors = new ArrayList<>(executors);
+        sortedExecutors.sort(Comparator.comparing(NamedExecutor::getName));
+        return sortedExecutors;
     }
 
     @Override
