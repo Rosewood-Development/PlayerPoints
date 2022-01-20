@@ -50,7 +50,7 @@ public class EnglishLocale implements Locale {
             this.put("#5", "Give Command");
             this.put("command-give-description", "&8 - &d/points give &7- Give a player points");
             this.put("command-give-usage", "&cUsage: &e/points give <player> <amount>");
-            this.put("command-give-success", "&b%player% &awas given &b%amount% &e%currency%.");
+            this.put("command-give-success", "&b%player% &awas given &b%amount% &a%currency%.");
             this.put("command-give-received", "&eYou have received &b%amount% &e%currency%.");
 
             this.put("#6", "Give All Command");

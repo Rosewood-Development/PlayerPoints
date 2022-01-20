@@ -50,7 +50,7 @@ public class JapaneseLocale implements Locale {
             this.put("#5", "Give コマンド");
             this.put("command-give-description", "&8 - &d/points give &7- プレイヤーにポイントを付与する。");
             this.put("command-give-usage", "&c構文: &e/points give <player> <amount>");
-            this.put("command-give-success", "&b%player% &aに &b%amount% &e%currency% &a付与しました。");
+            this.put("command-give-success", "&b%player% &aに &b%amount% &a%currency% &a付与しました。");
             this.put("command-give-received", "&eあなたは &b%amount% &e%currency% &e受け取りました。");
 
             this.put("#6", "Give All コマンド");

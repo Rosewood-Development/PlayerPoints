@@ -50,7 +50,7 @@ public class VietnameseLocale implements Locale {
             this.put("#5", "Give Command");
             this.put("command-give-description", "&8 - &d/points give &7- Trao cho người chơi points");
             this.put("command-give-usage", "&cSử dụng: &e/points give <người chơi> <số lượng>");
-            this.put("command-give-success", "&b%player% &ađã nhận được &b%amount% &e%currency%.");
+            this.put("command-give-success", "&b%player% &ađã nhận được &b%amount% &a%currency%.");
             this.put("command-give-received", "&eBạn đã nhận được &b%amount% &e%currency%.");
 
             this.put("#6", "Give All Command");

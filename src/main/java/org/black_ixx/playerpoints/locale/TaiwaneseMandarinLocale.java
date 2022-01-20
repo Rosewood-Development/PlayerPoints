@@ -50,7 +50,7 @@ public class TaiwaneseMandarinLocale implements Locale {
             this.put("#5", "Give Command");
             this.put("command-give-description", "&8 - &d/points give <玩家> <數量> &7- 給予玩家點數");
             this.put("command-give-usage", "&c用法: &e/points give <玩家> <數量>");
-            this.put("command-give-success", "&b%player% &a給你 &b%amount% &a點&a%currency%.");
+            this.put("command-give-success", "&b%player% &a給你 &b%amount% &a點%currency%.");
             this.put("command-give-received", "&e你獲得了 &b%amount% &e點&e%currency%.");
 
             this.put("#6", "Give All Command");

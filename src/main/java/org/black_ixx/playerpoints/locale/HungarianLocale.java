@@ -50,7 +50,7 @@ public class HungarianLocale implements Locale {
             this.put("#5", "Give Command");
             this.put("command-give-description", "&8 - &d/points give &7- Ad a játékosnak pontot");
             this.put("command-give-usage", "&cHasználat: &e/points give <játékos> <mennyiség>");
-            this.put("command-give-success", "&b%player% &akapott &b%amount% &e%currency%ot.");
+            this.put("command-give-success", "&b%player% &akapott &b%amount% &a%currency%ot.");
             this.put("command-give-received", "&eKaptál &b%amount% &e%currency%ot.");
 
             this.put("#6", "Give All Command");

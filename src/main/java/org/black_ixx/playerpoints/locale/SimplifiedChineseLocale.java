@@ -50,7 +50,7 @@ public class SimplifiedChineseLocale implements Locale {
             this.put("#5", "给予命令");
             this.put("command-give-description", "&8 - &d/points give &7- 给一名玩家点劵");
             this.put("command-give-usage", "&c用法: &e/points give <玩家> <数值>");
-            this.put("command-give-success", "&b%player% &a被给予了 &b%amount% &e%currency%。");
+            this.put("command-give-success", "&b%player% &a被给予了 &b%amount% &a%currency%。");
             this.put("command-give-received", "&e您被给予了 &b%amount% &e%currency%。");
 
             this.put("#6", "给予全体命令");
