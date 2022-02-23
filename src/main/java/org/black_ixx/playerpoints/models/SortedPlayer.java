@@ -3,6 +3,8 @@ package org.black_ixx.playerpoints.models;
 import java.util.UUID;
 
 /**
+ * Stores information about a player and how many points they have.
+ *
  * Holder class that will sort based on the points and by the name. Note, this
  * sorts by order of highest points first and uses the UUID for any matches.
  *

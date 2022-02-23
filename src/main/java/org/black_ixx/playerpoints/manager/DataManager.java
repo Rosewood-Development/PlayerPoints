@@ -10,12 +10,13 @@ import java.nio.charset.StandardCharsets;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Deque;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.SortedSet;
-import java.util.TreeSet;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedDeque;
@@ -251,10 +252,10 @@ public class DataManager extends AbstractDataManager implements Listener {
         return true;
     }
 
-    public SortedSet<SortedPlayer> getAllPoints() {
-        SortedSet<SortedPlayer> players = new TreeSet<>();
+    public List<SortedPlayer> getTopSortedPoints(Integer limit) {
+        List<SortedPlayer> players = new ArrayList<>();
         this.databaseConnector.connect(connection -> {
-            String query = "SELECT " + this.getUuidColumnName() + ", points FROM " + this.getPointsTableName();
+            String query = "SELECT " + this.getUuidColumnName() + ", points FROM " + this.getPointsTableName() + " ORDER BY points DESC" + (limit != null ? " LIMIT " + limit : "");
             try (Statement statement = connection.createStatement()) {
                 ResultSet result = statement.executeQuery(query);
                 while (result.next()) {

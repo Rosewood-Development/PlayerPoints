@@ -71,7 +71,7 @@ public class _1_Create_Tables extends DataMigration {
         PlayerPoints plugin = PlayerPoints.getInstance();
         DataManager dataManager = plugin.getManager(DataManager.class);
         File file = new File(plugin.getDataFolder(), "storage.yml");
-        if (dataManager.getAllPoints().isEmpty() && file.exists() && connector instanceof SQLiteConnector) {
+        if (dataManager.getTopSortedPoints(1).isEmpty() && file.exists() && connector instanceof SQLiteConnector) {
             try {
                 FileConfiguration configuration = YamlConfiguration.loadConfiguration(file);
                 ConfigurationSection section = configuration.getConfigurationSection("Points");

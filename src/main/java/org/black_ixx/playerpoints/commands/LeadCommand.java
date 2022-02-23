@@ -37,7 +37,7 @@ public class LeadCommand extends CommandHandler {
         int limit = Setting.LEADERBOARD_PER_PAGE.getInt();
 
         Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> {
-            SortedSet<SortedPlayer> leaders = this.plugin.getManager(DataManager.class).getAllPoints();
+            List<SortedPlayer> leaders = this.plugin.getManager(DataManager.class).getTopSortedPoints(null);
             int currentPage = this.pageMap.getOrDefault(sender.getName(), 0);
             int numPages = (int) Math.ceil(leaders.size() / (double) limit);
 

@@ -35,7 +35,7 @@ public class ExportCommand extends PointsCommand {
             if (file.exists())
                 file.delete();
 
-            SortedSet<SortedPlayer> data = plugin.getManager(DataManager.class).getAllPoints();
+            List<SortedPlayer> data = plugin.getManager(DataManager.class).getTopSortedPoints(null);
             FileConfiguration configuration = YamlConfiguration.loadConfiguration(file);
             ConfigurationSection section = configuration.createSection("Points");
             for (SortedPlayer playerData : data)

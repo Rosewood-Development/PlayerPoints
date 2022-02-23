@@ -1,12 +1,14 @@
 package org.black_ixx.playerpoints;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import org.black_ixx.playerpoints.event.PlayerPointsChangeEvent;
 import org.black_ixx.playerpoints.event.PlayerPointsResetEvent;
 import org.black_ixx.playerpoints.manager.DataManager;
+import org.black_ixx.playerpoints.models.SortedPlayer;
 import org.black_ixx.playerpoints.util.PointsUtils;
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
@@ -24,107 +26,6 @@ public class PlayerPointsAPI {
     public PlayerPointsAPI(PlayerPoints plugin) {
         this.plugin = plugin;
     }
-
-    //#region Deprecated
-
-    /**
-     * Gives a player a specified amount of points
-     *
-     * @param playerId The player to give points to
-     * @param amount The amount of points to give
-     * @return true if the transaction was successful, false otherwise
-     * @deprecated Use {@link PlayerPointsAPI#give(UUID, int)} instead, this is no longer run async
-     */
-    @NotNull
-    @Deprecated
-    public CompletableFuture<Boolean> giveAsync(@NotNull UUID playerId, int amount) {
-        return CompletableFuture.completedFuture(this.give(playerId, amount));
-    }
-
-    /**
-     * Gives a collection of players a specified amount of points
-     *
-     * @param playerIds The players to give points to
-     * @param amount The amount of points to give
-     * @return true if any transaction was successful, false otherwise
-     * @deprecated Use {@link PlayerPointsAPI#giveAll(Collection, int)} instead, this is no longer run async
-     */
-    @NotNull
-    @Deprecated
-    public CompletableFuture<Boolean> giveAllAsync(@NotNull Collection<UUID> playerIds, int amount) {
-        return CompletableFuture.completedFuture(this.giveAll(playerIds, amount));
-    }
-
-    /**
-     * Takes a specified amount of points from a player
-     *
-     * @param playerId The player to take points from
-     * @param amount The amount of points to take
-     * @return true if the transaction was successful, false otherwise
-     * @deprecated Use {@link PlayerPointsAPI#take(UUID, int)} instead, this is no longer run async
-     */
-    @NotNull
-    @Deprecated
-    public CompletableFuture<Boolean> takeAsync(@NotNull UUID playerId, int amount) {
-        return CompletableFuture.completedFuture(this.take(playerId, amount));
-    }
-
-    /**
-     * Looks at the number of points a player has
-     *
-     * @param playerId The player to give points to
-     * @return the amount of points a player has
-     * @deprecated Use {@link PlayerPointsAPI#look(UUID)} instead, this is no longer run async
-     */
-    @NotNull
-    @Deprecated
-    public CompletableFuture<Integer> lookAsync(@NotNull UUID playerId) {
-        return CompletableFuture.completedFuture(this.look(playerId));
-    }
-
-    /**
-     * Takes points from a source player and gives them to a target player
-     *
-     * @param source The player to take points from
-     * @param target The player to give points to
-     * @param amount The amount of points to take/give
-     * @return true if the transaction was successful, false otherwise
-     * @deprecated Use {@link PlayerPointsAPI#pay(UUID, UUID, int)} instead, this is no longer run async
-     */
-    @NotNull
-    @Deprecated
-    public CompletableFuture<Boolean> payAsync(@NotNull UUID source, @NotNull UUID target, int amount) {
-        return CompletableFuture.completedFuture(this.pay(source, target, amount));
-    }
-
-    /**
-     * Sets a player's points to a specified amount
-     *
-     * @param playerId The player to set the points of
-     * @param amount The amount of points to set to
-     * @return true if the transaction was successful, false otherwise
-     * @deprecated Use {@link PlayerPointsAPI#set(UUID, int)} instead, this is no longer run async
-     */
-    @NotNull
-    @Deprecated
-    public CompletableFuture<Boolean> setAsync(@NotNull UUID playerId, int amount) {
-        return CompletableFuture.completedFuture(this.set(playerId, amount));
-    }
-
-    /**
-     * Sets a player's points to zero
-     *
-     * @param playerId The player to reset the points of
-     * @return true if the transaction was successful, false otherwise
-     * @deprecated Use {@link PlayerPointsAPI#reset(UUID)} instead, this is no longer run async
-     */
-    @NotNull
-    @Deprecated
-    public CompletableFuture<Boolean> resetAsync(@NotNull UUID playerId) {
-        return CompletableFuture.completedFuture(this.reset(playerId));
-    }
-
-    //#endregion
 
     /**
      * Gives a player a specified amount of points
@@ -269,6 +170,23 @@ public class PlayerPointsAPI {
             return false;
 
         return this.plugin.getManager(DataManager.class).setPoints(playerId, 0);
+    }
+
+    /**
+     * Gets a List of a maximum number of players sorted by the number of points they have.
+     *
+     * @param limit The maximum number of players to get
+     * @return a List of all players sorted by the number of points they have.
+     */
+    public List<SortedPlayer> getTopSortedPoints(int limit) {
+        return this.plugin.getManager(DataManager.class).getTopSortedPoints(limit);
+    }
+
+    /**
+     * @return a List of all players sorted by the number of points they have.
+     */
+    public List<SortedPlayer> getTopSortedPoints() {
+        return this.plugin.getManager(DataManager.class).getTopSortedPoints(null);
     }
 
 }
