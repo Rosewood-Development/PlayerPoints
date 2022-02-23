@@ -1,8 +1,12 @@
 package org.black_ixx.playerpoints.manager;
 
+import com.google.common.collect.Iterables;
+import com.google.common.io.ByteArrayDataOutput;
+import com.google.common.io.ByteStreams;
 import dev.rosewood.rosegarden.RosePlugin;
 import dev.rosewood.rosegarden.database.SQLiteConnector;
 import dev.rosewood.rosegarden.manager.AbstractDataManager;
+import java.nio.charset.StandardCharsets;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -17,6 +21,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+import org.black_ixx.playerpoints.listeners.PointsMessageListener;
+import org.black_ixx.playerpoints.manager.ConfigurationManager.Setting;
 import org.black_ixx.playerpoints.models.PendingTransaction;
 import org.black_ixx.playerpoints.models.PointsValue;
 import org.black_ixx.playerpoints.models.SortedPlayer;
@@ -120,6 +126,16 @@ public class DataManager extends AbstractDataManager implements Listener {
     }
 
     /**
+     * Refreshes a player's points to the value in the database if they are online
+     *
+     * @param uuid The player's UUID
+     */
+    public void refreshPoints(UUID uuid) {
+        if (this.pointsCache.containsKey(uuid))
+            Bukkit.getScheduler().runTaskAsynchronously(this.rosePlugin, () -> this.pointsCache.put(uuid, new PointsValue(this.getPoints(uuid))));
+    }
+
+    /**
      * Performs a database query and hangs the current thread, also caches the points entry
      *
      * @param playerId The UUID of the Player
@@ -127,15 +143,23 @@ public class DataManager extends AbstractDataManager implements Listener {
      */
     private int getPoints(UUID playerId) {
         AtomicInteger value = new AtomicInteger();
+        AtomicBoolean generate = new AtomicBoolean(false);
         this.databaseConnector.connect(connection -> {
             String query = "SELECT points FROM " + this.getPointsTableName() + " WHERE " + this.getUuidColumnName() + " = ?";
             try (PreparedStatement statement = connection.prepareStatement(query)) {
                 statement.setString(1, playerId.toString());
                 ResultSet result = statement.executeQuery();
-                if (result.next())
+                if (result.next()) {
                     value.set(result.getInt(1));
+                } else {
+                    generate.set(true);
+                }
             }
         });
+
+        if (generate.get())
+            this.setPoints(playerId, 0);
+
         return value.get();
     }
 
@@ -185,6 +209,22 @@ public class DataManager extends AbstractDataManager implements Listener {
 
                     // Update cached value
                     this.pointsCache.computeIfAbsent(entry.getKey(), x -> new PointsValue(entry.getValue())).setValue(entry.getValue());
+
+                    // Send update to BungeeCord if enabled
+                    if (Setting.BUNGEECORD_SEND_UPDATES.getBoolean()) {
+                        ByteArrayDataOutput output = ByteStreams.newDataOutput();
+                        output.writeUTF("Forward");
+                        output.writeUTF("ALL");
+                        output.writeUTF(PointsMessageListener.REFRESH_SUBCHANNEL);
+
+                        byte[] bytes = entry.getKey().toString().getBytes(StandardCharsets.UTF_8);
+                        output.writeShort(bytes.length);
+                        output.write(bytes);
+
+                        Player attachedPlayer = Iterables.getFirst(Bukkit.getOnlinePlayers(), null);
+                        if (attachedPlayer != null)
+                            attachedPlayer.sendPluginMessage(this.rosePlugin, PointsMessageListener.CHANNEL, output.toByteArray());
+                    }
                 }
                 statement.executeBatch();
             }

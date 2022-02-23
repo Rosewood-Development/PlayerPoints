@@ -8,6 +8,7 @@ import java.util.List;
 import net.milkbowl.vault.economy.Economy;
 import org.black_ixx.playerpoints.database.migrations._1_Create_Tables;
 import org.black_ixx.playerpoints.hook.PointsPlaceholderExpansion;
+import org.black_ixx.playerpoints.listeners.PointsMessageListener;
 import org.black_ixx.playerpoints.listeners.VotifierListener;
 import org.black_ixx.playerpoints.manager.CommandManager;
 import org.black_ixx.playerpoints.manager.ConfigurationManager;
@@ -68,6 +69,11 @@ public class PlayerPoints extends RosePlugin {
             }
         }
 
+        if (Setting.BUNGEECORD_SEND_UPDATES.getBoolean()) {
+            Bukkit.getMessenger().registerOutgoingPluginChannel(this, PointsMessageListener.CHANNEL);
+            Bukkit.getMessenger().registerIncomingPluginChannel(this, PointsMessageListener.CHANNEL, new PointsMessageListener(this));
+        }
+
         if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI"))
             new PointsPlaceholderExpansion(this).register();
     }
@@ -78,6 +84,11 @@ public class PlayerPoints extends RosePlugin {
 
         if (this.vaultLayer != null)
             Bukkit.getServicesManager().unregister(Economy.class, this.vaultLayer);
+
+        if (Setting.BUNGEECORD_SEND_UPDATES.getBoolean()) {
+            Bukkit.getMessenger().unregisterOutgoingPluginChannel(this);
+            Bukkit.getMessenger().unregisterIncomingPluginChannel(this);
+        }
     }
 
     @Override
