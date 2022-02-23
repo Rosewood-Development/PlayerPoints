@@ -13,6 +13,7 @@ import org.black_ixx.playerpoints.manager.ConfigurationManager.Setting;
 import org.black_ixx.playerpoints.manager.DataManager;
 import org.black_ixx.playerpoints.manager.LocaleManager;
 import org.black_ixx.playerpoints.models.SortedPlayer;
+import org.black_ixx.playerpoints.util.NameFetcher;
 import org.black_ixx.playerpoints.util.PointsUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -67,9 +68,8 @@ public class LeadCommand extends CommandHandler {
                 int position = currentPage * limit + i + 1;
                 SortedPlayer player = listedPlayers.get(i);
 
-                String name = Bukkit.getOfflinePlayer(player.getUniqueId()).getName();
                 localeManager.sendSimpleMessage(sender, "command-lead-entry", StringPlaceholders.builder("position", position)
-                        .addPlaceholder("player", name != null ? name : "Unknown")
+                        .addPlaceholder("player", NameFetcher.getName(player.getUniqueId()))
                         .addPlaceholder("amount", PointsUtils.formatPoints(player.getPoints()))
                         .addPlaceholder("currency", localeManager.getCurrencyName(player.getPoints()))
                         .build());

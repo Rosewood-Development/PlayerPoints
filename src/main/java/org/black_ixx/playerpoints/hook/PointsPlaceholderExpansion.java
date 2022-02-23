@@ -10,6 +10,7 @@ import org.black_ixx.playerpoints.manager.DataManager;
 import org.black_ixx.playerpoints.manager.LeaderboardManager;
 import org.black_ixx.playerpoints.manager.LocaleManager;
 import org.black_ixx.playerpoints.models.SortedPlayer;
+import org.black_ixx.playerpoints.util.NameFetcher;
 import org.black_ixx.playerpoints.util.PointsUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -20,14 +21,12 @@ public class PointsPlaceholderExpansion extends PlaceholderExpansion {
     private final DataManager dataManager;
     private final LeaderboardManager leaderboardManager;
     private final LocaleManager localeManager;
-    private final Map<UUID, String> nameLookupCache;
 
     public PointsPlaceholderExpansion(PlayerPoints playerPoints) {
         this.playerPoints = playerPoints;
         this.dataManager = playerPoints.getManager(DataManager.class);
         this.leaderboardManager = playerPoints.getManager(LeaderboardManager.class);
         this.localeManager = playerPoints.getManager(LocaleManager.class);
-        this.nameLookupCache = new HashMap<>();
     }
 
     @Override
@@ -56,19 +55,36 @@ public class PointsPlaceholderExpansion extends PlaceholderExpansion {
 
         if (placeholder.toLowerCase().startsWith("leaderboard_")) {
             try {
-                int topPosition = Integer.parseInt(placeholder.substring("leaderboard_".length()));
-                List<SortedPlayer> leaderboard = this.leaderboardManager.getLeaderboard();
-                if (topPosition <= leaderboard.size()) {
-                    SortedPlayer leader = leaderboard.get(topPosition - 1);
-                    if (this.nameLookupCache.containsKey(leader.getUniqueId())) {
-                        return this.nameLookupCache.get(leader.getUniqueId());
-                    } else {
-                        String name = Bukkit.getOfflinePlayer(leader.getUniqueId()).getName();
-                        this.nameLookupCache.put(leader.getUniqueId(), name = (name != null ? name : "Unknown"));
-                        return name;
-                    }
+                String suffix = placeholder.substring("leaderboard_".length());
+                int underscoreIndex = suffix.indexOf('_');
+                int position;
+                if (underscoreIndex != -1) {
+                    String positionValue = suffix.substring(0, underscoreIndex);
+                    suffix = suffix.substring(underscoreIndex + 1);
+                    position = Integer.parseInt(positionValue);
+
                 } else {
+                    position = Integer.parseInt(suffix);
+                    suffix = "";
+                }
+
+                List<SortedPlayer> leaderboard = this.leaderboardManager.getLeaderboard();
+                if (position > leaderboard.size())
                     return this.localeManager.getLocaleMessage("leaderboard-empty-entry");
+
+                SortedPlayer leader = leaderboard.get(position - 1);
+
+                // Display the player's name
+                if (suffix.isEmpty())
+                    return NameFetcher.getName(leader.getUniqueId());
+
+                switch (suffix.toLowerCase()) {
+                    case "amount":
+                        return String.valueOf(leader.getPoints());
+                    case "amount_formatted":
+                        return PointsUtils.formatPoints(leader.getPoints());
+                    case "amount_shorthand":
+                        return PointsUtils.formatPointsShorthand(leader.getPoints());
                 }
             } catch (Exception e) {
                 return null;
