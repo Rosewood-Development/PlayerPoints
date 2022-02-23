@@ -38,6 +38,7 @@ public class HungarianLocale implements Locale {
             this.put("unknown-player", "&cJátékos nem található: &b%player%");
             this.put("unknown-command", "&cIsmeretlen parancs: &b%input%");
             this.put("votifier-voted", "&eKöszönjük hogy szavaztál ránk itt %service%! &b%amount% &ehozzáadva az egyenlegedhez.");
+            this.put("leaderboard-empty-entry", "Ez akár te is lehetsz!");
 
             this.put("#3", "Base Command Message");
             this.put("base-command-color", "&e");

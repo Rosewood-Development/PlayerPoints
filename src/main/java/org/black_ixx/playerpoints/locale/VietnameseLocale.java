@@ -38,6 +38,7 @@ public class VietnameseLocale implements Locale {
             this.put("unknown-player", "&cKhông thể tìm thấy người chơi: &b%player%");
             this.put("unknown-command", "&cLệnh không xác định: &b%input%");
             this.put("votifier-voted", "&eCảm ơn vì đã bỏ phiếu trên %service%! &b%amount% &eđã được thêm vào số dư của bạn.");
+            this.put("leaderboard-empty-entry", "Đây có thể là bạn!");
 
             this.put("#3", "Base Command Message");
             this.put("base-command-color", "&e");

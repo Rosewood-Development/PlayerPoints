@@ -3,6 +3,7 @@ package org.black_ixx.playerpoints;
 import dev.rosewood.rosegarden.RosePlugin;
 import dev.rosewood.rosegarden.database.DataMigration;
 import dev.rosewood.rosegarden.manager.Manager;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import net.milkbowl.vault.economy.Economy;
@@ -14,6 +15,7 @@ import org.black_ixx.playerpoints.manager.CommandManager;
 import org.black_ixx.playerpoints.manager.ConfigurationManager;
 import org.black_ixx.playerpoints.manager.ConfigurationManager.Setting;
 import org.black_ixx.playerpoints.manager.DataManager;
+import org.black_ixx.playerpoints.manager.LeaderboardManager;
 import org.black_ixx.playerpoints.manager.LocaleManager;
 import org.black_ixx.playerpoints.util.PointsUtils;
 import org.bukkit.Bukkit;
@@ -99,8 +101,9 @@ public class PlayerPoints extends RosePlugin {
 
     @Override
     protected List<Class<? extends Manager>> getManagerLoadPriority() {
-        return Collections.singletonList(
-                CommandManager.class
+        return Arrays.asList(
+                CommandManager.class,
+                LeaderboardManager.class
         );
     }
 

@@ -38,6 +38,7 @@ public class SimplifiedChineseLocale implements Locale {
             this.put("unknown-player", "&c找不到玩家: &b%player%");
             this.put("unknown-command", "&c未知命令: &b%input%");
             this.put("votifier-voted", "&e感谢您在 %service% 上为我们投票! &b%amount% &e已经被添加到您的账户。");
+            this.put("leaderboard-empty-entry", "这可能是你!");
 
             this.put("#3", "基础命令信息");
             this.put("base-command-color", "&e");

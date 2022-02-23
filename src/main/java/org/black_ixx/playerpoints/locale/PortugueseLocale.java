@@ -38,6 +38,7 @@ public class PortugueseLocale implements Locale {
             this.put("unknown-player", "&cJogador não pode ser encontrado: &b%player%");
             this.put("unknown-command", "&cComando desconhecido: &b%input%");
             this.put("votifier-voted", "&eObrigado por votar em %service%! &b%amount% &eforam adicionados ao seu saldo.");
+            this.put("leaderboard-empty-entry", "Este poderia ser você!");
 
             this.put("#3", "Mensagem de comandos base");
             this.put("base-command-color", "&e");

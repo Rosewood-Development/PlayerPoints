@@ -38,6 +38,7 @@ public class JapaneseLocale implements Locale {
             this.put("unknown-player", "&c&b%player% という名前のプレイヤーは見つかりませんでした。");
             this.put("unknown-command", "&c無効なコマンド: &b%input%");
             this.put("votifier-voted", "&e%service% での投票ありがとうございます。 &b%amount% &eポイントがアカウントに追加されました。");
+            this.put("leaderboard-empty-entry", "現在、ランキングは空です。");
 
             this.put("#3", "基礎コマンドメッセージ");
             this.put("base-command-color", "&e");

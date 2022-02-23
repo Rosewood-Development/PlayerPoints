@@ -38,6 +38,7 @@ public class TaiwaneseMandarinLocale implements Locale {
             this.put("unknown-player", "&c找不到此玩家: &b%player%");
             this.put("unknown-command", "&c未知指令: &b%input%");
             this.put("votifier-voted", "&e謝謝你對於 %service% &e的投票! &b%amount% &e點%currency%已進入你的點數庫.");
+            this.put("leaderboard-empty-entry", "這可能是你！");
 
             this.put("#3", "Base Command Message");
             this.put("base-command-color", "&e");

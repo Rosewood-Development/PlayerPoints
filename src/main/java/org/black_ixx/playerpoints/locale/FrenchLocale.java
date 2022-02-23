@@ -38,6 +38,7 @@ public class FrenchLocale implements Locale {
             this.put("unknown-player", "&cLe joueur est introuvable: &b%player%");
             this.put("unknown-command", "&cCommande inconnue: &b%input%");
             this.put("votifier-voted", "&eMerci d'avoir voté sur %service%! &b%amount% &ea été ajouté à votre solde.");
+            this.put("leaderboard-empty-entry", "Cela pourrait être vous!");
 
             this.put("#3", "Base Command Message");
             this.put("base-command-color", "&e");

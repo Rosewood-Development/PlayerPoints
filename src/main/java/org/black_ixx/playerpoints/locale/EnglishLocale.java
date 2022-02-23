@@ -38,6 +38,7 @@ public class EnglishLocale implements Locale {
             this.put("unknown-player", "&cPlayer could not be found: &b%player%");
             this.put("unknown-command", "&cUnknown command: &b%input%");
             this.put("votifier-voted", "&eThanks for voting on %service%! &b%amount% &ehas been added to your balance.");
+            this.put("leaderboard-empty-entry", "This could be you!");
 
             this.put("#3", "Base Command Message");
             this.put("base-command-color", "&e");

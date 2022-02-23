@@ -22,6 +22,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 import org.black_ixx.playerpoints.listeners.PointsMessageListener;
 import org.black_ixx.playerpoints.manager.ConfigurationManager.Setting;
 import org.black_ixx.playerpoints.models.PendingTransaction;
@@ -260,8 +261,30 @@ public class DataManager extends AbstractDataManager implements Listener {
                 ResultSet result = statement.executeQuery(query);
                 while (result.next()) {
                     UUID uuid = UUID.fromString(result.getString(1));
-                    int points = result.getInt(2);
-                    players.add(new SortedPlayer(uuid, points));
+                    PointsValue pointsValue = this.pointsCache.get(uuid);
+                    if (pointsValue == null)
+                        pointsValue = new PointsValue(result.getInt(2));
+
+                    players.add(new SortedPlayer(uuid, pointsValue));
+                }
+            }
+        });
+        return players;
+    }
+
+    public Map<UUID, Long> getOnlineTopSortedPointPositions() {
+        Map<UUID, Long> players = new HashMap<>();
+        this.databaseConnector.connect(connection -> {
+            String uuidList = Bukkit.getOnlinePlayers().stream().map(Player::getUniqueId).map(x -> "'" + x + "'").collect(Collectors.joining(", "));
+            String tableName = this.getPointsTableName();
+            String query = "SELECT " + this.getUuidColumnName() + ", (SELECT COUNT(*) FROM " + tableName + " x WHERE x.points >= t.points) AS position " +
+                           "FROM " + tableName + " t " +
+                           "WHERE uuid IN (" + uuidList + ")";
+            try (Statement statement = connection.createStatement()) {
+                ResultSet result = statement.executeQuery(query);
+                while (result.next()) {
+                    UUID uuid = UUID.fromString(result.getString(1));
+                    players.put(uuid, result.getLong(2));
                 }
             }
         });

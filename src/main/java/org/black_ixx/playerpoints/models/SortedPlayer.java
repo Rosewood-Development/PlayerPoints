@@ -20,11 +20,16 @@ public class SortedPlayer implements Comparable<SortedPlayer> {
     /**
      * Player points.
      */
-    final int points;
+    final PointsValue points;
+
+    public SortedPlayer(UUID uuid, PointsValue points) {
+        this.uuid = uuid;
+        this.points = points;
+    }
 
     public SortedPlayer(UUID uuid, int points) {
         this.uuid = uuid;
-        this.points = points;
+        this.points = new PointsValue(points);
     }
 
     /**
@@ -38,7 +43,7 @@ public class SortedPlayer implements Comparable<SortedPlayer> {
      * @return Point amount.
      */
     public int getPoints() {
-        return this.points;
+        return this.points.getValue();
     }
 
     @Override

@@ -14,9 +14,11 @@ public class ConfigurationManager extends AbstractConfigurationManager {
     public enum Setting implements RoseSetting {
         VAULT("vault", false, "Should register with Vault as a currency manager?"),
         VAULT_PRIORITY("vault-priority", "Low", "The priority level to use for the Vault hook", "Higher priorities will allow PlayerPoints to load before other economy plugins", "Valid values: [" + Arrays.stream(ServicePriority.values()).map(Enum::name).collect(Collectors.joining(", ")) + "]"),
-        LEADERBOARD_PER_PAGE("leaderboard-per-page", 10, "How many players should be displayed per page on the leaderboard?"),
-        CACHE_DURATION("cache-duration", 30, "How many seconds to hold a player's points in cache before being released"),
+        LEADERBOARD_PER_PAGE("leaderboard-per-page", 10, "The number of players to be displayed per page on the leaderboard?"),
+        CACHE_DURATION("cache-duration", 30, "The number of seconds to hold a player's points in cache before being released"),
         BUNGEECORD_SEND_UPDATES("bungeecord-send-updates", true, "Should we send updates to other servers when a player's points value changes?", "This should work for any type of proxy"),
+        LEADERBOARD_PLACEHOLDER_ENTRIES("leaderboard-placeholder-entries", 10, "The number of entries to keep updated in the leaderboard placeholder", "Only a certain number of leaderboard entries can be available at a time", "Accessing an entry that does not exist will display a placeholder message instead"),
+        LEADERBOARD_PLACEHOLDER_REFRESH_INTERVAL("leaderboard-placeholder-refresh-interval", 15, "The number of seconds between leaderboard placeholder updates"),
         VOTE("vote", null, "Votifier hook settings"),
         VOTE_ENABLED("vote.enabled", false, "If the votifier hook should be enabled"),
         VOTE_AMOUNT("vote.amount", 100, "How many points should be awarded per vote"),
