@@ -21,26 +21,20 @@ public class VotifierListener implements Listener {
 
     @EventHandler
     public void vote(VotifierEvent event) {
-        if (event.getVote().getUsername() == null) {
+        if (event.getVote().getUsername() == null)
             return;
-        }
+
         String name = event.getVote().getUsername();
         OfflinePlayer offlinePlayer = PointsUtils.getPlayerByName(name);
         int amount = Setting.VOTE_AMOUNT.getInt();
-        boolean pay = false;
-        if (Setting.VOTE_ONLINE.getBoolean()) {
+
+        if (!Setting.VOTE_ONLINE.getBoolean() || offlinePlayer.isOnline()) {
+            this.plugin.getAPI().give(offlinePlayer.getUniqueId(), amount);
             Player player = offlinePlayer.getPlayer();
-            if (player != null && player.isOnline()) {
-                pay = true;
+            if (player != null && player.isOnline())
                 this.plugin.getManager(LocaleManager.class).sendMessage(player, "votifier-voted", StringPlaceholders.builder("service", event.getVote().getServiceName())
                         .addPlaceholder("amount", Setting.VOTE_AMOUNT.getInt())
                         .build());
-            }
-        } else {
-            pay = true;
-        }
-        if (pay) {
-            this.plugin.getAPI().give(offlinePlayer.getUniqueId(), amount);
         }
     }
 }
