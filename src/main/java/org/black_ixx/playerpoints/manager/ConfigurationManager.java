@@ -19,6 +19,7 @@ public class ConfigurationManager extends AbstractConfigurationManager {
         BUNGEECORD_SEND_UPDATES("bungeecord-send-updates", true, "Should we send updates to other servers when a player's points value changes?", "This should work for any type of proxy"),
         LEADERBOARD_PLACEHOLDER_ENTRIES("leaderboard-placeholder-entries", 10, "The number of entries to keep updated in the leaderboard placeholder", "Only a certain number of leaderboard entries can be available at a time", "Accessing an entry that does not exist will display a placeholder message instead"),
         LEADERBOARD_PLACEHOLDER_REFRESH_INTERVAL("leaderboard-placeholder-refresh-interval", 15, "The number of seconds between leaderboard placeholder updates"),
+        STARTING_BALANCE("starting-balance", 0, "The amount of points new players will start with"),
         VOTE("vote", null, "Votifier hook settings"),
         VOTE_ENABLED("vote.enabled", false, "If the votifier hook should be enabled"),
         VOTE_AMOUNT("vote.amount", 100, "How many points should be awarded per vote"),

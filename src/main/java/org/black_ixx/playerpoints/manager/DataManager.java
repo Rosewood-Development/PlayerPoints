@@ -159,8 +159,11 @@ public class DataManager extends AbstractDataManager implements Listener {
             }
         });
 
-        if (generate.get())
-            this.setPoints(playerId, 0);
+        if (generate.get()) {
+            int startingBalance = Setting.STARTING_BALANCE.getInt();
+            this.setPoints(playerId, startingBalance);
+            value.set(startingBalance);
+        }
 
         return value.get();
     }
