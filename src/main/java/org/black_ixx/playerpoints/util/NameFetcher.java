@@ -19,7 +19,7 @@ import org.bukkit.OfflinePlayer;
 
 public final class NameFetcher {
 
-    private static final Cache<UUID, String> UUID_NAME_LOOKUP = CacheBuilder.newBuilder().expireAfterWrite(30L, TimeUnit.MINUTES).build();
+    private static final Cache<UUID, String> UUID_NAME_LOOKUP = CacheBuilder.newBuilder().expireAfterAccess(30L, TimeUnit.MINUTES).build();
     private static final Gson gson = new GsonBuilder().registerTypeAdapter(UUID.class, new UUIDTypeAdapter()).create();
     private static final String NAME_URL = "https://api.mojang.com/user/profiles/%s/names";
 
