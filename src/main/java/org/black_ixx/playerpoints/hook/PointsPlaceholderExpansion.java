@@ -1,9 +1,6 @@
 package org.black_ixx.playerpoints.hook;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.black_ixx.playerpoints.PlayerPoints;
 import org.black_ixx.playerpoints.manager.DataManager;
@@ -12,7 +9,6 @@ import org.black_ixx.playerpoints.manager.LocaleManager;
 import org.black_ixx.playerpoints.models.SortedPlayer;
 import org.black_ixx.playerpoints.util.NameFetcher;
 import org.black_ixx.playerpoints.util.PointsUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 
 public class PointsPlaceholderExpansion extends PlaceholderExpansion {
