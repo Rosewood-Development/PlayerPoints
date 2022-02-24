@@ -6,7 +6,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.mojang.util.UUIDTypeAdapter;
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.HttpURLConnection;
@@ -60,7 +59,8 @@ public final class NameFetcher {
                 UUID_NAME_LOOKUP.put(uuid, name);
                 return name;
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
+            UUID_NAME_LOOKUP.put(uuid, "Unknown");
             return "Unknown";
         }
     }
