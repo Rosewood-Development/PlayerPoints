@@ -4,16 +4,15 @@ import dev.rosewood.rosegarden.RosePlugin;
 import dev.rosewood.rosegarden.config.CommentedFileConfiguration;
 import dev.rosewood.rosegarden.config.RoseSetting;
 import dev.rosewood.rosegarden.manager.AbstractConfigurationManager;
-import java.util.Arrays;
-import java.util.stream.Collectors;
 import org.black_ixx.playerpoints.PlayerPoints;
-import org.bukkit.plugin.ServicePriority;
 
 public class ConfigurationManager extends AbstractConfigurationManager {
 
     public enum Setting implements RoseSetting {
-        VAULT("vault", false, "Should register with Vault as a currency manager?"),
-        VAULT_PRIORITY("vault-priority", "Low", "The priority level to use for the Vault hook", "Higher priorities will allow PlayerPoints to load before other economy plugins", "Valid values: [" + Arrays.stream(ServicePriority.values()).map(Enum::name).collect(Collectors.joining(", ")) + "]"),
+        VAULT("vault", false, "Should we register with Vault as a currency manager?"),
+        VAULT_PRIORITY("vault-priority", "Low", "The priority level to use for the Vault hook", "Higher priorities will allow PlayerPoints to load before other economy plugins", "Valid values: [Lowest, Low, Normal, High, Highest]"),
+        TREASURY("treasury", false, "Should we register with Treasury as a currency manager?"),
+        TREASURY_PRIORITY("treasury-priority", "LOW", "The priority level to use for the Treasury hook", "Higher priorities will allow PlayerPoints to load before other economy plugins", "Valid values: [LOW, NORMAL, HIGH]"),
         LEADERBOARD_PER_PAGE("leaderboard-per-page", 10, "The number of players to be displayed per page on the leaderboard?"),
         CACHE_DURATION("cache-duration", 30, "The number of seconds to hold a player's points in cache before being released"),
         BUNGEECORD_SEND_UPDATES("bungeecord-send-updates", true, "Should we send updates to other servers when a player's points value changes?", "This should work for any type of proxy"),

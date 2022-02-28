@@ -39,6 +39,15 @@ public final class PointsUtils {
     }
 
     /**
+     * @return Gets the decimal separator for the shorthand points format
+     */
+    public static char getDecimalSeparator() {
+        if (decimal == null || decimal.trim().isEmpty())
+            return '.';
+        return decimal.charAt(0);
+    }
+
+    /**
      * Formats a number from 1100 to 1.1k
      * Adapted from <a>https://stackoverflow.com/questions/4753251/how-to-go-about-formatting-1200-to-1-2k-in-java</a>
      *
@@ -55,7 +64,7 @@ public final class PointsUtils {
         String suffix = entry.getValue();
 
         long truncated = points / (divideBy / 10);
-        return ((truncated / 10D) + suffix).replaceFirst(Pattern.quote("."), decimal);
+        return ((truncated / 10D) + suffix).replaceFirst(Pattern.quote("."), getDecimalSeparator() + "");
     }
 
     public static void setCachedValues(RosePlugin rosePlugin) {

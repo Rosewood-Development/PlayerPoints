@@ -17,6 +17,7 @@ repositories {
     maven { url = 'https://repo.rosewooddev.io/repository/public/' }
     maven { url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
     maven { url = 'https://oss.sonatype.org/content/repositories/snapshots/' }
+    maven { url = 'https://repo.codemc.org/repository/maven-public' }
     maven { url = 'https://nexus.hc.to/content/repositories/pub_releases' }
     maven { url = 'https://repo.extendedclip.com/content/repositories/placeholderapi/' }
     maven { url = 'https://repo.dakanilabs.com/repository/public' }
@@ -29,6 +30,7 @@ dependencies {
 
     compileOnly 'org.spigotmc:spigot:1.17.1'
     compileOnly 'com.github.milkbowl:vault:1.7.3'
+    compileOnly 'me.lokka30:treasury-api:1.1.1'
     compileOnly 'com.vexsoftware:votifier:2.7.2'
     compileOnly 'me.clip:placeholderapi:2.10.9'
     compileOnly 'org.jetbrains:annotations:16.0.2'

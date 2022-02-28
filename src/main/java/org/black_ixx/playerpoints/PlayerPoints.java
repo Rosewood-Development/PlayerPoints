@@ -6,6 +6,8 @@ import dev.rosewood.rosegarden.manager.Manager;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import me.lokka30.treasury.api.common.service.ServiceRegistry;
+import me.lokka30.treasury.api.economy.EconomyProvider;
 import net.milkbowl.vault.economy.Economy;
 import org.black_ixx.playerpoints.database.migrations._1_Create_Tables;
 import org.black_ixx.playerpoints.hook.PointsPlaceholderExpansion;
@@ -17,6 +19,7 @@ import org.black_ixx.playerpoints.manager.ConfigurationManager.Setting;
 import org.black_ixx.playerpoints.manager.DataManager;
 import org.black_ixx.playerpoints.manager.LeaderboardManager;
 import org.black_ixx.playerpoints.manager.LocaleManager;
+import org.black_ixx.playerpoints.treasury.PlayerPointsTreasuryLayer;
 import org.black_ixx.playerpoints.util.PointsUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
@@ -30,6 +33,7 @@ public class PlayerPoints extends RosePlugin {
     private static PlayerPoints instance;
     private PlayerPointsAPI api;
     private PlayerPointsVaultLayer vaultLayer;
+    private PlayerPointsTreasuryLayer treasuryLayer;
 
     public PlayerPoints() {
         super(80745, 10234, ConfigurationManager.class, DataManager.class, LocaleManager.class);
@@ -40,10 +44,10 @@ public class PlayerPoints extends RosePlugin {
     public void enable() {
         this.api = new PlayerPointsAPI(this);
 
-        if (Setting.VAULT.getBoolean()) {
+        if (Setting.VAULT.getBoolean() && Bukkit.getPluginManager().isPluginEnabled("Vault")) {
             this.vaultLayer = new PlayerPointsVaultLayer(this);
 
-            // Check valid values for the service
+            // Check valid values for the priorities
             ServicePriority priority = null;
             String desiredPriority = Setting.VAULT_PRIORITY.getString();
             for (ServicePriority value : ServicePriority.values()) {
@@ -59,6 +63,27 @@ public class PlayerPoints extends RosePlugin {
             }
 
             Bukkit.getServicesManager().register(Economy.class, this.vaultLayer, this, priority);
+        }
+
+        if (Setting.TREASURY.getBoolean() && Bukkit.getPluginManager().isPluginEnabled("Treasury")) {
+            this.treasuryLayer = new PlayerPointsTreasuryLayer(this);
+
+            // Check valid values for the priorities
+            me.lokka30.treasury.api.common.service.ServicePriority priority = null;
+            String desiredPriority = Setting.TREASURY_PRIORITY.getString();
+            for (me.lokka30.treasury.api.common.service.ServicePriority value : me.lokka30.treasury.api.common.service.ServicePriority.values()) {
+                if (value.name().equalsIgnoreCase(desiredPriority)) {
+                    priority = value;
+                    break;
+                }
+            }
+
+            if (priority == null) {
+                this.getLogger().warning("treasury-priority value in the config.yml is invalid, defaulting to LOW.");
+                priority = me.lokka30.treasury.api.common.service.ServicePriority.LOW;
+            }
+
+            ServiceRegistry.INSTANCE.registerService(EconomyProvider.class, new PlayerPointsTreasuryLayer(this), this.getName(), priority);
         }
 
         // Register votifier listener, if applicable
@@ -86,6 +111,9 @@ public class PlayerPoints extends RosePlugin {
 
         if (this.vaultLayer != null)
             Bukkit.getServicesManager().unregister(Economy.class, this.vaultLayer);
+
+        if (this.treasuryLayer != null)
+            ServiceRegistry.INSTANCE.unregister(EconomyProvider.class, this.treasuryLayer);
 
         if (Setting.BUNGEECORD_SEND_UPDATES.getBoolean()) {
             Bukkit.getMessenger().unregisterOutgoingPluginChannel(this);
