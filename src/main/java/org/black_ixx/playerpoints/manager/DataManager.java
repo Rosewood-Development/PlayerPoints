@@ -277,8 +277,11 @@ public class DataManager extends AbstractDataManager implements Listener {
 
     public Map<UUID, Long> getOnlineTopSortedPointPositions() {
         Map<UUID, Long> players = new HashMap<>();
+        if (Bukkit.getOnlinePlayers().isEmpty())
+            return players;
+
+        String uuidList = Bukkit.getOnlinePlayers().stream().map(Player::getUniqueId).map(x -> "'" + x + "'").collect(Collectors.joining(", "));
         this.databaseConnector.connect(connection -> {
-            String uuidList = Bukkit.getOnlinePlayers().stream().map(Player::getUniqueId).map(x -> "'" + x + "'").collect(Collectors.joining(", "));
             String tableName = this.getPointsTableName();
             String query = "SELECT " + this.getUuidColumnName() + ", (SELECT COUNT(*) FROM " + tableName + " x WHERE x.points >= t.points) AS position " +
                            "FROM " + tableName + " t " +

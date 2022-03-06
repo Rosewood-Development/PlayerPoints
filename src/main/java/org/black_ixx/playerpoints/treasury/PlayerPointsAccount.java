@@ -42,7 +42,7 @@ public class PlayerPointsAccount implements PlayerAccount {
         Objects.requireNonNull(subscription);
 
         if (!currency.isPrimary()) {
-            subscription.fail(new EconomyException(EconomyFailureReason.FEATURE_NOT_SUPPORTED, "Currency is not supported"));
+            subscription.fail(new EconomyException(EconomyFailureReason.CURRENCY_NOT_FOUND, "Currency is not supported"));
             return;
         }
 
@@ -57,7 +57,7 @@ public class PlayerPointsAccount implements PlayerAccount {
         Objects.requireNonNull(subscription);
 
         if (!currency.isPrimary()) {
-            subscription.fail(new EconomyException(EconomyFailureReason.FEATURE_NOT_SUPPORTED, "Currency is not supported"));
+            subscription.fail(new EconomyException(EconomyFailureReason.CURRENCY_NOT_FOUND, "Currency is not supported"));
             return;
         }
 

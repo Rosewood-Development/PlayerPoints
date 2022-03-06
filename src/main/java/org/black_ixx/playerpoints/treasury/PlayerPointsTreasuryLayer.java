@@ -62,6 +62,8 @@ public class PlayerPointsTreasuryLayer implements EconomyProvider {
 
     @Override
     public void retrievePlayerAccountIds(EconomySubscriber<Collection<UUID>> subscription) {
+        Objects.requireNonNull(subscription);
+
         List<UUID> accountIds = this.plugin.getAPI().getTopSortedPoints().stream()
                 .map(SortedPlayer::getUniqueId)
                 .collect(Collectors.toList());
@@ -86,13 +88,7 @@ public class PlayerPointsTreasuryLayer implements EconomyProvider {
         Objects.requireNonNull(identifier);
         Objects.requireNonNull(subscription);
 
-        try {
-            UUID uuid = UUID.fromString(identifier);
-            PlayerPointsAccount account = new PlayerPointsAccount(this.plugin, uuid);
-            subscription.succeed(account);
-        } catch (IllegalArgumentException e) {
-            subscription.fail(new EconomyException(EconomyFailureReason.ACCOUNT_NOT_FOUND, "Account identifier must be a UUID"));
-        }
+        subscription.fail(new EconomyException(EconomyFailureReason.ACCOUNT_NOT_FOUND, "Non-player accounts are not supported"));
     }
 
     @Override
@@ -100,27 +96,21 @@ public class PlayerPointsTreasuryLayer implements EconomyProvider {
         Objects.requireNonNull(identifier);
         Objects.requireNonNull(subscription);
 
-        try {
-            UUID uuid = UUID.fromString(identifier);
-            PlayerPointsAccount account = new PlayerPointsAccount(this.plugin, uuid);
-            subscription.succeed(account);
-        } catch (IllegalArgumentException e) {
-            subscription.fail(new EconomyException(EconomyFailureReason.FEATURE_NOT_SUPPORTED, "Account identifier must be a UUID"));
-        }
+        subscription.fail(new EconomyException(EconomyFailureReason.ACCOUNT_NOT_FOUND, "Non-player accounts are not supported"));
     }
 
     @Override
     public void retrieveAccountIds(EconomySubscriber<Collection<String>> subscription) {
-        List<String> accountIds = this.plugin.getAPI().getTopSortedPoints().stream()
-                .map(SortedPlayer::getUniqueId)
-                .map(UUID::toString)
-                .collect(Collectors.toList());
-        subscription.succeed(accountIds);
+        Objects.requireNonNull(subscription);
+
+        subscription.fail(new EconomyException(EconomyFailureReason.ACCOUNT_NOT_FOUND, "Non-player accounts are not supported"));
     }
 
     @Override
     public void retrieveNonPlayerAccountIds(EconomySubscriber<Collection<String>> subscription) {
-        subscription.fail(new EconomyException(EconomyFailureReason.FEATURE_NOT_SUPPORTED, "Non-player accounts"));
+        Objects.requireNonNull(subscription);
+
+        subscription.fail(new EconomyException(EconomyFailureReason.FEATURE_NOT_SUPPORTED, "Non-player accounts are not supported"));
     }
 
     @Override
