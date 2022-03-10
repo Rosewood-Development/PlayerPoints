@@ -41,7 +41,7 @@ public class LeaderboardManager extends Manager implements Listener {
 
     @Override
     public void reload() {
-        this.refreshTask = Bukkit.getScheduler().runTaskTimerAsynchronously(this.rosePlugin, this::refresh, 0L, 1L);
+        this.refreshTask = Bukkit.getScheduler().runTaskTimerAsynchronously(this.rosePlugin, this::refresh, 0L, 20L);
         this.refreshInterval = Setting.LEADERBOARD_PLACEHOLDER_REFRESH_INTERVAL.getLong() * 1000;
     }
 
@@ -60,15 +60,15 @@ public class LeaderboardManager extends Manager implements Listener {
      */
     public void refresh() {
         if (this.usedLeaderboardSinceLastRefresh && System.currentTimeMillis() - this.lastLeaderboardRefreshTime >= this.refreshInterval) {
-            this.leaderboard = this.dataManager.getTopSortedPoints(Setting.LEADERBOARD_PLACEHOLDER_ENTRIES.getInt());
             this.usedLeaderboardSinceLastRefresh = false;
             this.lastLeaderboardRefreshTime = System.currentTimeMillis();
+            this.leaderboard = this.dataManager.getTopSortedPoints(Setting.LEADERBOARD_PLACEHOLDER_ENTRIES.getInt());
         }
 
         if (this.usedPositionsSinceLastRefresh && System.currentTimeMillis() - this.lastPositionsRefreshTime >= this.refreshInterval) {
-            this.positions = this.dataManager.getOnlineTopSortedPointPositions();
             this.usedPositionsSinceLastRefresh = false;
             this.lastPositionsRefreshTime = System.currentTimeMillis();
+            this.positions = this.dataManager.getOnlineTopSortedPointPositions();
         }
     }
 
