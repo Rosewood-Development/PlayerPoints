@@ -5,6 +5,8 @@ import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.UUID;
@@ -29,20 +31,26 @@ public class GamePointsConverter extends CurrencyConverter {
             method_getConnection.setAccessible(true);
             Connection connection = (Connection) method_getConnection.invoke(gamePointsData);
 
-            String query = "SELECT uuid, balance FROM gamepoints_users WHERE balance > 0";
+            String query = "SELECT uuid, name, balance FROM gamepoints_users";
             try (Statement statement = connection.createStatement()) {
                 SortedSet<SortedPlayer> players = new TreeSet<>();
+                Map<UUID, String> usernameMap = new HashMap<>();
+
                 ResultSet resultSet = statement.executeQuery(query);
                 while (resultSet.next()) {
                     try {
                         UUID uuid = UUID.fromString(resultSet.getString("uuid"));
+                        String name = resultSet.getString("name");
                         int balance = resultSet.getInt("balance");
-                        players.add(new SortedPlayer(uuid, balance));
+                        if (balance > 0)
+                            players.add(new SortedPlayer(uuid, name, balance));
+                        usernameMap.put(uuid, name);
                     } catch (Exception ignored) { }
                 }
 
                 DataManager dataManager = this.rosePlugin.getManager(DataManager.class);
                 dataManager.importData(players);
+                dataManager.updateCachedUsernames(usernameMap);
             }
         } catch (Exception e) {
             e.printStackTrace();

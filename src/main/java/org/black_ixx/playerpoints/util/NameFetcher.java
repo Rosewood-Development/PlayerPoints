@@ -13,8 +13,11 @@ import java.net.URL;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+import org.black_ixx.playerpoints.PlayerPoints;
+import org.black_ixx.playerpoints.manager.DataManager;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
 
 public final class NameFetcher {
 
@@ -24,8 +27,11 @@ public final class NameFetcher {
 
     /**
      * Fetches the name of a player by their UUID.
-     * If the player has joined the server before, it will use their last known name.
-     * If the player has never joined the server before, it will fetch their username using Mojang's API.
+     * If the player is currently online, their name will be returned immediately.
+     * If that fails, it will attempt to fetch the name from our username cache in the database.
+     * If that fails and the player has joined the server before, it will use their last known name if it is known.
+     * If that fails, it will fetch their username using Mojang's API.
+     * If that fails, it will return "Unknown".
      * This operation is done in place and should be run in an async task.
      *
      * @param uuid The UUID of the player.
@@ -41,9 +47,21 @@ public final class NameFetcher {
     }
 
     private static String fetch(UUID uuid) {
+        // Look for an online player first
+        Player onlinePlayer = Bukkit.getPlayer(uuid);
+        if (onlinePlayer != null)
+            return onlinePlayer.getName();
+
+        // Attempt to find name from our username cache in the database
+        String name = PlayerPoints.getInstance().getManager(DataManager.class).lookupCachedUsername(uuid);
+        if (name != null) {
+            UUID_NAME_LOOKUP.put(uuid, name);
+            return name;
+        }
+
         // Attempt to find name from OfflinePlayer
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(uuid);
-        String name = offlinePlayer.getName();
+        name = offlinePlayer.getName();
         if (name != null) {
             UUID_NAME_LOOKUP.put(uuid, name);
             return name;

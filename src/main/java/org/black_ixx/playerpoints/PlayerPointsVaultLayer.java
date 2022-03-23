@@ -7,6 +7,7 @@ import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 import net.milkbowl.vault.economy.EconomyResponse.ResponseType;
 import org.black_ixx.playerpoints.manager.LocaleManager;
+import org.black_ixx.playerpoints.models.Tuple;
 import org.black_ixx.playerpoints.util.PointsUtils;
 import org.bukkit.OfflinePlayer;
 
@@ -80,7 +81,8 @@ public class PlayerPointsVaultLayer implements Economy {
 
     @Override
     public double getBalance(String playerName) {
-        return this.plugin.getAPI().look(this.handleTranslation(playerName));
+        UUID uuid = this.handleTranslation(playerName);
+        return uuid != null ? this.plugin.getAPI().look(uuid) : 0;
     }
 
     @Override
@@ -100,7 +102,7 @@ public class PlayerPointsVaultLayer implements Economy {
 
     @Override
     public boolean has(String playerName, double amount) {
-        return this.plugin.getAPI().look(this.handleTranslation(playerName)) >= amount;
+        return this.getBalance(playerName) >= amount;
     }
 
     @Override
@@ -121,8 +123,12 @@ public class PlayerPointsVaultLayer implements Economy {
     @Override
     public EconomyResponse withdrawPlayer(String playerName, double amount) {
         int points = (int) amount;
-        boolean result = this.plugin.getAPI().take(this.handleTranslation(playerName), points);
-        int balance = this.plugin.getAPI().look(this.handleTranslation(playerName));
+        UUID uuid = this.handleTranslation(playerName);
+        if (uuid == null)
+            return new EconomyResponse(0, 0, ResponseType.FAILURE, "Invalid player");
+
+        boolean result = this.plugin.getAPI().take(uuid, points);
+        int balance = this.plugin.getAPI().look(uuid);
 
         EconomyResponse response;
         if (result) {
@@ -163,8 +169,12 @@ public class PlayerPointsVaultLayer implements Economy {
     @Override
     public EconomyResponse depositPlayer(String playerName, double amount) {
         int points = (int) amount;
-        boolean result = this.plugin.getAPI().give(this.handleTranslation(playerName), points);
-        int balance = this.plugin.getAPI().look(this.handleTranslation(playerName));
+        UUID uuid = this.handleTranslation(playerName);
+        if (uuid == null)
+            return new EconomyResponse(0, 0, ResponseType.FAILURE, "Invalid player");
+
+        boolean result = this.plugin.getAPI().give(uuid, points);
+        int balance = this.plugin.getAPI().look(uuid);
 
         EconomyResponse response;
         if (result) {
@@ -285,7 +295,12 @@ public class PlayerPointsVaultLayer implements Economy {
         try {
             return UUID.fromString(name);
         } catch (IllegalArgumentException e) {
-            return PointsUtils.getPlayerByName(name).getUniqueId();
+            Tuple<UUID, String> tuple = PointsUtils.getPlayerByName(name);
+            if (tuple != null) {
+                return tuple.getFirst();
+            } else {
+                return null;
+            }
         }
     }
 

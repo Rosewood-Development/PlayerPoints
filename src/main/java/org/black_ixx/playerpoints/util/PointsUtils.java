@@ -9,14 +9,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.NavigableMap;
 import java.util.TreeMap;
+import java.util.UUID;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import org.black_ixx.playerpoints.PlayerPoints;
+import org.black_ixx.playerpoints.manager.DataManager;
 import org.black_ixx.playerpoints.manager.LocaleManager;
+import org.black_ixx.playerpoints.models.Tuple;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.util.StringUtil;
+import org.jetbrains.annotations.Nullable;
 
 public final class PointsUtils {
 
@@ -98,8 +103,17 @@ public final class PointsUtils {
      * @return An OfflinePlayer
      */
     @SuppressWarnings("deprecation")
-    public static OfflinePlayer getPlayerByName(String name) {
-        return Bukkit.getOfflinePlayer(name);
+    @Nullable
+    public static Tuple<UUID, String> getPlayerByName(String name) {
+        OfflinePlayer player = Bukkit.getOfflinePlayer(name);
+        if (player.getName() != null && player.hasPlayedBefore())
+            return new Tuple<>(player.getUniqueId(), player.getName());
+
+        UUID uuid = PlayerPoints.getInstance().getManager(DataManager.class).lookupCachedUUID(name);
+        if (uuid != null)
+            return new Tuple<>(uuid, name);
+
+        return null;
     }
 
     /**

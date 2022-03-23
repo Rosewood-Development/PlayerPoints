@@ -4,12 +4,12 @@ import dev.rosewood.rosegarden.RosePlugin;
 import dev.rosewood.rosegarden.database.DataMigration;
 import dev.rosewood.rosegarden.manager.Manager;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import me.lokka30.treasury.api.common.service.ServiceRegistry;
 import me.lokka30.treasury.api.economy.EconomyProvider;
 import net.milkbowl.vault.economy.Economy;
 import org.black_ixx.playerpoints.database.migrations._1_Create_Tables;
+import org.black_ixx.playerpoints.database.migrations._2_Add_Table_Username_Cache;
 import org.black_ixx.playerpoints.hook.PointsPlaceholderExpansion;
 import org.black_ixx.playerpoints.listeners.PointsMessageListener;
 import org.black_ixx.playerpoints.listeners.VotifierListener;
@@ -137,8 +137,9 @@ public class PlayerPoints extends RosePlugin {
 
     @Override
     public List<Class<? extends DataMigration>> getDataMigrations() {
-        return Collections.singletonList(
-                _1_Create_Tables.class
+        return Arrays.asList(
+                _1_Create_Tables.class,
+                _2_Add_Table_Username_Cache.class
         );
     }
 

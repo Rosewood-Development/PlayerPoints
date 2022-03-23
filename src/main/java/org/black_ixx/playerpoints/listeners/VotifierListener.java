@@ -2,11 +2,13 @@ package org.black_ixx.playerpoints.listeners;
 
 import com.vexsoftware.votifier.model.VotifierEvent;
 import dev.rosewood.rosegarden.utils.StringPlaceholders;
+import java.util.UUID;
 import org.black_ixx.playerpoints.PlayerPoints;
 import org.black_ixx.playerpoints.manager.ConfigurationManager.Setting;
 import org.black_ixx.playerpoints.manager.LocaleManager;
+import org.black_ixx.playerpoints.models.Tuple;
 import org.black_ixx.playerpoints.util.PointsUtils;
-import org.bukkit.OfflinePlayer;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -25,13 +27,16 @@ public class VotifierListener implements Listener {
             return;
 
         String name = event.getVote().getUsername();
-        OfflinePlayer offlinePlayer = PointsUtils.getPlayerByName(name);
-        int amount = Setting.VOTE_AMOUNT.getInt();
+        Tuple<UUID, String> playerInfo = PointsUtils.getPlayerByName(name);
+        if (playerInfo == null)
+            return;
 
-        if (!Setting.VOTE_ONLINE.getBoolean() || offlinePlayer.isOnline()) {
-            this.plugin.getAPI().give(offlinePlayer.getUniqueId(), amount);
-            Player player = offlinePlayer.getPlayer();
-            if (player != null && player.isOnline())
+        int amount = Setting.VOTE_AMOUNT.getInt();
+        Player player = Bukkit.getPlayer(playerInfo.getFirst());
+
+        if (!Setting.VOTE_ONLINE.getBoolean() || player != null) {
+            this.plugin.getAPI().give(playerInfo.getFirst(), amount);
+            if (player != null)
                 this.plugin.getManager(LocaleManager.class).sendMessage(player, "votifier-voted", StringPlaceholders.builder("service", event.getVote().getServiceName())
                         .addPlaceholder("amount", Setting.VOTE_AMOUNT.getInt())
                         .build());

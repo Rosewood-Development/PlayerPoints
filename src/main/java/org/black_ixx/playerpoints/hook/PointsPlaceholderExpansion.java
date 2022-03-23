@@ -7,7 +7,6 @@ import org.black_ixx.playerpoints.manager.DataManager;
 import org.black_ixx.playerpoints.manager.LeaderboardManager;
 import org.black_ixx.playerpoints.manager.LocaleManager;
 import org.black_ixx.playerpoints.models.SortedPlayer;
-import org.black_ixx.playerpoints.util.NameFetcher;
 import org.black_ixx.playerpoints.util.PointsUtils;
 import org.bukkit.OfflinePlayer;
 
@@ -72,7 +71,7 @@ public class PointsPlaceholderExpansion extends PlaceholderExpansion {
 
                 // Display the player's name
                 if (suffix.isEmpty())
-                    return NameFetcher.getName(leader.getUniqueId());
+                    return leader.getUsername();
 
                 switch (suffix.toLowerCase()) {
                     case "amount":

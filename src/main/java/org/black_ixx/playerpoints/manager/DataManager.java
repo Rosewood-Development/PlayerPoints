@@ -11,7 +11,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.List;
@@ -22,6 +21,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 import org.black_ixx.playerpoints.listeners.PointsMessageListener;
 import org.black_ixx.playerpoints.manager.ConfigurationManager.Setting;
@@ -34,17 +34,20 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 
 public class DataManager extends AbstractDataManager implements Listener {
 
     private final Map<UUID, PointsValue> pointsCache;
     private final Map<UUID, Deque<PendingTransaction>> pendingTransactions;
+    private final Map<UUID, String> pendingUsernameUpdates;
 
     public DataManager(RosePlugin rosePlugin) {
         super(rosePlugin);
 
         this.pointsCache = new ConcurrentHashMap<>();
-        this.pendingTransactions = Collections.synchronizedMap(new HashMap<>());
+        this.pendingTransactions = new ConcurrentHashMap<>();
+        this.pendingUsernameUpdates = new ConcurrentHashMap<>();
 
         Bukkit.getPluginManager().registerEvents(this, rosePlugin);
         Bukkit.getScheduler().runTaskTimerAsynchronously(rosePlugin, this::update, 10L, 10L);
@@ -76,12 +79,25 @@ public class DataManager extends AbstractDataManager implements Listener {
         synchronized (this.pointsCache) {
             this.pointsCache.values().removeIf(PointsValue::isStale);
         }
+
+        synchronized (this.pendingUsernameUpdates) {
+            if (!this.pendingUsernameUpdates.isEmpty()) {
+                this.updateCachedUsernames(this.pendingUsernameUpdates);
+                this.pendingUsernameUpdates.clear();
+            }
+        }
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
-    public void onPlayerJoin(AsyncPlayerPreLoginEvent event) {
+    public void onPlayerPreLogin(AsyncPlayerPreLoginEvent event) {
         if (event.getLoginResult() == AsyncPlayerPreLoginEvent.Result.ALLOWED)
             this.pointsCache.put(event.getUniqueId(), new PointsValue(this.getPoints(event.getUniqueId())));
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        Player player = event.getPlayer();
+        this.pendingUsernameUpdates.put(player.getUniqueId(), player.getName());
     }
 
     public void resetCache() {
@@ -256,19 +272,38 @@ public class DataManager extends AbstractDataManager implements Listener {
         return true;
     }
 
+    public boolean doesDataExist() {
+        AtomicInteger count = new AtomicInteger();
+        this.databaseConnector.connect(connection -> {
+            try (Statement statement = connection.createStatement()) {
+                ResultSet result = statement.executeQuery("SELECT COUNT(*) FROM " + this.getPointsTableName());
+                result.next();
+                count.set(result.getInt(1));
+            }
+        });
+        return count.get() > 0;
+    }
+
     public List<SortedPlayer> getTopSortedPoints(Integer limit) {
         List<SortedPlayer> players = new ArrayList<>();
         this.databaseConnector.connect(connection -> {
-            String query = "SELECT " + this.getUuidColumnName() + ", points FROM " + this.getPointsTableName() + " ORDER BY points DESC" + (limit != null ? " LIMIT " + limit : "");
+            String query = "SELECT t." + this.getUuidColumnName() + ", username, points FROM " + this.getPointsTableName() + " t " +
+                           "LEFT JOIN " + this.getTablePrefix() + "username_cache c ON t.uuid = c.uuid " +
+                           "ORDER BY points DESC" + (limit != null ? " LIMIT " + limit : "");
             try (Statement statement = connection.createStatement()) {
                 ResultSet result = statement.executeQuery(query);
                 while (result.next()) {
                     UUID uuid = UUID.fromString(result.getString(1));
+                    String username = result.getString(2);
                     PointsValue pointsValue = this.pointsCache.get(uuid);
                     if (pointsValue == null)
-                        pointsValue = new PointsValue(result.getInt(2));
+                        pointsValue = new PointsValue(result.getInt(3));
 
-                    players.add(new SortedPlayer(uuid, pointsValue));
+                    if (username != null) {
+                        players.add(new SortedPlayer(uuid, username, pointsValue));
+                    } else {
+                        players.add(new SortedPlayer(uuid, pointsValue));
+                    }
                 }
             }
         });
@@ -283,9 +318,9 @@ public class DataManager extends AbstractDataManager implements Listener {
         String uuidList = Bukkit.getOnlinePlayers().stream().map(Player::getUniqueId).map(x -> "'" + x + "'").collect(Collectors.joining(", "));
         this.databaseConnector.connect(connection -> {
             String tableName = this.getPointsTableName();
-            String query = "SELECT " + this.getUuidColumnName() + ", (SELECT COUNT(*) FROM " + tableName + " x WHERE x.points >= t.points) AS position " +
+            String query = "SELECT t." + this.getUuidColumnName() + ", (SELECT COUNT(*) FROM " + tableName + " x WHERE x.points >= t.points) AS position " +
                            "FROM " + tableName + " t " +
-                           "WHERE uuid IN (" + uuidList + ")";
+                           "WHERE t.uuid IN (" + uuidList + ")";
             try (Statement statement = connection.createStatement()) {
                 ResultSet result = statement.executeQuery(query);
                 while (result.next()) {
@@ -349,6 +384,62 @@ public class DataManager extends AbstractDataManager implements Listener {
                 e.printStackTrace();
             }
         });
+        return value.get();
+    }
+
+    public void updateCachedUsernames(Map<UUID, String> cachedUsernames) {
+        this.databaseConnector.connect(connection -> {
+            String query = "INSERT INTO " + this.getTablePrefix() + "username_cache (uuid, username) VALUES (?, ?)";
+            if (this.databaseConnector instanceof SQLiteConnector) {
+                query += " ON CONFLICT(uuid) DO UPDATE SET username = ?";
+            } else {
+                query += " ON DUPLICATE KEY UPDATE username = ?";
+            }
+
+            try (PreparedStatement statement = connection.prepareStatement(query)) {
+                for (Map.Entry<UUID, String> entry : cachedUsernames.entrySet()) {
+                    statement.setString(1, entry.getKey().toString());
+                    statement.setString(2, entry.getValue());
+                    statement.setString(3, entry.getValue());
+                    statement.addBatch();
+                }
+                statement.executeBatch();
+            }
+        });
+    }
+
+    public String lookupCachedUsername(UUID uuid) {
+        AtomicReference<String> value = new AtomicReference<>();
+        this.databaseConnector.connect(connection -> {
+            String query = "SELECT username FROM " + this.getTablePrefix() + "username_cache WHERE uuid = ?";
+            try (PreparedStatement statement = connection.prepareStatement(query)) {
+                statement.setString(1, uuid.toString());
+                ResultSet result = statement.executeQuery();
+                if (result.next())
+                    value.set(result.getString(1));
+            }
+        });
+
+        String name = value.get();
+        if (name == null) {
+            return "Unknown";
+        } else {
+            return name;
+        }
+    }
+
+    public UUID lookupCachedUUID(String username) {
+        AtomicReference<UUID> value = new AtomicReference<>();
+        this.databaseConnector.connect(connection -> {
+            String query = "SELECT uuid FROM " + this.getTablePrefix() + "username_cache WHERE username = ?";
+            try (PreparedStatement statement = connection.prepareStatement(query)) {
+                statement.setString(1, username);
+                ResultSet result = statement.executeQuery();
+                if (result.next())
+                    value.set(UUID.fromString(result.getString(1)));
+            }
+        });
+
         return value.get();
     }
 

@@ -49,7 +49,7 @@ public class TokenManagerConverter extends CurrencyConverter {
                         }
 
                         int amount = Math.toIntExact(entry.getTokens());
-                        pointsData.add(new SortedPlayer(uuid, amount));
+                        pointsData.add(new SortedPlayer(uuid, "Unknown", amount));
                     } catch (Exception e) {
                         this.rosePlugin.getLogger().warning(String.format("Data entry [%s:%d] skipped due to invalid data", entry.getKey(), entry.getTokens()));
                     }

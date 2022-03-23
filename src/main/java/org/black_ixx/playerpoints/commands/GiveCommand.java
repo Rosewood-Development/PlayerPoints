@@ -3,12 +3,13 @@ package org.black_ixx.playerpoints.commands;
 import dev.rosewood.rosegarden.utils.StringPlaceholders;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 import org.black_ixx.playerpoints.PlayerPoints;
 import org.black_ixx.playerpoints.manager.CommandManager;
 import org.black_ixx.playerpoints.manager.LocaleManager;
+import org.black_ixx.playerpoints.models.Tuple;
 import org.black_ixx.playerpoints.util.PointsUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -27,8 +28,8 @@ public class GiveCommand extends PointsCommand {
         }
 
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-            OfflinePlayer player = PointsUtils.getPlayerByName(args[0]);
-            if (!player.hasPlayedBefore() && !player.isOnline()) {
+            Tuple<UUID, String> player = PointsUtils.getPlayerByName(args[0]);
+            if (player == null) {
                 localeManager.sendMessage(sender, "unknown-player", StringPlaceholders.single("player", args[0]));
                 return;
             }
@@ -40,10 +41,11 @@ public class GiveCommand extends PointsCommand {
                     return;
                 }
 
-                if (plugin.getAPI().give(player.getUniqueId(), amount)) {
+                if (plugin.getAPI().give(player.getFirst(), amount)) {
                     // Send message to receiver
-                    if (player.isOnline()) {
-                        localeManager.sendMessage((Player) player, "command-give-received", StringPlaceholders.builder("amount", PointsUtils.formatPoints(amount))
+                    Player onlinePlayer = Bukkit.getPlayer(player.getFirst());
+                    if (onlinePlayer != null) {
+                        localeManager.sendMessage(onlinePlayer, "command-give-received", StringPlaceholders.builder("amount", PointsUtils.formatPoints(amount))
                                 .addPlaceholder("currency", localeManager.getCurrencyName(amount))
                                 .build());
                     }
@@ -51,7 +53,7 @@ public class GiveCommand extends PointsCommand {
                     // Send message to sender
                     localeManager.sendMessage(sender, "command-give-success", StringPlaceholders.builder("amount", PointsUtils.formatPoints(amount))
                             .addPlaceholder("currency", localeManager.getCurrencyName(amount))
-                            .addPlaceholder("player", player.getName())
+                            .addPlaceholder("player", player.getSecond())
                             .build());
                 }
             } catch (NumberFormatException e) {
