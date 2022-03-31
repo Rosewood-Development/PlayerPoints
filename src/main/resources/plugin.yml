@@ -2,7 +2,7 @@ name: PlayerPoints
 version: '@version@'
 authors: [Esophose, Black_ixx]
 website: 'https://www.spigotmc.org/resources/playerpoints.80745/'
-description: Player points system for Bukkit servers
+description: A point based currency system
 main: org.black_ixx.playerpoints.PlayerPoints
 api-version: '1.13'
 softdepend: [Vault, Treasury, Votifier, PlaceholderAPI, TokenManager, GamePoints, NexEngine]

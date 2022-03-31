@@ -366,13 +366,20 @@ public class DataManager extends AbstractDataManager implements Listener {
                     }
                 }
 
-                String insertQuery = "INSERT INTO " + this.getPointsTableName() + " (" + this.getUuidColumnName() + ", points) VALUES (?, ?) ON DUPLICATE KEY UPDATE points = ?";
+                boolean isSqlite = this.databaseConnector instanceof SQLiteConnector;
+                String insertQuery;
+                if (isSqlite) {
+                    insertQuery = "REPLACE INTO " + this.getPointsTableName() + " (" + this.getUuidColumnName() + ", points) VALUES (?, ?)";
+                } else {
+                    insertQuery = "INSERT INTO " + this.getPointsTableName() + " (" + this.getUuidColumnName() + ", points) VALUES (?, ?) ON DUPLICATE KEY UPDATE points = ?";
+                }
 
                 try (PreparedStatement statement = connection.prepareStatement(insertQuery)) {
                     for (Map.Entry<UUID, Integer> entry : points.entrySet()) {
                         statement.setString(1, entry.getKey().toString());
                         statement.setInt(2, entry.getValue());
-                        statement.setInt(3, entry.getValue());
+                        if (!isSqlite)
+                            statement.setInt(3, entry.getValue());
                         statement.addBatch();
                     }
                     statement.executeBatch();
@@ -389,18 +396,20 @@ public class DataManager extends AbstractDataManager implements Listener {
 
     public void updateCachedUsernames(Map<UUID, String> cachedUsernames) {
         this.databaseConnector.connect(connection -> {
-            String query = "INSERT INTO " + this.getTablePrefix() + "username_cache (uuid, username) VALUES (?, ?)";
-            if (this.databaseConnector instanceof SQLiteConnector) {
-                query += " ON CONFLICT(uuid) DO UPDATE SET username = ?";
+            String query;
+            boolean isSqlite = this.databaseConnector instanceof SQLiteConnector;
+            if (isSqlite) {
+                query = "REPLACE INTO " + this.getTablePrefix() + "username_cache (uuid, username) VALUES (?, ?)";
             } else {
-                query += " ON DUPLICATE KEY UPDATE username = ?";
+                query = "INSERT INTO " + this.getTablePrefix() + "username_cache (uuid, username) VALUES (?, ?) ON DUPLICATE KEY UPDATE username = ?";
             }
 
             try (PreparedStatement statement = connection.prepareStatement(query)) {
                 for (Map.Entry<UUID, String> entry : cachedUsernames.entrySet()) {
                     statement.setString(1, entry.getKey().toString());
                     statement.setString(2, entry.getValue());
-                    statement.setString(3, entry.getValue());
+                    if (!isSqlite)
+                        statement.setString(3, entry.getValue());
                     statement.addBatch();
                 }
                 statement.executeBatch();
