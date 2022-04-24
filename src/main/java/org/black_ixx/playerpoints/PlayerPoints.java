@@ -36,7 +36,7 @@ public class PlayerPoints extends RosePlugin {
     private PlayerPointsTreasuryLayer treasuryLayer;
 
     public PlayerPoints() {
-        super(80745, 10234, ConfigurationManager.class, DataManager.class, LocaleManager.class);
+        super(80745, 10234, ConfigurationManager.class, DataManager.class, LocaleManager.class, null);
         instance = this;
     }
 
@@ -132,14 +132,6 @@ public class PlayerPoints extends RosePlugin {
         return Arrays.asList(
                 CommandManager.class,
                 LeaderboardManager.class
-        );
-    }
-
-    @Override
-    public List<Class<? extends DataMigration>> getDataMigrations() {
-        return Arrays.asList(
-                _1_Create_Tables.class,
-                _2_Add_Table_Username_Cache.class
         );
     }
 

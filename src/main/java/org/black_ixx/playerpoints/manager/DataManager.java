@@ -4,6 +4,7 @@ import com.google.common.collect.Iterables;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import dev.rosewood.rosegarden.RosePlugin;
+import dev.rosewood.rosegarden.database.DataMigration;
 import dev.rosewood.rosegarden.database.SQLiteConnector;
 import dev.rosewood.rosegarden.manager.AbstractDataManager;
 import java.nio.charset.StandardCharsets;
@@ -11,6 +12,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.List;
@@ -23,6 +25,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
+import org.black_ixx.playerpoints.database.migrations._1_Create_Tables;
+import org.black_ixx.playerpoints.database.migrations._2_Add_Table_Username_Cache;
 import org.black_ixx.playerpoints.listeners.PointsMessageListener;
 import org.black_ixx.playerpoints.manager.ConfigurationManager.Setting;
 import org.black_ixx.playerpoints.models.PendingTransaction;
@@ -466,6 +470,14 @@ public class DataManager extends AbstractDataManager implements Listener {
         } else {
             return "uuid";
         }
+    }
+
+    @Override
+    public List<Class<? extends DataMigration>> getDataMigrations() {
+        return Arrays.asList(
+                _1_Create_Tables.class,
+                _2_Add_Table_Username_Cache.class
+        );
     }
 
 }

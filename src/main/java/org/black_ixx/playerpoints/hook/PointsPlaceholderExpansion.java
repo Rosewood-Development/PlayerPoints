@@ -26,26 +26,25 @@ public class PointsPlaceholderExpansion extends PlaceholderExpansion {
 
     @Override
     public String onRequest(OfflinePlayer player, String placeholder) {
-        if (player == null)
-            return null;
-
-        switch (placeholder.toLowerCase()) {
-            case "points":
-                return String.valueOf(this.dataManager.getEffectivePoints(player.getUniqueId()));
-            case "points_formatted":
-                return PointsUtils.formatPoints(this.dataManager.getEffectivePoints(player.getUniqueId()));
-            case "points_shorthand":
-                return PointsUtils.formatPointsShorthand(this.dataManager.getEffectivePoints(player.getUniqueId()));
-            case "leaderboard_position":
-                Long position = this.leaderboardManager.getPlayerLeaderboardPosition(player.getUniqueId());
-                return String.valueOf(position != null ? position : -1);
-            case "leaderboard_position_formatted":
-                try {
-                    Long position1 = this.leaderboardManager.getPlayerLeaderboardPosition(player.getUniqueId());
-                    return PointsUtils.formatPoints(position1 != null ? position1 : -1);
-                } catch (Exception e) {
-                    return null;
-                }
+        if (player != null) {
+            switch (placeholder.toLowerCase()) {
+                case "points":
+                    return String.valueOf(this.dataManager.getEffectivePoints(player.getUniqueId()));
+                case "points_formatted":
+                    return PointsUtils.formatPoints(this.dataManager.getEffectivePoints(player.getUniqueId()));
+                case "points_shorthand":
+                    return PointsUtils.formatPointsShorthand(this.dataManager.getEffectivePoints(player.getUniqueId()));
+                case "leaderboard_position":
+                    Long position = this.leaderboardManager.getPlayerLeaderboardPosition(player.getUniqueId());
+                    return String.valueOf(position != null ? position : -1);
+                case "leaderboard_position_formatted":
+                    try {
+                        Long position1 = this.leaderboardManager.getPlayerLeaderboardPosition(player.getUniqueId());
+                        return PointsUtils.formatPoints(position1 != null ? position1 : -1);
+                    } catch (Exception e) {
+                        return null;
+                    }
+            }
         }
 
         if (placeholder.toLowerCase().startsWith("leaderboard_")) {
