@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Collections;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.UUID;
@@ -87,7 +88,7 @@ public class _1_Create_Tables extends DataMigration {
                 for (String uuid : section.getKeys(false))
                     data.add(new SortedPlayer(UUID.fromString(uuid), section.getInt(uuid)));
 
-                plugin.getManager(DataManager.class).importData(data);
+                plugin.getManager(DataManager.class).importData(data, Collections.emptyMap());
                 plugin.getLogger().warning("Imported legacy data from storage.yml");
             } catch (Exception e) {
                 e.printStackTrace();

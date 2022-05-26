@@ -5,6 +5,7 @@ import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.SortedSet;
@@ -49,7 +50,7 @@ public class GamePointsConverter extends CurrencyConverter {
                 }
 
                 DataManager dataManager = this.rosePlugin.getManager(DataManager.class);
-                dataManager.importData(players);
+                dataManager.importData(players, Collections.emptyMap());
                 dataManager.updateCachedUsernames(usernameMap);
             }
         } catch (Exception e) {

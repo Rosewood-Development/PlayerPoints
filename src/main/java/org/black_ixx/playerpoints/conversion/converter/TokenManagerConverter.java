@@ -2,6 +2,7 @@ package org.black_ixx.playerpoints.conversion.converter;
 
 import dev.rosewood.rosegarden.RosePlugin;
 import java.lang.reflect.Field;
+import java.util.Collections;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.UUID;
@@ -55,7 +56,7 @@ public class TokenManagerConverter extends CurrencyConverter {
                     }
                 }
 
-                this.rosePlugin.getManager(org.black_ixx.playerpoints.manager.DataManager.class).importData(pointsData);
+                this.rosePlugin.getManager(org.black_ixx.playerpoints.manager.DataManager.class).importData(pointsData, Collections.emptyMap());
             }));
         } catch (ReflectiveOperationException e) {
             e.printStackTrace();

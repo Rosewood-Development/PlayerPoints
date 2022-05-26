@@ -4,7 +4,9 @@ import dev.rosewood.rosegarden.database.MySQLConnector;
 import dev.rosewood.rosegarden.utils.StringPlaceholders;
 import java.io.File;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.UUID;
@@ -42,20 +44,39 @@ public class ImportCommand extends PointsCommand {
 
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             FileConfiguration configuration = YamlConfiguration.loadConfiguration(file);
-            ConfigurationSection section = configuration.getConfigurationSection("Points");
-            if (section == null)
-                section = configuration.getConfigurationSection("Players");
+            ConfigurationSection pointsSection = configuration.getConfigurationSection("Points");
+            if (pointsSection == null)
+                pointsSection = configuration.getConfigurationSection("Players");
 
-            if (section == null) {
+            if (pointsSection == null) {
                 plugin.getLogger().warning("Malformed storage.yml file.");
                 return;
             }
 
-            SortedSet<SortedPlayer> data = new TreeSet<>();
-            for (String uuid : section.getKeys(false))
-                data.add(new SortedPlayer(UUID.fromString(uuid), section.getInt(uuid)));
+            ConfigurationSection uuidSection = configuration.getConfigurationSection("UUIDs");
+            Map<UUID, String> uuidMap = new HashMap<>();
+            if (uuidSection != null) {
+                for (String uuidString : uuidSection.getKeys(false)) {
+                    String name = uuidSection.getString(uuidString);
+                    UUID uuidObj = UUID.fromString(uuidString);
+                    uuidMap.put(uuidObj, name);
+                }
+            }
 
-            plugin.getManager(DataManager.class).importData(data);
+            SortedSet<SortedPlayer> data = new TreeSet<>();
+            for (String uuidString : pointsSection.getKeys(false)) {
+                UUID uuid = UUID.fromString(uuidString);
+                int points = pointsSection.getInt(uuidString);
+
+                String username = uuidMap.get(uuid);
+                if (username != null) {
+                    data.add(new SortedPlayer(uuid, username, points));
+                } else {
+                    data.add(new SortedPlayer(uuid, points));
+                }
+            }
+
+            plugin.getManager(DataManager.class).importData(data, uuidMap);
             localeManager.sendMessage(sender, "command-import-success");
         });
     }

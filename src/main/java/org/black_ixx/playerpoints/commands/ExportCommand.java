@@ -36,9 +36,14 @@ public class ExportCommand extends PointsCommand {
 
             List<SortedPlayer> data = plugin.getManager(DataManager.class).getTopSortedPoints(null);
             FileConfiguration configuration = YamlConfiguration.loadConfiguration(file);
-            ConfigurationSection section = configuration.createSection("Points");
-            for (SortedPlayer playerData : data)
-                section.set(playerData.getUniqueId().toString(), playerData.getPoints());
+            ConfigurationSection pointsSection = configuration.createSection("Points");
+            ConfigurationSection uuidSection = configuration.createSection("UUIDs");
+
+            for (SortedPlayer playerData : data) {
+                pointsSection.set(playerData.getUniqueId().toString(), playerData.getPoints());
+                if (!playerData.getUsername().equalsIgnoreCase("Unknown"))
+                    uuidSection.set(playerData.getUniqueId().toString(), playerData.getUsername());
+            }
 
             try {
                 configuration.save(file);

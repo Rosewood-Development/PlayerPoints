@@ -336,7 +336,7 @@ public class DataManager extends AbstractDataManager implements Listener {
         return players;
     }
 
-    public void importData(SortedSet<SortedPlayer> data) {
+    public void importData(SortedSet<SortedPlayer> data, Map<UUID, String> cachedUsernames) {
         this.databaseConnector.connect(connection -> {
             String purgeQuery = "DELETE FROM " + this.getPointsTableName();
             try (Statement statement = connection.createStatement()) {
@@ -352,6 +352,9 @@ public class DataManager extends AbstractDataManager implements Listener {
                 }
                 statement.executeBatch();
             }
+
+            if (!cachedUsernames.isEmpty())
+                this.updateCachedUsernames(cachedUsernames);
         });
     }
 
