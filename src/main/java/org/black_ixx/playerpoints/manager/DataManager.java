@@ -236,7 +236,7 @@ public class DataManager extends AbstractDataManager implements Listener {
                     this.pointsCache.computeIfAbsent(entry.getKey(), x -> new PointsValue(entry.getValue())).setValue(entry.getValue());
 
                     // Send update to BungeeCord if enabled
-                    if (Setting.BUNGEECORD_SEND_UPDATES.getBoolean()) {
+                    if (Setting.BUNGEECORD_SEND_UPDATES.getBoolean() && this.rosePlugin.isEnabled()) {
                         ByteArrayDataOutput output = ByteStreams.newDataOutput();
                         output.writeUTF("Forward");
                         output.writeUTF("ALL");
