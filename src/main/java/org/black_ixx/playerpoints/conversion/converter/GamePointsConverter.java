@@ -14,9 +14,10 @@ import java.util.UUID;
 import org.black_ixx.playerpoints.conversion.CurrencyConverter;
 import org.black_ixx.playerpoints.manager.DataManager;
 import org.black_ixx.playerpoints.models.SortedPlayer;
+import org.bukkit.Bukkit;
 import su.nexmedia.engine.api.data.AbstractDataHandler;
 import su.nightexpress.gamepoints.GamePoints;
-import su.nightexpress.gamepoints.data.GamePointsData;
+import su.nightexpress.gamepoints.data.PointsDataHandler;
 
 public class GamePointsConverter extends CurrencyConverter {
 
@@ -26,11 +27,11 @@ public class GamePointsConverter extends CurrencyConverter {
 
     @Override
     public void convert() {
-        GamePointsData gamePointsData = GamePoints.getInstance().getData();
+        PointsDataHandler pointsDataHandler = ((GamePoints) Bukkit.getPluginManager().getPlugin("GamePoints")).getData();
         try {
             Method method_getConnection = AbstractDataHandler.class.getDeclaredMethod("getConnection");
             method_getConnection.setAccessible(true);
-            Connection connection = (Connection) method_getConnection.invoke(gamePointsData);
+            Connection connection = (Connection) method_getConnection.invoke(pointsDataHandler);
 
             String query = "SELECT uuid, name, balance FROM gamepoints_users";
             try (Statement statement = connection.createStatement()) {
