@@ -86,23 +86,26 @@ public class PlayerPoints extends RosePlugin {
             ServiceRegistry.INSTANCE.registerService(EconomyProvider.class, new PlayerPointsTreasuryLayer(this), this.getName(), priority);
         }
 
-        // Register votifier listener, if applicable
-        if (Setting.VOTE_ENABLED.getBoolean()) {
-            Plugin votifier = Bukkit.getPluginManager().getPlugin("Votifier");
-            if (votifier != null) {
-                Bukkit.getPluginManager().registerEvents(new VotifierListener(this), this);
-            } else {
-                this.getLogger().warning("The hook for Votifier was enabled, but it does not appear to be installed.");
-            }
-        }
-
         if (Setting.BUNGEECORD_SEND_UPDATES.getBoolean()) {
             Bukkit.getMessenger().registerOutgoingPluginChannel(this, PointsMessageListener.CHANNEL);
             Bukkit.getMessenger().registerIncomingPluginChannel(this, PointsMessageListener.CHANNEL, new PointsMessageListener(this));
         }
 
-        if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI"))
-            new PointsPlaceholderExpansion(this).register();
+        Bukkit.getScheduler().runTask(this, () -> {
+            // Register placeholders, if applicable
+            if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI"))
+                new PointsPlaceholderExpansion(this).register();
+
+            // Register votifier listener, if applicable
+            if (Setting.VOTE_ENABLED.getBoolean()) {
+                Plugin votifier = Bukkit.getPluginManager().getPlugin("Votifier");
+                if (votifier != null) {
+                    Bukkit.getPluginManager().registerEvents(new VotifierListener(this), this);
+                } else {
+                    this.getLogger().warning("The hook for Votifier was enabled, but it does not appear to be installed.");
+                }
+            }
+        });
     }
 
     @Override
