@@ -7,6 +7,7 @@ import org.bukkit.plugin.Plugin;
 public abstract class CurrencyConverter {
 
     protected final RosePlugin rosePlugin;
+
     protected final Plugin plugin;
 
     public CurrencyConverter(RosePlugin rosePlugin, String pluginName) {

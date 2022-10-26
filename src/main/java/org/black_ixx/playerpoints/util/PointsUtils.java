@@ -10,6 +10,8 @@ import java.util.Map;
 import java.util.NavigableMap;
 import java.util.TreeMap;
 import java.util.UUID;
+import java.util.function.BiPredicate;
+import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import org.black_ixx.playerpoints.PlayerPoints;
@@ -131,5 +133,4 @@ public final class PointsUtils {
         StringUtil.copyPartialMatches(arg, players, completions);
         return completions;
     }
-
 }

@@ -2,11 +2,13 @@ package org.black_ixx.playerpoints.conversion;
 
 import dev.rosewood.rosegarden.RosePlugin;
 import org.black_ixx.playerpoints.PlayerPoints;
+import org.black_ixx.playerpoints.conversion.converter.EconomyConverter;
 import org.black_ixx.playerpoints.conversion.converter.GamePointsConverter;
 import org.black_ixx.playerpoints.conversion.converter.TokenManagerConverter;
 
 public enum CurrencyPlugin {
 
+    Economy(EconomyConverter.class),
     TokenManager(TokenManagerConverter.class),
     GamePoints(GamePointsConverter.class);
 
