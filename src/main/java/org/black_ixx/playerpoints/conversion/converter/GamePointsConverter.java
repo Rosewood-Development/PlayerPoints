@@ -4,6 +4,7 @@ import dev.rosewood.rosegarden.RosePlugin;
 import org.black_ixx.playerpoints.conversion.CurrencyConverter;
 import org.black_ixx.playerpoints.manager.DataManager;
 import org.black_ixx.playerpoints.models.SortedPlayer;
+import org.bukkit.Bukkit;
 import su.nexmedia.engine.api.data.AbstractDataHandler;
 import su.nightexpress.gamepoints.GamePoints;
 import su.nightexpress.gamepoints.data.PointsDataHandler;
@@ -21,11 +22,12 @@ public class GamePointsConverter extends CurrencyConverter {
     }
 
     @Override
-    public void convert() {
+    public boolean convert() {
         PointsDataHandler pointsDataHandler = ((GamePoints) this.plugin).getData();
         try {
             Method method_getConnection = AbstractDataHandler.class.getDeclaredMethod("getConnection");
             method_getConnection.setAccessible(true);
+
             Connection connection = (Connection) method_getConnection.invoke(pointsDataHandler);
 
             String query = "SELECT uuid, name, balance FROM gamepoints_users";
@@ -49,9 +51,11 @@ public class GamePointsConverter extends CurrencyConverter {
                 dataManager.importData(players, Collections.emptyMap());
                 dataManager.updateCachedUsernames(usernameMap);
             }
+            return true;
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return false;
     }
 
 }

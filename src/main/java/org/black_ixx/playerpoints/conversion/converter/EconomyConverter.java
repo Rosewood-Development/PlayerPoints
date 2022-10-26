@@ -27,7 +27,7 @@ public class EconomyConverter extends CurrencyConverter {
     }
 
     @Override
-    public void convert() {
+    public boolean convert() {
         final EconomyMain plugin = (EconomyMain) this.plugin;
         final SortedSet<SortedPlayer> players = new TreeSet<>();
         try {
@@ -45,8 +45,10 @@ public class EconomyConverter extends CurrencyConverter {
             }
 
             this.rosePlugin.getManager(DataManager.class).importData(players, Collections.emptyMap());
+            return true;
         } catch (ReflectiveOperationException e) {
             e.printStackTrace();
         }
+        return false;
     }
 }

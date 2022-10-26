@@ -32,7 +32,7 @@ public class TokenManagerConverter extends CurrencyConverter {
     };
 
     @Override
-    public void convert() {
+    public boolean convert() {
         TokenManagerPlugin tokenManager = (TokenManagerPlugin) this.plugin;
         DataManager dataManager = tokenManager.getDataManager();
         try {
@@ -61,8 +61,10 @@ public class TokenManagerConverter extends CurrencyConverter {
 
                 this.rosePlugin.getManager(org.black_ixx.playerpoints.manager.DataManager.class).importData(pointsData, Collections.emptyMap());
             }));
+            return true;
         } catch (ReflectiveOperationException e) {
             e.printStackTrace();
         }
+        return false;
     }
 }
