@@ -11,6 +11,13 @@ targetCompatibility = 1.8
 group = 'org.black_ixx'
 version = '3.2.6'
 
+compileJava {
+    options.compilerArgs += ['-parameters']
+    options.fork = true
+    options.forkOptions.executable = 'javac'
+    options.encoding = 'UTF-8'
+}
+
 repositories {
     mavenCentral()
 
@@ -39,12 +46,7 @@ dependencies {
     compileOnly 'su.nexmedia:nexengine:2.2.0'
 }
 
-compileJava {
-    options.compilerArgs += ['-parameters']
-    options.fork = true
-    options.forkOptions.executable = 'javac'
-    options.encoding = 'UTF-8'
-}
+
 
 processResources {
     from (sourceSets.main.resources.srcDirs) {
