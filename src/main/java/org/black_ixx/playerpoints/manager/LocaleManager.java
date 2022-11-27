@@ -13,6 +13,10 @@ import org.black_ixx.playerpoints.locale.PortugueseLocale;
 import org.black_ixx.playerpoints.locale.SimplifiedChineseLocale;
 import org.black_ixx.playerpoints.locale.TaiwaneseMandarinLocale;
 import org.black_ixx.playerpoints.locale.VietnameseLocale;
+import org.bukkit.Bukkit;
+import org.bukkit.command.BlockCommandSender;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.minecart.CommandMinecart;
 
 public class LocaleManager extends AbstractLocaleManager {
 
@@ -39,6 +43,15 @@ public class LocaleManager extends AbstractLocaleManager {
             return this.getLocaleMessage("currency-singular");
         } else {
             return this.getLocaleMessage("currency-plural");
+        }
+    }
+
+    @Override
+    protected void handleMessage(CommandSender sender, String message) {
+        if (!Bukkit.isPrimaryThread() && (sender instanceof BlockCommandSender || sender instanceof CommandMinecart)) {
+            Bukkit.getScheduler().runTask(this.rosePlugin, () -> super.handleMessage(sender, message));
+        } else {
+            super.handleMessage(sender, message);
         }
     }
 

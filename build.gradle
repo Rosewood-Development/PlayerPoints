@@ -26,7 +26,7 @@ repositories {
 }
 
 dependencies {
-    api 'dev.rosewood:rosegarden:1.1.0.42-SNAPSHOT'
+    api 'dev.rosewood:rosegarden:1.1.0.49-SNAPSHOT'
 
     compileOnly 'org.spigotmc:spigot:1.17.1'
     compileOnly 'com.github.milkbowl:vault:1.7.3'

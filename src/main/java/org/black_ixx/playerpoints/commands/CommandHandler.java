@@ -1,5 +1,6 @@
 package org.black_ixx.playerpoints.commands;
 
+import dev.rosewood.rosegarden.hook.PlaceholderAPIHook;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -13,10 +14,16 @@ import java.util.stream.Collectors;
 import org.black_ixx.playerpoints.PlayerPoints;
 import org.black_ixx.playerpoints.manager.CommandManager;
 import org.black_ixx.playerpoints.manager.LocaleManager;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.command.TabExecutor;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.minecart.CommandMinecart;
 import org.bukkit.permissions.Permissible;
 import org.bukkit.util.StringUtil;
 
@@ -97,6 +104,45 @@ public abstract class CommandHandler implements TabExecutor, NamedExecutor {
         }
 
         String subcmd = args[0].toLowerCase();
+
+        // Parse placeholders for the console
+        if (sender instanceof ConsoleCommandSender)
+            for (int i = 1; i < args.length; i++)
+                if (args[i].startsWith("%"))
+                    args[i] = PlaceholderAPIHook.applyPlaceholders(null, args[i]);
+
+        // Parse selectors in command blocks
+        if (sender instanceof BlockCommandSender || sender instanceof CommandMinecart) {
+            for (int i = 1; i < args.length; i++) {
+                String selector = args[i];
+                if (!selector.startsWith("@"))
+                    continue;
+
+                try {
+                    List<Entity> selectedEntities = Bukkit.selectEntities(sender, selector);
+                    if (selectedEntities.isEmpty()) {
+                        sender.sendMessage("Error: No entities found for selector '" + selector + "'");
+                        return true;
+                    }
+
+                    if (selectedEntities.size() > 1) {
+                        sender.sendMessage("Error: More than one entity found for selector '" + selector + "'");
+                        return true;
+                    }
+
+                    Entity entity = selectedEntities.get(0);
+                    if (!(entity instanceof Player)) {
+                        sender.sendMessage("Error: Entity '" + entity.getName() + "' is not a player");
+                        return true;
+                    }
+
+                    args[i] = entity.getName();
+                } catch (IllegalArgumentException e) {
+                    sender.sendMessage("Error: Invalid player selector '" + selector + "'");
+                    return true;
+                }
+            }
+        }
 
         // Check known handlers first and pass to them
         CommandHandler handler = this.registeredHandlers.get(subcmd);
