@@ -33,7 +33,7 @@ public class PlayerPointsAPI {
      * @param amount The amount of points to give
      * @return true if the transaction was successful, false otherwise
      */
-    public boolean give(@NotNull UUID playerId, int amount) {
+    public synchronized boolean give(@NotNull UUID playerId, int amount) {
         Objects.requireNonNull(playerId);
 
         PlayerPointsChangeEvent event = new PlayerPointsChangeEvent(playerId, amount);
@@ -51,8 +51,7 @@ public class PlayerPointsAPI {
      * @param amount The amount of points to give
      * @return true if any transaction was successful, false otherwise
      */
-    @NotNull
-    public boolean giveAll(@NotNull Collection<UUID> playerIds, int amount) {
+    public synchronized boolean giveAll(@NotNull Collection<UUID> playerIds, int amount) {
         Objects.requireNonNull(playerIds);
 
         boolean success = false;
@@ -69,7 +68,7 @@ public class PlayerPointsAPI {
      * @param amount The amount of points to take
      * @return true if the transaction was successful, false otherwise
      */
-    public boolean take(@NotNull UUID playerId, int amount) {
+    public synchronized boolean take(@NotNull UUID playerId, int amount) {
         Objects.requireNonNull(playerId);
 
         return this.give(playerId, -amount);
@@ -81,7 +80,7 @@ public class PlayerPointsAPI {
      * @param playerId The player to give points to
      * @return the amount of points a player has
      */
-    public int look(@NotNull UUID playerId) {
+    public synchronized int look(@NotNull UUID playerId) {
         Objects.requireNonNull(playerId);
 
         return this.plugin.getManager(DataManager.class).getEffectivePoints(playerId);
@@ -119,7 +118,7 @@ public class PlayerPointsAPI {
      * @param amount The amount of points to take/give
      * @return true if the transaction was successful, false otherwise
      */
-    public boolean pay(@NotNull UUID source, @NotNull UUID target, int amount) {
+    public synchronized boolean pay(@NotNull UUID source, @NotNull UUID target, int amount) {
         Objects.requireNonNull(source);
         Objects.requireNonNull(target);
 
@@ -141,7 +140,7 @@ public class PlayerPointsAPI {
      * @param amount The amount of points to set to
      * @return true if the transaction was successful, false otherwise
      */
-    public boolean set(@NotNull UUID playerId, int amount) {
+    public synchronized boolean set(@NotNull UUID playerId, int amount) {
         Objects.requireNonNull(playerId);
 
         DataManager dataManager = this.plugin.getManager(DataManager.class);
@@ -160,7 +159,7 @@ public class PlayerPointsAPI {
      * @param playerId The player to reset the points of
      * @return true if the transaction was successful, false otherwise
      */
-    public boolean reset(@NotNull UUID playerId) {
+    public synchronized boolean reset(@NotNull UUID playerId) {
         Objects.requireNonNull(playerId);
 
         PlayerPointsResetEvent event = new PlayerPointsResetEvent(playerId);
