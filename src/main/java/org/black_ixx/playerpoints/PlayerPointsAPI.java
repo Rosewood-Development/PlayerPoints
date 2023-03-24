@@ -4,6 +4,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.concurrent.locks.ReentrantLock;
+
 import org.black_ixx.playerpoints.event.PlayerPointsChangeEvent;
 import org.black_ixx.playerpoints.event.PlayerPointsResetEvent;
 import org.black_ixx.playerpoints.manager.DataManager;
@@ -20,6 +22,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class PlayerPointsAPI {
 
+    private final ReentrantLock lock = new ReentrantLock();
     private final PlayerPoints plugin;
 
     public PlayerPointsAPI(PlayerPoints plugin) {
@@ -33,15 +36,20 @@ public class PlayerPointsAPI {
      * @param amount The amount of points to give
      * @return true if the transaction was successful, false otherwise
      */
-    public synchronized boolean give(@NotNull UUID playerId, int amount) {
+    public boolean give(@NotNull UUID playerId, int amount) {
         Objects.requireNonNull(playerId);
 
-        PlayerPointsChangeEvent event = new PlayerPointsChangeEvent(playerId, amount);
-        Bukkit.getPluginManager().callEvent(event);
-        if (event.isCancelled())
-            return false;
+        lock.lock();
+        try {
+            PlayerPointsChangeEvent event = new PlayerPointsChangeEvent(playerId, amount);
+            Bukkit.getPluginManager().callEvent(event);
+            if (event.isCancelled())
+                return false;
 
-        return this.plugin.getManager(DataManager.class).offsetPoints(playerId, amount);
+            return this.plugin.getManager(DataManager.class).offsetPoints(playerId, amount);
+        } finally {
+            lock.unlock();
+        }
     }
 
     /**
@@ -51,14 +59,19 @@ public class PlayerPointsAPI {
      * @param amount The amount of points to give
      * @return true if any transaction was successful, false otherwise
      */
-    public synchronized boolean giveAll(@NotNull Collection<UUID> playerIds, int amount) {
+    public boolean giveAll(@NotNull Collection<UUID> playerIds, int amount) {
         Objects.requireNonNull(playerIds);
 
-        boolean success = false;
-        for (UUID uuid : playerIds)
-            success |= this.give(uuid, amount);
+        lock.lock();
+        try {
+            boolean success = false;
+            for (UUID uuid : playerIds)
+                success |= this.give(uuid, amount);
 
-        return success;
+            return success;
+        } finally {
+            lock.unlock();
+        }
     }
 
     /**
@@ -68,7 +81,7 @@ public class PlayerPointsAPI {
      * @param amount The amount of points to take
      * @return true if the transaction was successful, false otherwise
      */
-    public synchronized boolean take(@NotNull UUID playerId, int amount) {
+    public boolean take(@NotNull UUID playerId, int amount) {
         Objects.requireNonNull(playerId);
 
         return this.give(playerId, -amount);
@@ -80,10 +93,15 @@ public class PlayerPointsAPI {
      * @param playerId The player to give points to
      * @return the amount of points a player has
      */
-    public synchronized int look(@NotNull UUID playerId) {
+    public int look(@NotNull UUID playerId) {
         Objects.requireNonNull(playerId);
 
-        return this.plugin.getManager(DataManager.class).getEffectivePoints(playerId);
+        lock.lock();
+        try {
+            return this.plugin.getManager(DataManager.class).getEffectivePoints(playerId);
+        } finally {
+            lock.unlock();
+        }
     }
 
     /**
@@ -95,7 +113,12 @@ public class PlayerPointsAPI {
     public String lookFormatted(@NotNull UUID playerId) {
         Objects.requireNonNull(playerId);
 
-        return PointsUtils.formatPoints(this.plugin.getManager(DataManager.class).getEffectivePoints(playerId));
+        lock.lock();
+        try {
+            return PointsUtils.formatPoints(this.plugin.getManager(DataManager.class).getEffectivePoints(playerId));
+        } finally {
+            lock.unlock();
+        }
     }
 
     /**
@@ -107,7 +130,12 @@ public class PlayerPointsAPI {
     public String lookShorthand(@NotNull UUID playerId) {
         Objects.requireNonNull(playerId);
 
-        return PointsUtils.formatPointsShorthand(this.plugin.getManager(DataManager.class).getEffectivePoints(playerId));
+        lock.lock();
+        try {
+            return PointsUtils.formatPointsShorthand(this.plugin.getManager(DataManager.class).getEffectivePoints(playerId));
+        } finally {
+            lock.unlock();
+        }
     }
 
     /**
@@ -118,19 +146,24 @@ public class PlayerPointsAPI {
      * @param amount The amount of points to take/give
      * @return true if the transaction was successful, false otherwise
      */
-    public synchronized boolean pay(@NotNull UUID source, @NotNull UUID target, int amount) {
+    public boolean pay(@NotNull UUID source, @NotNull UUID target, int amount) {
         Objects.requireNonNull(source);
         Objects.requireNonNull(target);
 
-        if (!this.take(source, amount))
-            return false;
+        lock.lock();
+        try {
+            if (!this.take(source, amount))
+                return false;
 
-        if (!this.give(target, amount)) {
-            this.give(source, amount);
-            return false;
+            if (!this.give(target, amount)) {
+                this.give(source, amount);
+                return false;
+            }
+
+            return true;
+        } finally {
+            lock.unlock();
         }
-
-        return true;
     }
 
     /**
@@ -140,17 +173,22 @@ public class PlayerPointsAPI {
      * @param amount The amount of points to set to
      * @return true if the transaction was successful, false otherwise
      */
-    public synchronized boolean set(@NotNull UUID playerId, int amount) {
+    public boolean set(@NotNull UUID playerId, int amount) {
         Objects.requireNonNull(playerId);
 
-        DataManager dataManager = this.plugin.getManager(DataManager.class);
-        int points = dataManager.getEffectivePoints(playerId);
-        PlayerPointsChangeEvent event = new PlayerPointsChangeEvent(playerId, amount - points);
-        Bukkit.getPluginManager().callEvent(event);
-        if (event.isCancelled())
-            return false;
+        lock.lock();
+        try {
+            DataManager dataManager = this.plugin.getManager(DataManager.class);
+            int points = dataManager.getEffectivePoints(playerId);
+            PlayerPointsChangeEvent event = new PlayerPointsChangeEvent(playerId, amount - points);
+            Bukkit.getPluginManager().callEvent(event);
+            if (event.isCancelled())
+                return false;
 
-        return dataManager.setPoints(playerId, amount);
+            return dataManager.setPoints(playerId, amount);
+        } finally {
+            lock.unlock();
+        }
     }
 
     /**
@@ -159,15 +197,20 @@ public class PlayerPointsAPI {
      * @param playerId The player to reset the points of
      * @return true if the transaction was successful, false otherwise
      */
-    public synchronized boolean reset(@NotNull UUID playerId) {
+    public boolean reset(@NotNull UUID playerId) {
         Objects.requireNonNull(playerId);
 
-        PlayerPointsResetEvent event = new PlayerPointsResetEvent(playerId);
-        Bukkit.getPluginManager().callEvent(event);
-        if (event.isCancelled())
-            return false;
+        lock.lock();
+        try {
+            PlayerPointsResetEvent event = new PlayerPointsResetEvent(playerId);
+            Bukkit.getPluginManager().callEvent(event);
+            if (event.isCancelled())
+                return false;
 
-        return this.plugin.getManager(DataManager.class).setPoints(playerId, 0);
+            return this.plugin.getManager(DataManager.class).setPoints(playerId, 0);
+        } finally {
+            lock.unlock();
+        }
     }
 
     /**
@@ -177,14 +220,24 @@ public class PlayerPointsAPI {
      * @return a List of all players sorted by the number of points they have.
      */
     public List<SortedPlayer> getTopSortedPoints(int limit) {
-        return this.plugin.getManager(DataManager.class).getTopSortedPoints(limit);
+        lock.lock();
+        try {
+            return this.plugin.getManager(DataManager.class).getTopSortedPoints(limit);
+        } finally {
+            lock.unlock();
+        }
     }
 
     /**
      * @return a List of all players sorted by the number of points they have.
      */
     public List<SortedPlayer> getTopSortedPoints() {
-        return this.plugin.getManager(DataManager.class).getTopSortedPoints(null);
+        lock.lock();
+        try {
+            return this.plugin.getManager(DataManager.class).getTopSortedPoints(null);
+        } finally {
+            lock.unlock();
+        }
     }
 
 }
