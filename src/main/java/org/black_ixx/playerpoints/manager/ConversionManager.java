@@ -36,8 +36,7 @@ public class ConversionManager extends Manager {
             return false;
 
         try {
-            converter.convert();
-            return true;
+            return converter.convert();
         } catch (Exception e) {
             return false;
         }

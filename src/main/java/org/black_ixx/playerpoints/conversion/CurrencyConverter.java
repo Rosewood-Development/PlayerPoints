@@ -18,6 +18,6 @@ public abstract class CurrencyConverter {
         return this.plugin != null && this.plugin.isEnabled();
     }
 
-    public abstract void convert();
+    public abstract boolean convert();
 
 }
