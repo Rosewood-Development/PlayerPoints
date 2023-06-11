@@ -1,7 +1,7 @@
 import org.apache.tools.ant.filters.ReplaceTokens
 
 plugins {
-    id 'com.github.johnrengelman.shadow' version '7.0.0'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
     id 'java-library'
     id 'maven-publish'
 }
@@ -9,7 +9,7 @@ plugins {
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 group = 'org.black_ixx'
-version = '3.2.5'
+version = '3.2.6'
 
 repositories {
     mavenCentral()
@@ -26,14 +26,14 @@ repositories {
 }
 
 dependencies {
-    api 'dev.rosewood:rosegarden:1.2.1'
+    api 'dev.rosewood:rosegarden:1.2.4'
 
     compileOnly 'org.spigotmc:spigot:1.17.1'
     compileOnly 'com.github.milkbowl:vault:1.7.3'
     compileOnly 'me.lokka30:treasury-api:1.2.1'
     compileOnly 'com.vexsoftware:votifier:2.7.2'
-    compileOnly 'me.clip:placeholderapi:2.10.9'
-    compileOnly 'org.jetbrains:annotations:16.0.2'
+    compileOnly 'me.clip:placeholderapi:2.11.3'
+    compileOnly 'org.jetbrains:annotations:24.0.1'
     compileOnly 'me.realized:tokenmanager:3.2.5'
     compileOnly 'su.nightexpress:gamepoints:1.3.1'
     compileOnly 'su.nexmedia:nexengine:2.2.0'
