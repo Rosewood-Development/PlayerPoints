@@ -41,12 +41,12 @@ public class GiveAllCommand extends RoseCommand {
             if (success) {
                 for (Player player : Bukkit.getOnlinePlayers()) {
                     locale.sendMessage(player, "command-give-received", StringPlaceholders.builder("amount", PointsUtils.formatPoints(amount))
-                            .addPlaceholder("currency", locale.getCurrencyName(amount))
+                            .add("currency", locale.getCurrencyName(amount))
                             .build());
                 }
 
                 locale.sendMessage(context.getSender(), "command-giveall-success", StringPlaceholders.builder("amount", PointsUtils.formatPoints(amount))
-                        .addPlaceholder("currency", locale.getCurrencyName(amount))
+                        .add("currency", locale.getCurrencyName(amount))
                         .build());
             }
         });

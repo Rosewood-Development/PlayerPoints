@@ -29,15 +29,15 @@ public class LookCommand extends RoseCommand {
             Tuple<UUID, String> target = PointsUtils.getPlayerByName(player);
 
             if (target == null) {
-                locale.sendMessage(context.getSender(), "argument-handler-offline-player", StringPlaceholders.single("player", player));
+                locale.sendMessage(context.getSender(), "argument-handler-offline-player", StringPlaceholders.of("player", player));
                 return;
             }
 
             int amount = plugin.getAPI().look(target.getFirst());
 
             locale.sendMessage(context.getSender(), "command-look-success", StringPlaceholders.builder("player", target.getSecond())
-                    .addPlaceholder("amount", PointsUtils.formatPoints(amount))
-                    .addPlaceholder("currency", locale.getCurrencyName(amount))
+                    .add("amount", PointsUtils.formatPoints(amount))
+                    .add("currency", locale.getCurrencyName(amount))
                     .build());
         });
     }

@@ -22,7 +22,7 @@ public class CurrencyPluginArgumentHandler extends RoseCommandArgumentHandler<Cu
         String input = argumentParser.next();
         CurrencyPlugin value = CurrencyPlugin.get(input);
         if (value == null)
-            throw new HandledArgumentException("argument-handler-currency-plugin", StringPlaceholders.single("input", input));
+            throw new HandledArgumentException("argument-handler-currency-plugin", StringPlaceholders.of("input", input));
 
         return value;
     }

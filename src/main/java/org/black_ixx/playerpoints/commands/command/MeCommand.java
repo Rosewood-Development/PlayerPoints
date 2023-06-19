@@ -27,7 +27,7 @@ public class MeCommand extends RoseCommand {
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             int points = plugin.getAPI().look(player.getUniqueId());
             locale.sendMessage(player, "command-me-success", StringPlaceholders.builder("amount", PointsUtils.formatPoints(points))
-                    .addPlaceholder("currency", locale.getCurrencyName(points))
+                    .add("currency", locale.getCurrencyName(points))
                     .build());
         });
     }

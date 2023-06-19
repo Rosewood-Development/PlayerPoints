@@ -29,13 +29,13 @@ public class ResetCommand extends RoseCommand {
             Tuple<UUID, String> target = PointsUtils.getPlayerByName(player);
 
             if (target == null) {
-                locale.sendMessage(context.getSender(), "argument-handler-offline-player", StringPlaceholders.single("player", player));
+                locale.sendMessage(context.getSender(), "argument-handler-offline-player", StringPlaceholders.of("player", player));
                 return;
             }
 
             if (plugin.getAPI().reset(target.getFirst())) {
                 locale.sendMessage(context.getSender(), "command-reset-success", StringPlaceholders.builder("player", target.getSecond())
-                        .addPlaceholder("currency", locale.getCurrencyName(0))
+                        .add("currency", locale.getCurrencyName(0))
                         .build());
             }
         });

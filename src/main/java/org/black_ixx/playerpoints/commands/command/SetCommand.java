@@ -29,7 +29,7 @@ public class SetCommand extends RoseCommand {
             Tuple<UUID, String> target = PointsUtils.getPlayerByName(player);
 
             if (target == null) {
-                locale.sendMessage(context.getSender(), "argument-handler-offline-player", StringPlaceholders.single("player", player));
+                locale.sendMessage(context.getSender(), "argument-handler-offline-player", StringPlaceholders.of("player", player));
                 return;
             }
 
@@ -40,8 +40,8 @@ public class SetCommand extends RoseCommand {
 
             if (plugin.getAPI().set(target.getFirst(), amount)) {
                 locale.sendMessage(context.getSender(), "command-set-success", StringPlaceholders.builder("player", target.getSecond())
-                        .addPlaceholder("currency", locale.getCurrencyName(amount))
-                        .addPlaceholder("amount", PointsUtils.formatPoints(amount))
+                        .add("currency", locale.getCurrencyName(amount))
+                        .add("amount", PointsUtils.formatPoints(amount))
                         .build());
             }
         });

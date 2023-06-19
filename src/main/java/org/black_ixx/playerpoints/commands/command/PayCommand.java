@@ -30,7 +30,7 @@ public class PayCommand extends RoseCommand {
             Tuple<UUID, String> target = PointsUtils.getPlayerByName(player);
 
             if (target == null) {
-                locale.sendMessage(context.getSender(), "argument-handler-offline-player", StringPlaceholders.single("player", player));
+                locale.sendMessage(context.getSender(), "argument-handler-offline-player", StringPlaceholders.of("player", player));
                 return;
             }
 
@@ -44,21 +44,21 @@ public class PayCommand extends RoseCommand {
             if (plugin.getAPI().pay(sender.getUniqueId(), target.getFirst(), amount)) {
                 // Send success message to sender
                 locale.sendMessage(sender, "command-pay-sent", StringPlaceholders.builder("amount", PointsUtils.formatPoints(amount))
-                        .addPlaceholder("currency", locale.getCurrencyName(amount))
-                        .addPlaceholder("player", target.getSecond())
+                        .add("currency", locale.getCurrencyName(amount))
+                        .add("player", target.getSecond())
                         .build());
 
                 // Send success message to target
                 Player onlinePlayer = Bukkit.getPlayer(target.getFirst());
                 if (onlinePlayer != null) {
                     locale.sendMessage(onlinePlayer, "command-pay-received", StringPlaceholders.builder("amount", PointsUtils.formatPoints(amount))
-                            .addPlaceholder("currency", locale.getCurrencyName(amount))
-                            .addPlaceholder("player", sender.getName())
+                            .add("currency", locale.getCurrencyName(amount))
+                            .add("player", sender.getName())
                             .build());
                 }
 
             } else {
-                locale.sendMessage(sender, "command-pay-lacking-funds", StringPlaceholders.single("currency", locale.getCurrencyName(0)));
+                locale.sendMessage(sender, "command-pay-lacking-funds", StringPlaceholders.of("currency", locale.getCurrencyName(0)));
             }
         });
     }

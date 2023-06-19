@@ -30,7 +30,7 @@ public class GiveCommand extends RoseCommand {
             Tuple<UUID, String> target = PointsUtils.getPlayerByName(player);
 
             if (target == null) {
-                locale.sendMessage(context.getSender(), "argument-handler-offline-player", StringPlaceholders.single("player", player));
+                locale.sendMessage(context.getSender(), "argument-handler-offline-player", StringPlaceholders.of("player", player));
                 return;
             }
 
@@ -43,14 +43,14 @@ public class GiveCommand extends RoseCommand {
                 Player onlinePlayer = Bukkit.getPlayer(target.getFirst());
                 if (onlinePlayer != null) {
                     locale.sendMessage(onlinePlayer, "command-give-received", StringPlaceholders.builder("amount", PointsUtils.formatPoints(amount))
-                            .addPlaceholder("currency", locale.getCurrencyName(amount))
+                            .add("currency", locale.getCurrencyName(amount))
                             .build());
                 }
 
                 // Send message to sender
                 locale.sendMessage(context.getSender(), "command-give-success", StringPlaceholders.builder("amount", PointsUtils.formatPoints(amount))
-                        .addPlaceholder("currency", locale.getCurrencyName(amount))
-                        .addPlaceholder("player", target.getSecond())
+                        .add("currency", locale.getCurrencyName(amount))
+                        .add("player", target.getSecond())
                         .build());
             }
         });

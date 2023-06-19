@@ -24,18 +24,18 @@ public class ConvertCommand extends RoseCommand {
         ConversionManager manager = this.rosePlugin.getManager(ConversionManager.class);
 
         if (!manager.getEnabledConverters().contains(plugin)) {
-            locale.sendMessage(context.getSender(), "command-convert-invalid", StringPlaceholders.single("plugin", plugin.name()));
+            locale.sendMessage(context.getSender(), "command-convert-invalid", StringPlaceholders.of("plugin", plugin.name()));
             return;
         }
 
         if (!confirm) {
-            locale.sendMessage(context.getSender(), "command-convert-warning", StringPlaceholders.single("plugin", plugin.name()));
+            locale.sendMessage(context.getSender(), "command-convert-warning", StringPlaceholders.of("plugin", plugin.name()));
             return;
         }
 
         Bukkit.getScheduler().runTaskAsynchronously(PlayerPoints.getInstance(), () -> {
             if (manager.convert(plugin)) {
-                locale.sendMessage(context.getSender(), "command-convert-success", StringPlaceholders.single("plugin", plugin.name()));
+                locale.sendMessage(context.getSender(), "command-convert-success", StringPlaceholders.of("plugin", plugin.name()));
             } else {
                 locale.sendMessage(context.getSender(), "command-convert-failure");
             }

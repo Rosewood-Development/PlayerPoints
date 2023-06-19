@@ -30,7 +30,7 @@ public class BroadcastCommand extends RoseCommand {
             Tuple<UUID, String> target = PointsUtils.getPlayerByName(player);
 
             if (target == null) {
-                locale.sendMessage(context.getSender(), "argument-handler-offline-player", StringPlaceholders.single("player", player));
+                locale.sendMessage(context.getSender(), "argument-handler-offline-player", StringPlaceholders.of("player", player));
                 return;
             }
 
@@ -38,8 +38,8 @@ public class BroadcastCommand extends RoseCommand {
 
             for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
                 locale.sendMessage(onlinePlayer, "command-broadcast-message", StringPlaceholders.builder("player", target.getSecond())
-                        .addPlaceholder("amount", PointsUtils.formatPoints(points))
-                        .addPlaceholder("currency", locale.getCurrencyName(points))
+                        .add("amount", PointsUtils.formatPoints(points))
+                        .add("currency", locale.getCurrencyName(points))
                         .build());
             }
         });

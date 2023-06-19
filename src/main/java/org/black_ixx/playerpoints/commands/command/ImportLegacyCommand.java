@@ -35,9 +35,9 @@ public class ImportLegacyCommand extends RoseCommand {
         }
 
         if (this.rosePlugin.getManager(DataManager.class).importLegacyTable(table)) {
-            locale.sendMessage(context.getSender(), "command-importlegacy-success", StringPlaceholders.single("table", table));
+            locale.sendMessage(context.getSender(), "command-importlegacy-success", StringPlaceholders.of("table", table));
         } else {
-            locale.sendMessage(context.getSender(), "command-importlegacy-failure", StringPlaceholders.single("table", table));
+            locale.sendMessage(context.getSender(), "command-importlegacy-failure", StringPlaceholders.of("table", table));
         }
     }
 

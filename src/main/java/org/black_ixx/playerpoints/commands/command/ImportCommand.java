@@ -40,7 +40,7 @@ public class ImportCommand extends RoseCommand {
 
         if (!confirm) {
             String databaseType = this.rosePlugin.getManager(DataManager.class).getDatabaseConnector() instanceof MySQLConnector ? "MySQL" : "SQLite";
-            locale.sendMessage(context.getSender(), "command-import-warning", StringPlaceholders.single("type", databaseType));
+            locale.sendMessage(context.getSender(), "command-import-warning", StringPlaceholders.of("type", databaseType));
             return;
         }
 
