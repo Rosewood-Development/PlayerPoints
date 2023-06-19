@@ -8,10 +8,6 @@ api-version: '1.13'
 load: STARTUP
 softdepend: [Vault, Treasury, Votifier, PlaceholderAPI, TokenManager, GamePoints, NexEngine]
 loadbefore: [mcMMO]
-commands:
-  points:
-    aliases: [p]
-    description: Root command for PlayerPoints
 permissions:
   playerpoints.*:
     description: Gives access to all PlayerPoints commands
