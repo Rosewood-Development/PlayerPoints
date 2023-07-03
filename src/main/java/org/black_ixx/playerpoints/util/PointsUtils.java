@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.NavigableMap;
 import java.util.TreeMap;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import org.black_ixx.playerpoints.PlayerPoints;
@@ -97,27 +98,39 @@ public final class PointsUtils {
 
     /**
      * Gets an OfflinePlayer by name, prioritizing online players.
-     * This method exists just so the deprecation warning only has to be suppressed in one place.
+     * Warning: This method can cause a blocking call to the database for UUID lookups.
      *
      * @param name The name of the player
-     * @return An OfflinePlayer
+     * @return A tuple of the player's UUID and name, or null if not found
      */
     @SuppressWarnings("deprecation")
-    @Nullable
-    public static Tuple<UUID, String> getPlayerByName(String name) {
-        OfflinePlayer player = Bukkit.getOfflinePlayer(name);
-        if (player.getName() != null && player.hasPlayedBefore())
-            return new Tuple<>(player.getUniqueId(), player.getName());
+    public static CompletableFuture<Tuple<UUID, String>> getPlayerByName(String name) {
+        Player player = Bukkit.getPlayer(name);
+        if (player != null)
+            return CompletableFuture.completedFuture(new Tuple<>(player.getUniqueId(), player.getName()));
 
-        UUID uuid = PlayerPoints.getInstance().getManager(DataManager.class).lookupCachedUUID(name);
-        if (uuid != null)
-            return new Tuple<>(uuid, name);
+        CompletableFuture<Tuple<UUID, String>> completableFuture = new CompletableFuture<>();
+        Bukkit.getScheduler().runTaskAsynchronously(PlayerPoints.getInstance(), () -> {
+            OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(name);
+            if (offlinePlayer.getName() != null && offlinePlayer.hasPlayedBefore()) {
+                completableFuture.complete(new Tuple<>(offlinePlayer.getUniqueId(), offlinePlayer.getName()));
+                return;
+            }
 
-        return null;
+            UUID uuid = PlayerPoints.getInstance().getManager(DataManager.class).lookupCachedUUID(name);
+            if (uuid != null) {
+                completableFuture.complete(new Tuple<>(uuid, name));
+                return;
+            }
+
+            completableFuture.complete(null);
+        });
+
+        return completableFuture;
     }
 
     /**
-     * Gets a list of player names to show in tab completions, vanished players
+     * Gets a list of player names to show in tab completions, vanished players are excluded.
      *
      * @param arg The argument for the name
      * @return a list of online players excluding the

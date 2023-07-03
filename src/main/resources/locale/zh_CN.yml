@@ -18,6 +18,7 @@ unknown-player: '&c找不到玩家: &b%player%'
 unknown-command: '&c未知命令: &b%input%'
 votifier-voted: '&e感谢您在 %service% 上为我们投票! &b%amount% &e已经被添加到您的账户。'
 leaderboard-empty-entry: '这可能是你!'
+command-cooldown: '&c请等待一段时间再使用该命令。'
 
 # 基础命令信息
 base-command-color: '&e'
@@ -52,6 +53,7 @@ command-look-success: '&b%player% &e有 &b%amount% &e%currency%。'
 # 转账命令
 command-pay-description: '&8 - &d/points pay &7- 给一名玩家转账'
 command-pay-usage: '&c用法: &e/points pay <玩家> <数值>'
+command-pay-self: '&c您不能给自己转账。'
 command-pay-sent: '&a您向玩家 &b%player% 转账了 %amount% &a%currency%。'
 command-pay-received: '&e您收到了来自玩家 &b%player% &e的 &b%amount% &e%currency% 。'
 command-pay-lacking-funds: '&c您没有多于 %currency% 的点劵来那么做。'

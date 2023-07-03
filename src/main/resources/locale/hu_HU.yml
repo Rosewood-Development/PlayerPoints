@@ -18,6 +18,7 @@ unknown-player: '&cJátékos nem található: &b%player%'
 unknown-command: '&cIsmeretlen parancs: &b%input%'
 votifier-voted: '&eKöszönjük hogy szavaztál ránk itt %service%! &b%amount% &ehozzáadva az egyenlegedhez.'
 leaderboard-empty-entry: 'Ez akár te is lehetsz!'
+command-cooldown: '&cKérjük, várjon, mielőtt újra használná ezt a parancsot.'
 
 # Base Command Message
 base-command-color: '&e'
@@ -52,6 +53,7 @@ command-look-success: '&b%player%-nak/nek &evan &b%amount% &e%currency%ja.'
 # Pay Command
 command-pay-description: '&8 - &d/points pay &7- Fizetés egy játékosnak'
 command-pay-usage: '&cHasználat: &e/points pay <játékos> <mennyiség>'
+command-pay-self: '&cNem tudsz magadnak fizetni.'
 command-pay-sent: '&aFizettél &b%player%-nak/nek %amount% &a%currency%ot.'
 command-pay-received: '&eFizetett neked &b%amount% &e%currency%ot &b%player%&e.'
 command-pay-lacking-funds: '&cNincs elég %currency%od ehhez.'

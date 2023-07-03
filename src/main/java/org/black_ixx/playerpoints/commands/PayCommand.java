@@ -1,19 +1,25 @@
 package org.black_ixx.playerpoints.commands;
 
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import dev.rosewood.rosegarden.utils.StringPlaceholders;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 import org.black_ixx.playerpoints.PlayerPoints;
 import org.black_ixx.playerpoints.manager.CommandManager;
 import org.black_ixx.playerpoints.manager.LocaleManager;
-import org.black_ixx.playerpoints.models.Tuple;
 import org.black_ixx.playerpoints.util.PointsUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class PayCommand extends PointsCommand {
+
+    private static final Cache<UUID, Long> PAY_COOLDOWN = CacheBuilder.newBuilder()
+            .expireAfterWrite(500, TimeUnit.MILLISECONDS)
+            .build();
 
     public PayCommand() {
         super("pay", CommandManager.CommandAliases.PAY);
@@ -27,34 +33,46 @@ public class PayCommand extends PointsCommand {
             return;
         }
 
+        Player player = (Player) sender;
         if (args.length < 2) {
-            localeManager.sendMessage(sender, "command-pay-usage");
+            localeManager.sendMessage(player, "command-pay-usage");
             return;
         }
 
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-            Tuple<UUID, String> target = PointsUtils.getPlayerByName(args[0]);
+        if (PAY_COOLDOWN.getIfPresent(player.getUniqueId()) != null) {
+            localeManager.sendMessage(player, "command-cooldown");
+            return;
+        }
+
+        PAY_COOLDOWN.put(player.getUniqueId(), System.currentTimeMillis());
+
+        PointsUtils.getPlayerByName(args[0]).thenAccept(target -> {
             if (target == null) {
-                localeManager.sendMessage(sender, "unknown-player", StringPlaceholders.single("player", args[0]));
+                localeManager.sendMessage(player, "unknown-player", StringPlaceholders.single("player", args[0]));
+                return;
+            }
+
+            if (player.getUniqueId().equals(target.getFirst())) {
+                localeManager.sendMessage(player, "command-pay-self");
                 return;
             }
 
             int amount;
             try {
                 amount = Integer.parseInt(args[1]);
-                if (amount <= 0) {
-                    localeManager.sendMessage(sender, "invalid-amount");
-                    return;
-                }
             } catch (NumberFormatException e) {
-                localeManager.sendMessage(sender, "invalid-amount");
+                localeManager.sendMessage(player, "invalid-amount");
                 return;
             }
 
-            Player player = (Player) sender;
+            if (amount <= 0) {
+                localeManager.sendMessage(player, "invalid-amount");
+                return;
+            }
+
             if (plugin.getAPI().pay(player.getUniqueId(), target.getFirst(), amount)) {
                 // Send success message to sender
-                localeManager.sendMessage(sender, "command-pay-sent", StringPlaceholders.builder("amount", PointsUtils.formatPoints(amount))
+                localeManager.sendMessage(player, "command-pay-sent", StringPlaceholders.builder("amount", PointsUtils.formatPoints(amount))
                         .addPlaceholder("currency", localeManager.getCurrencyName(amount))
                         .addPlaceholder("player", target.getSecond())
                         .build());
@@ -68,7 +86,7 @@ public class PayCommand extends PointsCommand {
                             .build());
                 }
             } else {
-                localeManager.sendMessage(sender, "command-pay-lacking-funds", StringPlaceholders.single("currency", localeManager.getCurrencyName(0)));
+                localeManager.sendMessage(player, "command-pay-lacking-funds", StringPlaceholders.single("currency", localeManager.getCurrencyName(0)));
             }
         });
     }
@@ -79,7 +97,9 @@ public class PayCommand extends PointsCommand {
             return Collections.emptyList();
 
         if (args.length == 1) {
-            return PointsUtils.getPlayerTabComplete(args[0]);
+            List<String> completions = PointsUtils.getPlayerTabComplete(args[0]);
+            completions.remove(sender.getName());
+            return completions;
         } else if (args.length == 2) {
             return Collections.singletonList("<amount>");
         } else {

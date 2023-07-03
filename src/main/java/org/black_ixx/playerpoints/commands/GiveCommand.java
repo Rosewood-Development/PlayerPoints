@@ -27,37 +27,39 @@ public class GiveCommand extends PointsCommand {
             return;
         }
 
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-            Tuple<UUID, String> player = PointsUtils.getPlayerByName(args[0]);
+        PointsUtils.getPlayerByName(args[0]).thenAccept(player -> {
             if (player == null) {
                 localeManager.sendMessage(sender, "unknown-player", StringPlaceholders.single("player", args[0]));
                 return;
             }
 
+            int amount;
             try {
-                int amount = Integer.parseInt(args[1]);
-                if (amount <= 0) {
-                    localeManager.sendMessage(sender, "invalid-amount");
-                    return;
-                }
-
-                if (plugin.getAPI().give(player.getFirst(), amount)) {
-                    // Send message to receiver
-                    Player onlinePlayer = Bukkit.getPlayer(player.getFirst());
-                    if (onlinePlayer != null) {
-                        localeManager.sendMessage(onlinePlayer, "command-give-received", StringPlaceholders.builder("amount", PointsUtils.formatPoints(amount))
-                                .addPlaceholder("currency", localeManager.getCurrencyName(amount))
-                                .build());
-                    }
-
-                    // Send message to sender
-                    localeManager.sendMessage(sender, "command-give-success", StringPlaceholders.builder("amount", PointsUtils.formatPoints(amount))
-                            .addPlaceholder("currency", localeManager.getCurrencyName(amount))
-                            .addPlaceholder("player", player.getSecond())
-                            .build());
-                }
+                amount = Integer.parseInt(args[1]);
             } catch (NumberFormatException e) {
                 localeManager.sendMessage(sender, "invalid-amount");
+                return;
+            }
+
+            if (amount <= 0) {
+                localeManager.sendMessage(sender, "invalid-amount");
+                return;
+            }
+
+            if (plugin.getAPI().give(player.getFirst(), amount)) {
+                // Send message to receiver
+                Player onlinePlayer = Bukkit.getPlayer(player.getFirst());
+                if (onlinePlayer != null) {
+                    localeManager.sendMessage(onlinePlayer, "command-give-received", StringPlaceholders.builder("amount", PointsUtils.formatPoints(amount))
+                            .addPlaceholder("currency", localeManager.getCurrencyName(amount))
+                            .build());
+                }
+
+                // Send message to sender
+                localeManager.sendMessage(sender, "command-give-success", StringPlaceholders.builder("amount", PointsUtils.formatPoints(amount))
+                        .addPlaceholder("currency", localeManager.getCurrencyName(amount))
+                        .addPlaceholder("player", player.getSecond())
+                        .build());
             }
         });
     }

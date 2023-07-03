@@ -18,6 +18,7 @@ unknown-player: '&c&b%player% という名前のプレイヤーは見つかり�
 unknown-command: '&c無効なコマンド: &b%input%'
 votifier-voted: '&e%service% での投票ありがとうございます。 &b%amount% &eポイントがアカウントに追加されました。'
 leaderboard-empty-entry: '現在、ランキングは空です。'
+command-cooldown: '&cそのコマンドを再度使用する前にお待ちください。'
 
 # 基礎コマンドメッセージ
 base-command-color: '&e'
@@ -52,6 +53,7 @@ command-look-success: '&b%player% &eは &b%amount% &e%currency% 所持してい�
 # Pay Command
 command-pay-description: '&8 - &d/points pay &7- プレイヤーにポイントを支払う。'
 command-pay-usage: '&c構文: &e/points pay <player> <amount>'
+command-pay-self: '&c自分で支払うことはできない！'
 command-pay-sent: '&aあなたは &b%player% に %amount% &a%currency% 支払いました。'
 command-pay-received: '&eあなたは &b%player% から &b%amount% &e%currency% 受け取りました。'
 command-pay-lacking-funds: '&c%currency% 不足です。'

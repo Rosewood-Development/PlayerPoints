@@ -28,34 +28,37 @@ public class GiveAllCommand extends PointsCommand {
             return;
         }
 
+        int amount;
         try {
-            int amount = Integer.parseInt(args[0]);
-            boolean includeOffline = args.length > 1 && args[1].equals("*");
+            amount = Integer.parseInt(args[0]);
+        } catch (NumberFormatException e) {
+            localeManager.sendMessage(sender, "invalid-amount");
+            return;
+        }
 
-            Bukkit.getScheduler().runTaskAsynchronously(PlayerPoints.getInstance(), () -> {
-                boolean success;
-                if (includeOffline) {
-                    success = plugin.getManager(DataManager.class).offsetAllPoints(amount);
-                } else {
-                    List<UUID> playerIds = Bukkit.getOnlinePlayers().stream().map(Player::getUniqueId).collect(Collectors.toList());
-                    success = plugin.getAPI().giveAll(playerIds, amount);
-                }
+        boolean includeOffline = args.length > 1 && args[1].equals("*");
 
-                if (success) {
-                    for (Player player : Bukkit.getOnlinePlayers()) {
-                        localeManager.sendMessage(player, "command-give-received", StringPlaceholders.builder("amount", PointsUtils.formatPoints(amount))
-                                .addPlaceholder("currency", localeManager.getCurrencyName(amount))
-                                .build());
-                    }
+        Bukkit.getScheduler().runTaskAsynchronously(PlayerPoints.getInstance(), () -> {
+            boolean success;
+            if (includeOffline) {
+                success = plugin.getManager(DataManager.class).offsetAllPoints(amount);
+            } else {
+                List<UUID> playerIds = Bukkit.getOnlinePlayers().stream().map(Player::getUniqueId).collect(Collectors.toList());
+                success = plugin.getAPI().giveAll(playerIds, amount);
+            }
 
-                    localeManager.sendMessage(sender, "command-giveall-success", StringPlaceholders.builder("amount", PointsUtils.formatPoints(amount))
+            if (success) {
+                for (Player player : Bukkit.getOnlinePlayers()) {
+                    localeManager.sendMessage(player, "command-give-received", StringPlaceholders.builder("amount", PointsUtils.formatPoints(amount))
                             .addPlaceholder("currency", localeManager.getCurrencyName(amount))
                             .build());
                 }
-            });
-        } catch (NumberFormatException e) {
-            localeManager.sendMessage(sender, "invalid-amount");
-        }
+
+                localeManager.sendMessage(sender, "command-giveall-success", StringPlaceholders.builder("amount", PointsUtils.formatPoints(amount))
+                        .addPlaceholder("currency", localeManager.getCurrencyName(amount))
+                        .build());
+            }
+        });
     }
 
     @Override

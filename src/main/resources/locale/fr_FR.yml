@@ -18,6 +18,7 @@ unknown-player: '&cLe joueur est introuvable: &b%player%'
 unknown-command: '&cCommande inconnue: &b%input%'
 votifier-voted: '&eMerci d''avoir voté sur %service%! &b%amount% &ea été ajouté à votre solde.'
 leaderboard-empty-entry: 'Cela pourrait être vous!'
+command-cooldown: '&cVeuillez attendre avant d''utiliser à nouveau cette commande.'
 
 # Base Command Message
 base-command-color: '&e'
@@ -52,6 +53,7 @@ command-look-success: '&b%player% &epossède &b%amount% &e%currency%.'
 # Pay Command
 command-pay-description: '&8 - &d/points pay &7- Payer un joueur'
 command-pay-usage: '&cUtilisation: &e/points pay <joueur> <montant>'
+command-pay-self: '&cVous ne pouvez pas vous payer vous-même !'
 command-pay-sent: '&aTu as payé &b%player% %amount% &a%currency%.'
 command-pay-received: '&eTu étais payé &b%amount% &e%currency% par &b%player%&e.'
 command-pay-lacking-funds: '&cTu n''as pas assez %currency% pour ça.'

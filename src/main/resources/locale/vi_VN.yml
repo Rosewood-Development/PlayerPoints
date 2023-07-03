@@ -18,6 +18,7 @@ unknown-player: '&cKhông thể tìm thấy người chơi: &b%player%'
 unknown-command: '&cLệnh không xác định: &b%input%'
 votifier-voted: '&eCảm ơn vì đã bỏ phiếu trên %service%! &b%amount% &eđã được thêm vào số dư của bạn.'
 leaderboard-empty-entry: 'Đây có thể là bạn!'
+command-cooldown: '&cVui lòng đợi trước khi sử dụng lại lệnh đó.'
 
 # Base Command Message
 base-command-color: '&e'
@@ -52,6 +53,7 @@ command-look-success: '&b%player% &ecó &b%amount% &e%currency%.'
 # Pay Command
 command-pay-description: '&8 - &d/points pay &7- Chuyển points cho người chơi'
 command-pay-usage: '&cSử dụng: &e/points pay <người chơi> <số lượng>'
+command-pay-self: '&cBạn không thể chuyển cho chính mình.'
 command-pay-sent: '&aBạn đã chuyển cho &b%player% %amount% &a%currency%.'
 command-pay-received: '&eBạn đã được chuyển &b%amount% &e%currency% bởi &b%player%&e.'
 command-pay-lacking-funds: '&cBạn không có đủ %currency% cho điều này.'

@@ -18,6 +18,7 @@ unknown-player: '&c找不到此玩家: &b%player%'
 unknown-command: '&c未知指令: &b%input%'
 votifier-voted: '&e謝謝你對於 %service% &e的投票! &b%amount% &e點%currency%已進入你的點數庫.'
 leaderboard-empty-entry: '這可能是你！'
+command-cooldown: '&c請等待一段時間再使用此指令.'
 
 # Base Command Message
 base-command-color: '&e'
@@ -52,6 +53,7 @@ command-look-success: '&b%player% &e擁有 &b%amount% &e點&e%currency%.'
 # Pay Command
 command-pay-description: '&8 - &d/points pay &7- 支付玩家點數'
 command-pay-usage: '&c用法: &e/points pay <玩家> <數量>'
+command-pay-self: '&c你不能支付給自己.'
 command-pay-sent: '&a你支付了 &b%player% %amount% &a點&a%currency%.'
 command-pay-received: '&b%player% &e支付了 &b%amount% &e點&e%currency%給你&e.'
 command-pay-lacking-funds: '&c你沒有足夠的%currency%.'

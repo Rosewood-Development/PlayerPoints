@@ -26,8 +26,7 @@ public class ResetCommand extends PointsCommand {
             return;
         }
 
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-            Tuple<UUID, String> player = PointsUtils.getPlayerByName(args[0]);
+        PointsUtils.getPlayerByName(args[0]).thenAccept(player -> {
             if (player == null) {
                 localeManager.sendMessage(sender, "unknown-player", StringPlaceholders.single("player", args[0]));
                 return;
