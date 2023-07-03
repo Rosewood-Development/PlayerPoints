@@ -45,14 +45,17 @@ public class TokenManagerConverter extends CurrencyConverter {
                 for (Database.TopElement entry : data) {
                     try {
                         UUID uuid;
+                        String name;
                         if (isUUID) {
                             uuid = UUID.fromString(entry.getKey());
+                            name = "Unknown";
                         } else {
                             uuid = Bukkit.getOfflinePlayer(entry.getKey()).getUniqueId();
+                            name = entry.getKey();
                         }
 
                         int amount = Math.toIntExact(entry.getTokens());
-                        pointsData.add(new SortedPlayer(uuid, "Unknown", amount));
+                        pointsData.add(new SortedPlayer(uuid, name, amount));
 
                         if (++count % 500 == 0)
                             this.rosePlugin.getLogger().warning(String.format("Converted %d entries...", count));
