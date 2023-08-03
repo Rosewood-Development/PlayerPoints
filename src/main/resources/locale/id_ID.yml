@@ -1,0 +1,121 @@
+# Plugin Message Prefix
+prefix: '&7[<g:#E8A230:#ECD32D>PlayerPoints&7] '
+
+# Currency
+currency-singular: Poin
+currency-plural: Poin
+currency-separator: ','
+currency-decimal: .
+number-abbreviation-thousands: k
+number-abbreviation-millions: m
+number-abbreviation-billions: b
+
+# Misc
+no-permission: '&cKamu tidak punya izin untuk itu!'
+no-console: '&cHanya pemain yang dapat mengeksekusi perintah ini.'
+invalid-amount: '&cJumlah harus berupa bilangan bulat positif.'
+unknown-player: '&cPemain tidak dapat ditemukan: &b%player%'
+unknown-command: '&cPerintah tidak diketahui: &b%input%'
+votifier-voted: '&eTerima kasih sudah voting di %service%! &b%amount% &etelah ditambahkan ke saldomu.'
+leaderboard-empty-entry: Ini bisa jadi kamu!
+command-cooldown: '&cHarap tunggu sebelum menggunakan perintah itu lagi.'
+
+# Base Command Message
+base-command-color: '&e'
+base-command-help: '&eGunakan &b/points help &euntuk informasi perintah.'
+
+# Help Command
+command-help-description: '&8 - &d/points help &7- Menampilkan menu bantuan... Kamu sudah disini'
+command-help-title: '&ePerintah yang Tersedia:'
+
+# Give Command
+command-give-description: '&8 - &d/points give &7- Memberikan poin kepada pemain'
+command-give-usage: '&cPenggunaan: &e/points give <player> <amount>'
+command-give-success: '&b%player% &adiberikan &b%amount% &a%currency%.'
+command-give-received: '&eKamu telah menerima &b%amount% &e%currency%.'
+
+# Give All Command
+command-giveall-description: '&8 - &d/points giveall &7- Memberikan poin kepada semua pemain online'
+command-giveall-usage: '&cPenggunaan: &e/points giveall <amount> [*]'
+command-giveall-success: '&aMemberikan &b%amount% &a%currency% kepada semua player online.'
+
+# Take Command
+command-take-description: '&8 - &d/points take &7- Ambil poin dari pemain'
+command-take-usage: '&cPenggunaan: &e/points take <player> <amount>'
+command-take-success: '&aMengambil &b%amount% &a%currency% dari &b%player%&a.'
+command-take-lacking-funds: '&b%player% &ctidak memiliki %currency% yang cukup untuk itu, jadi saldonya diatur ke 0.'
+
+# Look Command
+command-look-description: '&8 - &d/points look &7- Melihat poin pemain'
+command-look-usage: '&cPenggunaan: &e/points look <player>'
+command-look-success: '&b%player% &ememiliki &b%amount% &e%currency%.'
+
+# Pay Command
+command-pay-description: '&8 - &d/points pay &7- Bayar seorang pemain'
+command-pay-usage: '&cPenggunaan: &e/points pay <player> <amount>'
+command-pay-self: '&cKamu tidak dapat membayar diri sendiri!'
+command-pay-sent: '&aKamu membayar &b%player% %amount% &a%currency%.'
+command-pay-received: '&eKamu dibayar &b%amount% &e%currency% oleh &b%player%&e.'
+command-pay-lacking-funds: '&cKamu tidak punya %currency% yang cukup untuk itu.'
+
+# Set Command
+command-set-description: '&8 - &d/points set &7- Atur poin pemain'
+command-set-usage: '&cPenggunaan: &e/points set <player> <amount>'
+command-set-success: '&aMengatur %currency% &b%player% &amenjadi &b%amount%&a.'
+
+# Reset Command
+command-reset-description: '&8 - &d/points reset &7- Atur ulang poin pemain'
+command-reset-usage: '&cPenggunaan: &e/points reset <player>'
+command-reset-success: '&aMengatur ulang %currency% untuk &b%player%&a.'
+
+# Me Command
+command-me-description: '&8 - &d/points me &7- Melihat poinmu'
+command-me-usage: '&cPenggunaan: &d/points me'
+command-me-success: '&eKamu punya &b%amount% &e%currency%.'
+
+# Lead Command
+command-lead-description: '&8 - &d/points lead &7- Melihat papan peringkat'
+command-lead-usage: '&cPenggunaan: &e/points lead [next|prev|#]'
+command-lead-title: '&ePapan Peringkat &7(Halaman #%page%/%pages%)'
+command-lead-entry: '&b%position%). &e%player% &7- &6%amount% %currency%'
+
+# Broadcast Command
+command-broadcast-description: '&8 - &d/points broadcast &7- Menyiarkan poin pemain'
+command-broadcast-usage: '&cPenggunaan: &e/points broadcast <player>'
+command-broadcast-message: '&b%player% &ememiliki &b%amount% &e%currency%.'
+
+# Reload Command
+command-reload-description: '&8 - &d/points reload &7- Memuat ulang plugin'
+command-reload-usage: '&cPenggunaan: &e/points reload'
+command-reload-success: '&aFile konfigurasi dan bahasa telah dimuat ulang.'
+
+# Export Command
+command-export-description: '&8 - &d/points export &7- Ekspor data ke storage.yml'
+command-export-usage: '&cPenggunaan: &e/points export'
+command-export-success: '&aData yang disimpan telah diekspor ke storage.yml.'
+command-export-warning: '&cCatatan: File storage.yml sudah ada. Jika kamu ingin menimpanya, gunakan &b/points export confirm&c.'
+
+# Import Command
+command-import-description: '&8 - &d/points import &7- Impor data dari storage.yml'
+command-import-usage: '&cPenggunaan: &e/points import'
+command-import-success: '&aData yang disimpan telah diimpor dari storage.yml.'
+command-import-no-backup: '&cTidak dapat mengimpor, tidak ada storage.yml. Kamu dapat membuatnya dengan &b/points export &cdan gunakan itu untuk mentransfer data antar jenis basis data.'
+command-import-warning: '&cCatatan: Operasi ini akan menghapus semua data dari basis data yang aktif dan menggantinya dengan isi dari storage.yml. &cJenis basis data yang aktif saat ini adalah &b&o&l%type%&c. &cJika kamu benar-benar yakin tentang hal ini, gunakan &b/points import confirm&c.'
+
+# Convert Command
+command-convert-description: '&8 - &d/points convert &7- Memuat data mata uang dari plugin lain'
+command-convert-usage: '&cPenggunaan: &e/points convert <plugin>'
+command-convert-invalid: '&b%plugin% &cbukan nama plugin mata uang yang dapat dikonversi.'
+command-convert-success: '&aData mata uang dari &b%plugin% &asedang dikonversi.'
+command-convert-failure: '&cTerjadi kesalahan saat mencoba mengonversi data. Silakan cek konsolmu dan laporkan kesalahan apa pun ke pembuat plugin PlayerPoints.'
+command-convert-warning: '&cCatatan: operasi ini akan menghapus semua data dari basis data yang aktif dan menggantinya dengan data dari &b%plugin%&c. &cJika kamu benar-benar yakin tentang hal ini, gunakan &b/points convert %plugin% confirm&c.'
+
+# Import Legacy Command
+command-importlegacy-description: '&8 - &d/points importlegacy &7- Impor tabel lama'
+command-importlegacy-usage: '&cPenggunaan: &e/points importlegacy <table>'
+command-importlegacy-success: '&aBerhasil mengimpor data lama dari &b%table%&a.'
+command-importlegacy-failure: '&cGagal mengimpor data lama dari &b%table%&c. Apakah tabelnya ada?'
+command-importlegacy-only-mysql: '&cPerintah ini hanya tersedia disaat kamu sudah mengaktifkan MySQL.'
+
+# Version Command
+command-version-description: '&8 - &d/points version &7- Menampilkan informasi versi PlayerPoints'
