@@ -48,6 +48,7 @@ public class LeaderboardManager extends Manager implements Listener {
     @Override
     public void disable() {
         this.leaderboard.clear();
+        this.positions.clear();
 
         if (this.refreshTask != null) {
             this.refreshTask.cancel();

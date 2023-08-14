@@ -295,7 +295,7 @@ public class PlayerPointsVaultLayer implements Economy {
         try {
             return UUID.fromString(name);
         } catch (IllegalArgumentException e) {
-            Tuple<UUID, String> tuple = PointsUtils.getPlayerByName(name);
+            Tuple<UUID, String> tuple = PointsUtils.getPlayerByName(name).join();
             if (tuple != null) {
                 return tuple.getFirst();
             } else {

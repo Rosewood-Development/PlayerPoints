@@ -27,19 +27,20 @@ public class VotifierListener implements Listener {
             return;
 
         String name = event.getVote().getUsername();
-        Tuple<UUID, String> playerInfo = PointsUtils.getPlayerByName(name);
-        if (playerInfo == null)
-            return;
+        PointsUtils.getPlayerByName(name).thenAccept(playerInfo -> {
+            if (playerInfo == null)
+                return;
 
-        int amount = Setting.VOTE_AMOUNT.getInt();
-        Player player = Bukkit.getPlayer(playerInfo.getFirst());
+            int amount = Setting.VOTE_AMOUNT.getInt();
+            Player player = Bukkit.getPlayer(playerInfo.getFirst());
 
-        if (!Setting.VOTE_ONLINE.getBoolean() || player != null) {
-            this.plugin.getAPI().give(playerInfo.getFirst(), amount);
-            if (player != null)
-                this.plugin.getManager(LocaleManager.class).sendMessage(player, "votifier-voted", StringPlaceholders.builder("service", event.getVote().getServiceName())
-                        .addPlaceholder("amount", Setting.VOTE_AMOUNT.getInt())
-                        .build());
-        }
+            if (!Setting.VOTE_ONLINE.getBoolean() || player != null) {
+                this.plugin.getAPI().give(playerInfo.getFirst(), amount);
+                if (player != null)
+                    this.plugin.getManager(LocaleManager.class).sendMessage(player, "votifier-voted", StringPlaceholders.builder("service", event.getVote().getServiceName())
+                            .addPlaceholder("amount", Setting.VOTE_AMOUNT.getInt())
+                            .build());
+            }
+        });
     }
 }

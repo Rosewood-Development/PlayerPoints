@@ -33,11 +33,13 @@ public class GamePointsConverter extends CurrencyConverter {
             method_getConnection.setAccessible(true);
             Connection connection = (Connection) method_getConnection.invoke(pointsDataHandler);
 
+            this.rosePlugin.getLogger().warning("Converting data from GamePoints, this may take a while if you have a lot of data...");
             String query = "SELECT uuid, name, balance FROM gamepoints_users";
             try (Statement statement = connection.createStatement()) {
                 SortedSet<SortedPlayer> players = new TreeSet<>();
                 Map<UUID, String> usernameMap = new HashMap<>();
 
+                int count = 0;
                 ResultSet resultSet = statement.executeQuery(query);
                 while (resultSet.next()) {
                     try {
@@ -47,12 +49,17 @@ public class GamePointsConverter extends CurrencyConverter {
                         if (balance > 0)
                             players.add(new SortedPlayer(uuid, name, balance));
                         usernameMap.put(uuid, name);
+
+                        if (++count % 500 == 0)
+                            this.rosePlugin.getLogger().warning(String.format("Converted %d entries...", count));
                     } catch (Exception ignored) { }
                 }
 
                 DataManager dataManager = this.rosePlugin.getManager(DataManager.class);
                 dataManager.importData(players, Collections.emptyMap());
                 dataManager.updateCachedUsernames(usernameMap);
+
+                this.rosePlugin.getLogger().warning(String.format("Successfully converted %d entries!", count));
             }
         } catch (Exception e) {
             e.printStackTrace();

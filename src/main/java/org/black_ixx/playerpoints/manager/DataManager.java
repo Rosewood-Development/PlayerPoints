@@ -57,6 +57,17 @@ public class DataManager extends AbstractDataManager implements Listener {
         Bukkit.getScheduler().runTaskTimerAsynchronously(rosePlugin, this::update, 10L, 10L);
     }
 
+    @Override
+    public void disable() {
+        this.update();
+
+        this.pointsCache.clear();
+        this.pendingTransactions.clear();
+        this.pendingUsernameUpdates.clear();
+
+        super.disable();
+    }
+
     /**
      * Pushes any points changes to the database and removes stale cache entries
      */
@@ -102,11 +113,6 @@ public class DataManager extends AbstractDataManager implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         this.pendingUsernameUpdates.put(player.getUniqueId(), player.getName());
-    }
-
-    public void resetCache() {
-        this.update();
-        this.pointsCache.clear();
     }
 
     /**

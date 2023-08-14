@@ -110,8 +110,6 @@ public class PlayerPoints extends RosePlugin {
 
     @Override
     public void disable() {
-        this.getManager(DataManager.class).resetCache();
-
         if (this.vaultLayer != null)
             Bukkit.getServicesManager().unregister(Economy.class, this.vaultLayer);
 

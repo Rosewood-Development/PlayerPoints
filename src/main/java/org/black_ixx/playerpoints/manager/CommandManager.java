@@ -75,7 +75,7 @@ public class CommandManager extends Manager {
         }
 
         if (changes)
-            fileConfiguration.save();
+            fileConfiguration.save(file);
 
         // Register commands
         Commander commander = new Commander((PlayerPoints) this.rosePlugin);
