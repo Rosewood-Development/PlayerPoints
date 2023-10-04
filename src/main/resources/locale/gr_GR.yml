@@ -100,7 +100,7 @@ command-import-description: '&8 - &d/points import &7- Εισαγάγει δεδ
 command-import-usage: '&cΧρήση εντολής: &e/points import'
 command-import-success: '&aΤα Save data έχουν εισαχθεί από το  storage.yml.'
 command-import-no-backup: '&cΑδυναμία εισαγωγής, το αρχείο storage.yml δεν υπάρχει. Μπορείτε να δημιουργήσετε ένα με την χρήση της &b/points export &cand use it to transfer data between database types.'
-  command-import-warning: '&cΠροσοχή: Αυτή η ενέργεια θα διαγράψει ολα τα δεδομέμα απο την ενεργή βάση δεδομένων και θα τα αντικαταστήσει με το περιεχόμενο του αρχείου storage.yml. &cΗ τρέχουσα ενεργή βάση δεδομένων είναι &b&o&l%type%&c. &cΕάν είστε απολύτως σίγουροι για αυτό, χρησιμοποιήστε την &b/points import confirm&c.'
+command-import-warning: '&cΠροσοχή: Αυτή η ενέργεια θα διαγράψει ολα τα δεδομέμα απο την ενεργή βάση δεδομένων και θα τα αντικαταστήσει με το περιεχόμενο του αρχείου storage.yml. &cΗ τρέχουσα ενεργή βάση δεδομένων είναι &b&o&l%type%&c. &cΕάν είστε απολύτως σίγουροι για αυτό, χρησιμοποιήστε την &b/points import confirm&c.'
 
 # Convert Command
 command-convert-description: '&8 - &d/points convert &7- Φορτώνει τα δεδομένα νομίσματος από άλλο plugin'
