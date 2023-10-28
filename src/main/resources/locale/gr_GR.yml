@@ -1,0 +1,121 @@
+# Plugin Message Prefix
+prefix: '&7[<g:#E8A230:#ECD32D>{{PLUGIN_NAME}}&7] '
+
+# Currency
+currency-singular: 'Point'
+currency-plural: 'Points'
+currency-separator: ','
+currency-decimal: '.'
+number-abbreviation-thousands: 'k'
+number-abbreviation-millions: 'm'
+number-abbreviation-billions: 'b'
+
+# Misc
+no-permission: '&cΔεν έχεις άδεια για αυτό!'
+no-console: '&cΜόνο οι παίκτες μπορούν να εκτελέσουν αυτή την εντολή.'
+invalid-amount: '&cΤο ποσό πρέπει να είναι θετικός ακέραιος αριθμός.'
+unknown-player: '&cΔεν ήταν δυνατή η εύρεση του παίκτη: &b%player%'
+unknown-command: '&cΑγνωστη εντολή: &b%input%'
+votifier-voted: '&eΕυχαριστουμε που ψηφίσατε στο %service%! &b%amount% &έχουν προστεθεί στο υπόλοιπό σας.'
+leaderboard-empty-entry: 'Αυτό μπορεί να είσαι εσύ!'
+command-cooldown: '&cΠεριμένετε πριν χρησιμοποιήσετε ξανά αυτήν την εντολή.'
+
+# Base Command Message
+base-command-color: '&e'
+base-command-help: '&Χρησημοποιήστε το &b/points help &eγια πληροφορές σχετικά με την εντολή.'
+
+# Help Command
+command-help-description: '&8 - &d/points help &7- Εμφανίζει το μενού βοήθειας... Είστε στο σωστό μέρος.'
+command-help-title: '&eΔιαθέσιμες εντολές:'
+
+# Give Command
+command-give-description: '&8 - &d/points give &7- Δώσε πόντους σε έναν παίκτη.'
+command-give-usage: '&cΧρήση εντολής: &e/points give <παίκτης> <ποσό>'
+command-give-success: '&b%player% &έδωσε &b%amount% &a%currency%.'
+command-give-received: '&eΛάβατε &b%amount% &e%currency%.'
+
+# Give All Command
+command-giveall-description: '&8 - &d/points giveall &7- Δίνει σε όλους τους παίκτες που είναι online πόντους.'
+command-giveall-usage: '&cΧρήση εντολής: &e/points giveall <ποσό> [*]'
+command-giveall-success: '&aΔόθηκαν &b%amount% &a%currency% σε όλους τους παίκτες που είναι online..'
+
+# Take Command
+command-take-description: '&8 - &d/points take &7- Πάρε πόντους απο έναν παίκτη.'
+command-take-usage: '&cΧρήση εντολής: &e/points take <παίκτης> <ποσό>'
+command-take-success: '&aΈλαβε &b%amount% &a%currency% από &b%player%&a.'
+command-take-lacking-funds: '&b%player% &cδεν έχει αρκετά %currency% για αυτό, οπότε το υπόλοιπό τους μηδενίστηκε.'
+
+# Look Command
+command-look-description: '&8 - &d/points look &7- Δες τους πόντου ενός παίκτη.'
+command-look-usage: '&cΧρήση εντολής : &e/points δες <παίκτης>'
+command-look-success: '&b%player% &eέχει &b%amount% &e%currency%.'
+
+# Pay Command
+command-pay-description: '&8 - &d/points pay &7- Πλήρωσε έναν παίκτη.'
+command-pay-usage: '&cΧρήση: &e/points πλήρωσε <παίκτη> <ποσό>'
+command-pay-self: '&cΔεν μπορείς να πληρώσεις τον ευατό σου!'
+command-pay-sent: '&aΠλήρωσες &b%player% %amount% &a%currency%.'
+command-pay-received: '&eΠληρώθηκες &b%amount% &e%currency% από τον &b%player%&e.'
+command-pay-lacking-funds: '&cΔεν έχεις αρκετά %currency% για αυτό.'
+
+# Set Command
+command-set-description: '&8 - &d/points set &7- Δήλωσε τους πόντους ενός παίκτη.'
+command-set-usage: '&cΧρήση εντολής: &e/points set <παίκτη> <ποσό>'
+command-set-success: '&aΔήλωσε τα %currency% του &b%player% &aστο &b%amount%&a.'
+
+# Reset Command
+command-reset-description: '&8 - &d/points reset &7- Μηδένισε τους πόντους ενός παίκτη.'
+command-reset-usage: '&Χρήση εντολής: &e/points reset <player>'
+command-reset-success: '&aΜηδένισε τα %currency% του &b%player%&a.'
+
+# Me Command
+command-me-description: '&8 - &d/points me &7- Ρίξε μια ματιά στους πόντους σου!'
+command-me-usage: '&cΧρήση εντολής: &d/points me'
+command-me-success: '&eΈχεις &b%amount% &e%currency%.'
+
+# Lead Command
+command-lead-description: '&8 - &d/points lead &7- Εμφάνησε το leaderboard'
+command-lead-usage: '&cΧρήση εντολής: &e/points lead [next|prev|#]'
+command-lead-title: '&eLeaderboard &7(Page #%page%/%pages%)'
+command-lead-entry: '&b%position%). &e%player% &7- &6%amount% %currency%'
+
+# Broadcast Command
+command-broadcast-description: '&8 - &d/points broadcast &7- Μεταδώστε τους πόντους ενός παίκτη'
+command-broadcast-usage: '&cΧρήση εντολής: &e/points broadcast <παίκτης>'
+command-broadcast-message: '&b%player% &eέχει &b%amount% &e%currency%.'
+
+# Reload Command
+command-reload-description: '&8 - &d/points reload &7- Φορτώνει ξανά το plugin'
+command-reload-usage: '&cΧρήση εντολής: &e/points reload'
+command-reload-success: '&aΤα configuration και locale αρχεία φορτώθηκαν ξανά.'
+
+# Export Command
+command-export-description: '&8 - &d/points export &7- Εξάγει τα δεδομένα στο storage.yml'
+command-export-usage: '&cΧρήση εντολής: &e/points export'
+command-export-success: '&aΤΑ Save data έχουν εξαχθεί στο storage.yml.'
+command-export-warning: '&cΠροσοχή: Το αρχείο storage.yml υπάρχει είδη. Εάν θέλετε να το αντικαταστήσετε, χρησιμοποιήστε το &b/points export confirm&c.'
+
+# Import Command
+command-import-description: '&8 - &d/points import &7- Εισαγάγει δεδομένα από το storage.yml'
+command-import-usage: '&cΧρήση εντολής: &e/points import'
+command-import-success: '&aΤα Save data έχουν εισαχθεί από το  storage.yml.'
+command-import-no-backup: '&cΑδυναμία εισαγωγής, το αρχείο storage.yml δεν υπάρχει. Μπορείτε να δημιουργήσετε ένα με την χρήση της &b/points export &cand use it to transfer data between database types.'
+command-import-warning: '&cΠροσοχή: Αυτή η ενέργεια θα διαγράψει ολα τα δεδομέμα απο την ενεργή βάση δεδομένων και θα τα αντικαταστήσει με το περιεχόμενο του αρχείου storage.yml. &cΗ τρέχουσα ενεργή βάση δεδομένων είναι &b&o&l%type%&c. &cΕάν είστε απολύτως σίγουροι για αυτό, χρησιμοποιήστε την &b/points import confirm&c.'
+
+# Convert Command
+command-convert-description: '&8 - &d/points convert &7- Φορτώνει τα δεδομένα νομίσματος από άλλο plugin'
+command-convert-usage: '&cΧρήση εντολής: &e/points convert <plugin>'
+command-convert-invalid: '&b%plugin% &cδεν είναι μετατρέψιμο νόμισμα στο plugin.'
+command-convert-success: '&aΤα δεδομένα νομίσματος από το &b%plugin% &aμετατρέπονται.'
+command-convert-failure: '&cΠαρουσιάστηκε σφάλμα κατά την προσπάθεια μετατροπής των δεδομένων. Ελέξτε το console σας και αναφέρετε τυχόν σφάλματα στον συντάκτη του PlayerPoints plugin.'
+command-convert-warning: '&cΠροσοχλη: Αυτή η ενέργεια θα διαγράψει όλα τα δεδομένα data από την ενεργή βαση δεδομένων και θα τα αντικαταστήσει με τα δεδομενα από το &b%plugin%&c. &cΑν είστε σίγουροι για αυτο χρησιμοποιήστε την εντολή &b/points convert %plugin% confirm&c.'
+
+# Import Legacy Command
+command-importlegacy-description: '&8 - &d/points importlegacy &7- Εισαγάγεται εναν legacy πίνακα.'
+command-importlegacy-usage: '&cΧρήση εντολής: &e/points importlegacy <table>'
+command-importlegacy-success: '&aΗ εισαγωγή των legacy δεδομένων έγινε με επιτυχία από τον &b%table%&a.'
+command-importlegacy-failure: '&cΑπέτυχε η εισαγωγή από τον &b%table%&c. Υπάρχει ο πίνακα;?'
+command-importlegacy-only-mysql: '&cΑυτή η εντολή είναι διαθέσιμη μόνο όταν η MySQL είναι ενεργή.'
+
+# Version Command
+command-version-description: '&8 - &d/points version &7- Εμφάνιση των πληροφοριών έκδοσης για PlayerPoints'
