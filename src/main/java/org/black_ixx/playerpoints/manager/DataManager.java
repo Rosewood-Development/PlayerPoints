@@ -245,7 +245,7 @@ public class DataManager extends AbstractDataManager implements Listener {
                     if (Setting.BUNGEECORD_SEND_UPDATES.getBoolean() && this.rosePlugin.isEnabled()) {
                         ByteArrayDataOutput output = ByteStreams.newDataOutput();
                         output.writeUTF("Forward");
-                        output.writeUTF("ALL");
+                        output.writeUTF("ONLINE");
                         output.writeUTF(PointsMessageListener.REFRESH_SUBCHANNEL);
 
                         byte[] bytes = entry.getKey().toString().getBytes(StandardCharsets.UTF_8);
