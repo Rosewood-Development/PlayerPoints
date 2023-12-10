@@ -1,5 +1,8 @@
 package org.black_ixx.playerpoints.manager;
 
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import com.google.common.collect.Iterables;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
@@ -17,10 +20,13 @@ import java.util.Deque;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
@@ -30,7 +36,6 @@ import org.black_ixx.playerpoints.database.migrations._2_Add_Table_Username_Cach
 import org.black_ixx.playerpoints.listeners.PointsMessageListener;
 import org.black_ixx.playerpoints.manager.ConfigurationManager.Setting;
 import org.black_ixx.playerpoints.models.PendingTransaction;
-import org.black_ixx.playerpoints.models.PointsValue;
 import org.black_ixx.playerpoints.models.SortedPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -42,14 +47,14 @@ import org.bukkit.event.player.PlayerJoinEvent;
 
 public class DataManager extends AbstractDataManager implements Listener {
 
-    private final Map<UUID, PointsValue> pointsCache;
+    private final Set<UUID> locks = ConcurrentHashMap.newKeySet();
+    private LoadingCache<UUID, Integer> pointsCache;
     private final Map<UUID, Deque<PendingTransaction>> pendingTransactions;
     private final Map<UUID, String> pendingUsernameUpdates;
 
     public DataManager(RosePlugin rosePlugin) {
         super(rosePlugin);
 
-        this.pointsCache = new ConcurrentHashMap<>();
         this.pendingTransactions = new ConcurrentHashMap<>();
         this.pendingUsernameUpdates = new ConcurrentHashMap<>();
 
@@ -58,10 +63,26 @@ public class DataManager extends AbstractDataManager implements Listener {
     }
 
     @Override
+    public void reload() {
+        super.reload();
+
+        this.pointsCache = CacheBuilder.newBuilder()
+                .concurrencyLevel(2)
+                .expireAfterAccess(5, TimeUnit.MINUTES)
+                .refreshAfterWrite(Setting.CACHE_DURATION.getInt(), TimeUnit.SECONDS)
+                .build(new CacheLoader<UUID, Integer>() {
+                    @Override
+                    public Integer load(UUID uuid) throws Exception {
+                        return DataManager.this.getPoints(uuid);
+                    }
+                });
+    }
+
+    @Override
     public void disable() {
         this.update();
 
-        this.pointsCache.clear();
+        this.pointsCache.invalidateAll();
         this.pendingTransactions.clear();
         this.pendingUsernameUpdates.clear();
 
@@ -83,30 +104,23 @@ public class DataManager extends AbstractDataManager implements Listener {
         for (Map.Entry<UUID, Deque<PendingTransaction>> entry : processingPendingTransactions.entrySet()) {
             UUID uuid = entry.getKey();
             int points = this.getEffectivePoints(uuid, entry.getValue());
-            this.pointsCache.put(uuid, new PointsValue(points));
+            this.pointsCache.put(uuid, points);
             transactions.put(uuid, points);
         }
 
         if (!transactions.isEmpty())
             this.updatePoints(transactions);
 
-        // Remove stale cache entries
-        synchronized (this.pointsCache) {
-            this.pointsCache.values().removeIf(PointsValue::isStale);
-        }
-
-        synchronized (this.pendingUsernameUpdates) {
-            if (!this.pendingUsernameUpdates.isEmpty()) {
-                this.updateCachedUsernames(this.pendingUsernameUpdates);
-                this.pendingUsernameUpdates.clear();
-            }
+        if (!this.pendingUsernameUpdates.isEmpty()) {
+            this.updateCachedUsernames(this.pendingUsernameUpdates);
+            this.pendingUsernameUpdates.clear();
         }
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerPreLogin(AsyncPlayerPreLoginEvent event) {
         if (event.getLoginResult() == AsyncPlayerPreLoginEvent.Result.ALLOWED)
-            this.pointsCache.put(event.getUniqueId(), new PointsValue(this.getPoints(event.getUniqueId())));
+            this.pointsCache.put(event.getUniqueId(), this.getPoints(event.getUniqueId()));
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -128,11 +142,11 @@ public class DataManager extends AbstractDataManager implements Listener {
     private int getEffectivePoints(UUID playerId, Deque<PendingTransaction> transactions) {
         // Get the cached amount or fetch it fresh from the database
         int points;
-        if (this.pointsCache.containsKey(playerId)) {
-            points = this.pointsCache.get(playerId).getValue();
-        } else {
-            points = this.getPoints(playerId);
-            this.pointsCache.put(playerId, new PointsValue(points));
+        try {
+            points = this.pointsCache.get(playerId);
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+            points = 0;
         }
 
         // Apply any pending transactions
@@ -159,8 +173,7 @@ public class DataManager extends AbstractDataManager implements Listener {
      * @param uuid The player's UUID
      */
     public void refreshPoints(UUID uuid) {
-        if (this.pointsCache.containsKey(uuid))
-            Bukkit.getScheduler().runTaskAsynchronously(this.rosePlugin, () -> this.pointsCache.put(uuid, new PointsValue(this.getPoints(uuid))));
+        this.pointsCache.invalidate(uuid);
     }
 
     /**
@@ -221,12 +234,21 @@ public class DataManager extends AbstractDataManager implements Listener {
      * @return true if the transaction was successful, false otherwise
      */
     public boolean offsetPoints(UUID playerId, int amount) {
-        int points = this.getEffectivePoints(playerId);
-        if (points + amount < 0)
+        if (this.locks.contains(playerId))
             return false;
 
-        this.getPendingTransactions(playerId).add(new PendingTransaction(PendingTransaction.TransactionType.OFFSET, amount));
-        return true;
+        try {
+            this.locks.add(playerId);
+
+            int points = this.getEffectivePoints(playerId);
+            if (points + amount < 0)
+                return false;
+
+            this.getPendingTransactions(playerId).add(new PendingTransaction(PendingTransaction.TransactionType.OFFSET, amount));
+            return true;
+        } finally {
+            this.locks.remove(playerId);
+        }
     }
 
     private void updatePoints(Map<UUID, Integer> transactions) {
@@ -239,7 +261,7 @@ public class DataManager extends AbstractDataManager implements Listener {
                     statement.addBatch();
 
                     // Update cached value
-                    this.pointsCache.computeIfAbsent(entry.getKey(), x -> new PointsValue(entry.getValue())).setValue(entry.getValue());
+                    this.pointsCache.put(entry.getKey(), entry.getValue());
 
                     // Send update to BungeeCord if enabled
                     if (Setting.BUNGEECORD_SEND_UPDATES.getBoolean() && this.rosePlugin.isEnabled()) {
@@ -276,8 +298,7 @@ public class DataManager extends AbstractDataManager implements Listener {
         });
 
         for (Player player : Bukkit.getOnlinePlayers())
-            if (this.pointsCache.containsKey(player.getUniqueId()))
-                this.offsetPoints(player.getUniqueId(), amount);
+            this.offsetPoints(player.getUniqueId(), amount);
 
         return true;
     }
@@ -305,9 +326,9 @@ public class DataManager extends AbstractDataManager implements Listener {
                 while (result.next()) {
                     UUID uuid = UUID.fromString(result.getString(1));
                     String username = result.getString(2);
-                    PointsValue pointsValue = this.pointsCache.get(uuid);
+                    Integer pointsValue = this.pointsCache.getIfPresent(uuid);
                     if (pointsValue == null)
-                        pointsValue = new PointsValue(result.getInt(3));
+                        pointsValue = result.getInt(3);
 
                     if (username != null) {
                         players.add(new SortedPlayer(uuid, username, pointsValue));

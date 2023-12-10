@@ -15,24 +15,16 @@ public class SortedPlayer implements Comparable<SortedPlayer> {
 
     private final UUID uuid;
     private final String username;
-    private final PointsValue points;
+    private final int points;
 
-    public SortedPlayer(UUID uuid, String username, PointsValue points) {
+    public SortedPlayer(UUID uuid, String username, int points) {
         this.uuid = uuid;
         this.username = username;
         this.points = points;
     }
 
-    public SortedPlayer(UUID uuid, String username, int points) {
-        this(uuid, username, new PointsValue(points));
-    }
-
-    public SortedPlayer(UUID uuid, PointsValue points) {
-        this(uuid, NameFetcher.getName(uuid), points);
-    }
-
     public SortedPlayer(UUID uuid, int points) {
-        this(uuid, NameFetcher.getName(uuid), new PointsValue(points));
+        this(uuid, NameFetcher.getName(uuid), points);
     }
 
     /**
@@ -53,7 +45,7 @@ public class SortedPlayer implements Comparable<SortedPlayer> {
      * @return Point amount.
      */
     public int getPoints() {
-        return this.points.getValue();
+        return this.points;
     }
 
     @Override

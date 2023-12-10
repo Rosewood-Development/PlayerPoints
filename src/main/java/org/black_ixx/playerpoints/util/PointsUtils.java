@@ -22,7 +22,6 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.util.StringUtil;
-import org.jetbrains.annotations.Nullable;
 
 public final class PointsUtils {
 
