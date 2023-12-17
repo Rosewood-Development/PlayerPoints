@@ -41,8 +41,10 @@ public class LeaderboardManager extends Manager implements Listener {
 
     @Override
     public void reload() {
-        this.refreshTask = Bukkit.getScheduler().runTaskTimerAsynchronously(this.rosePlugin, this::refresh, 10L, 20L);
-        this.refreshInterval = Setting.LEADERBOARD_PLACEHOLDER_REFRESH_INTERVAL.getLong() * 1000;
+        if (!Setting.LEADERBOARD_DISABLE.getBoolean()) {
+            this.refreshTask = Bukkit.getScheduler().runTaskTimerAsynchronously(this.rosePlugin, this::refresh, 10L, 20L);
+            this.refreshInterval = Setting.LEADERBOARD_PLACEHOLDER_REFRESH_INTERVAL.getLong() * 1000;
+        }
     }
 
     @Override
