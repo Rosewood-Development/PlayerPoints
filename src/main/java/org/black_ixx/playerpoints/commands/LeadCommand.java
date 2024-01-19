@@ -102,7 +102,7 @@ public class LeadCommand extends CommandHandler {
         }
 
         // Handle invalid input
-        this.plugin.getManager(LocaleManager.class).sendMessage(sender, "command-give-usage");
+        this.plugin.getManager(LocaleManager.class).sendMessage(sender, "command-lead-usage");
     }
 
     @Override
