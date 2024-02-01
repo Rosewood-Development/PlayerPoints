@@ -1,5 +1,6 @@
 package org.black_ixx.playerpoints.manager;
 
+import cn.handyplus.lib.adapter.HandySchedulerUtil;
 import dev.rosewood.rosegarden.RosePlugin;
 import dev.rosewood.rosegarden.manager.AbstractLocaleManager;
 import org.bukkit.Bukkit;
@@ -24,7 +25,7 @@ public class LocaleManager extends AbstractLocaleManager {
     @Override
     protected void handleMessage(CommandSender sender, String message) {
         if (!Bukkit.isPrimaryThread() && (sender instanceof BlockCommandSender || sender instanceof CommandMinecart)) {
-            Bukkit.getScheduler().runTask(this.rosePlugin, () -> super.handleMessage(sender, message));
+            HandySchedulerUtil.runTask(() -> super.handleMessage(sender, message));
         } else {
             super.handleMessage(sender, message);
         }

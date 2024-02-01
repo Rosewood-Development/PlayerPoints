@@ -1,5 +1,6 @@
 package org.black_ixx.playerpoints.commands;
 
+import cn.handyplus.lib.adapter.HandySchedulerUtil;
 import dev.rosewood.rosegarden.utils.StringPlaceholders;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -40,7 +41,7 @@ public class ConvertCommand extends PointsCommand {
             return;
         }
 
-        Bukkit.getScheduler().runTaskAsynchronously(PlayerPoints.getInstance(), () -> {
+        HandySchedulerUtil.runTaskAsynchronously(() -> {
             if (conversionManager.convert(currencyPlugin)) {
                 localeManager.sendMessage(sender, "command-convert-success", StringPlaceholders.single("plugin", args[0]));
             } else {

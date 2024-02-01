@@ -1,5 +1,6 @@
 package org.black_ixx.playerpoints.manager;
 
+import cn.handyplus.lib.adapter.HandySchedulerUtil;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
@@ -59,7 +60,7 @@ public class DataManager extends AbstractDataManager implements Listener {
         this.pendingUsernameUpdates = new ConcurrentHashMap<>();
 
         Bukkit.getPluginManager().registerEvents(this, rosePlugin);
-        Bukkit.getScheduler().runTaskTimerAsynchronously(rosePlugin, this::update, 10L, 10L);
+        HandySchedulerUtil.runTaskTimerAsynchronously(this::update, 10L, 10L);
     }
 
     @Override

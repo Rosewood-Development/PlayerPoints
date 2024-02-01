@@ -1,5 +1,6 @@
 package org.black_ixx.playerpoints.commands;
 
+import cn.handyplus.lib.adapter.HandySchedulerUtil;
 import dev.rosewood.rosegarden.utils.StringPlaceholders;
 import java.util.Collections;
 import java.util.List;
@@ -38,7 +39,7 @@ public class GiveAllCommand extends PointsCommand {
 
         boolean includeOffline = args.length > 1 && args[1].equals("*");
 
-        Bukkit.getScheduler().runTaskAsynchronously(PlayerPoints.getInstance(), () -> {
+        HandySchedulerUtil.runTaskAsynchronously(() -> {
             boolean success;
             if (includeOffline) {
                 success = plugin.getManager(DataManager.class).offsetAllPoints(amount);

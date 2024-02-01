@@ -1,5 +1,6 @@
 package org.black_ixx.playerpoints.commands;
 
+import cn.handyplus.lib.adapter.HandySchedulerUtil;
 import dev.rosewood.rosegarden.utils.StringPlaceholders;
 import java.util.Collections;
 import java.util.List;
@@ -25,7 +26,7 @@ public class MeCommand extends PointsCommand {
             return;
         }
 
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+        HandySchedulerUtil.runTaskAsynchronously(() -> {
             int amount = plugin.getAPI().look(((Player) sender).getUniqueId());
             localeManager.sendMessage(sender, "command-me-success", StringPlaceholders.builder("amount", PointsUtils.formatPoints(amount))
                     .addPlaceholder("currency", localeManager.getCurrencyName(amount))

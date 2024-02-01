@@ -1,5 +1,6 @@
 package org.black_ixx.playerpoints;
 
+import cn.handyplus.lib.adapter.HandySchedulerUtil;
 import dev.rosewood.rosegarden.RosePlugin;
 import dev.rosewood.rosegarden.database.DataMigration;
 import dev.rosewood.rosegarden.manager.Manager;
@@ -91,7 +92,7 @@ public class PlayerPoints extends RosePlugin {
             Bukkit.getMessenger().registerIncomingPluginChannel(this, PointsMessageListener.CHANNEL, new PointsMessageListener(this));
         }
 
-        Bukkit.getScheduler().runTask(this, () -> {
+        HandySchedulerUtil.runTask(() -> {
             // Register placeholders, if applicable
             if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI"))
                 new PointsPlaceholderExpansion(this).register();

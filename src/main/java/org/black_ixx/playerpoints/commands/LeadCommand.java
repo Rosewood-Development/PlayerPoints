@@ -1,5 +1,6 @@
 package org.black_ixx.playerpoints.commands;
 
+import cn.handyplus.lib.adapter.HandySchedulerUtil;
 import dev.rosewood.rosegarden.utils.StringPlaceholders;
 import java.util.Arrays;
 import java.util.Collections;
@@ -35,7 +36,7 @@ public class LeadCommand extends CommandHandler {
         LocaleManager localeManager = this.plugin.getManager(LocaleManager.class);
         int limit = Setting.LEADERBOARD_PER_PAGE.getInt();
 
-        Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> {
+        HandySchedulerUtil.runTaskAsynchronously(() -> {
             List<SortedPlayer> leaders = this.plugin.getManager(DataManager.class).getTopSortedPoints(null);
             int currentPage = this.pageMap.getOrDefault(sender.getName(), 0);
             int numPages = (int) Math.ceil(leaders.size() / (double) limit);

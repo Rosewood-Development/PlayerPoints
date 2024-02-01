@@ -1,5 +1,6 @@
 package org.black_ixx.playerpoints.commands;
 
+import cn.handyplus.lib.adapter.HandySchedulerUtil;
 import dev.rosewood.rosegarden.database.MySQLConnector;
 import dev.rosewood.rosegarden.utils.StringPlaceholders;
 import java.io.File;
@@ -42,7 +43,7 @@ public class ImportCommand extends PointsCommand {
             return;
         }
 
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+        HandySchedulerUtil.runTaskAsynchronously(() -> {
             FileConfiguration configuration = YamlConfiguration.loadConfiguration(file);
             ConfigurationSection pointsSection = configuration.getConfigurationSection("Points");
             if (pointsSection == null)

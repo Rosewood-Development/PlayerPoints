@@ -1,5 +1,7 @@
 package org.black_ixx.playerpoints.manager;
 
+import cn.handyplus.lib.adapter.HandyRunnable;
+import cn.handyplus.lib.adapter.HandySchedulerUtil;
 import dev.rosewood.rosegarden.RosePlugin;
 import dev.rosewood.rosegarden.manager.Manager;
 import java.util.ArrayList;
@@ -17,7 +19,7 @@ import org.bukkit.scheduler.BukkitTask;
 
 public class LeaderboardManager extends Manager implements Listener {
 
-    private BukkitTask refreshTask;
+    private HandyRunnable refreshTask;
     private final DataManager dataManager;
     private long refreshInterval;
 
@@ -42,7 +44,14 @@ public class LeaderboardManager extends Manager implements Listener {
     @Override
     public void reload() {
         if (!Setting.LEADERBOARD_DISABLE.getBoolean()) {
-            this.refreshTask = Bukkit.getScheduler().runTaskTimerAsynchronously(this.rosePlugin, this::refresh, 10L, 20L);
+            HandyRunnable handyRunnable = new HandyRunnable() {
+                @Override
+                public void run() {
+                    refresh();
+                }
+            };
+            this.refreshTask = handyRunnable;
+            HandySchedulerUtil.runTaskTimerAsynchronously(handyRunnable, 10L, 20L);
             this.refreshInterval = Setting.LEADERBOARD_PLACEHOLDER_REFRESH_INTERVAL.getLong() * 1000;
         }
     }
