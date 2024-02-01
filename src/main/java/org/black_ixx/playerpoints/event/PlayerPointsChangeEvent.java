@@ -1,7 +1,8 @@
 package org.black_ixx.playerpoints.event;
 
-import java.util.UUID;
 import org.bukkit.event.HandlerList;
+
+import java.util.UUID;
 
 /**
  * Called when a player's points is to be changed.

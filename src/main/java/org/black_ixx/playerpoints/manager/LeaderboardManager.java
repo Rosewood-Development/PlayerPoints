@@ -1,23 +1,25 @@
 package org.black_ixx.playerpoints.manager;
 
+import cn.handyplus.lib.adapter.HandyRunnable;
+import cn.handyplus.lib.adapter.HandySchedulerUtil;
 import dev.rosewood.rosegarden.RosePlugin;
 import dev.rosewood.rosegarden.manager.Manager;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 import org.black_ixx.playerpoints.manager.ConfigurationManager.Setting;
 import org.black_ixx.playerpoints.models.SortedPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.scheduler.BukkitTask;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 public class LeaderboardManager extends Manager implements Listener {
 
-    private BukkitTask refreshTask;
+    private HandyRunnable refreshTask;
     private final DataManager dataManager;
     private long refreshInterval;
 
@@ -42,7 +44,14 @@ public class LeaderboardManager extends Manager implements Listener {
     @Override
     public void reload() {
         if (!Setting.LEADERBOARD_DISABLE.getBoolean()) {
-            this.refreshTask = Bukkit.getScheduler().runTaskTimerAsynchronously(this.rosePlugin, this::refresh, 10L, 20L);
+            HandyRunnable handyRunnable = new HandyRunnable() {
+                @Override
+                public void run() {
+                    refresh();
+                }
+            };
+            HandySchedulerUtil.runTaskTimerAsynchronously(handyRunnable, 10L, 20L);
+            this.refreshTask = handyRunnable;
             this.refreshInterval = Setting.LEADERBOARD_PLACEHOLDER_REFRESH_INTERVAL.getLong() * 1000;
         }
     }

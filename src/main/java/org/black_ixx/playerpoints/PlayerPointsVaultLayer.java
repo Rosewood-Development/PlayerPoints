@@ -1,8 +1,5 @@
 package org.black_ixx.playerpoints;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 import net.milkbowl.vault.economy.EconomyResponse.ResponseType;
@@ -10,6 +7,10 @@ import org.black_ixx.playerpoints.manager.LocaleManager;
 import org.black_ixx.playerpoints.models.Tuple;
 import org.black_ixx.playerpoints.util.PointsUtils;
 import org.bukkit.OfflinePlayer;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * Vault economy layer for PlayerPoints.

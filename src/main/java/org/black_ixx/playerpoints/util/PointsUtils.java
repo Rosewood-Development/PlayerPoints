@@ -1,6 +1,17 @@
 package org.black_ixx.playerpoints.util;
 
+import cn.handyplus.lib.adapter.HandySchedulerUtil;
 import dev.rosewood.rosegarden.RosePlugin;
+import org.black_ixx.playerpoints.PlayerPoints;
+import org.black_ixx.playerpoints.manager.DataManager;
+import org.black_ixx.playerpoints.manager.LocaleManager;
+import org.black_ixx.playerpoints.models.Tuple;
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
+import org.bukkit.metadata.MetadataValue;
+import org.bukkit.util.StringUtil;
+
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
@@ -13,15 +24,6 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import org.black_ixx.playerpoints.PlayerPoints;
-import org.black_ixx.playerpoints.manager.DataManager;
-import org.black_ixx.playerpoints.manager.LocaleManager;
-import org.black_ixx.playerpoints.models.Tuple;
-import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Player;
-import org.bukkit.metadata.MetadataValue;
-import org.bukkit.util.StringUtil;
 
 public final class PointsUtils {
 
@@ -109,7 +111,7 @@ public final class PointsUtils {
             return CompletableFuture.completedFuture(new Tuple<>(player.getUniqueId(), player.getName()));
 
         CompletableFuture<Tuple<UUID, String>> completableFuture = new CompletableFuture<>();
-        Bukkit.getScheduler().runTaskAsynchronously(PlayerPoints.getInstance(), () -> {
+        HandySchedulerUtil.runTaskAsynchronously(() -> {
             OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(name);
             if (offlinePlayer.getName() != null && offlinePlayer.hasPlayedBefore()) {
                 completableFuture.complete(new Tuple<>(offlinePlayer.getUniqueId(), offlinePlayer.getName()));

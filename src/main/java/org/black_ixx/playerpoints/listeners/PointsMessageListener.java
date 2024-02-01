@@ -3,11 +3,12 @@ package org.black_ixx.playerpoints.listeners;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteStreams;
 import dev.rosewood.rosegarden.RosePlugin;
-import java.nio.charset.StandardCharsets;
-import java.util.UUID;
 import org.black_ixx.playerpoints.manager.DataManager;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.messaging.PluginMessageListener;
+
+import java.nio.charset.StandardCharsets;
+import java.util.UUID;
 
 public class PointsMessageListener implements PluginMessageListener {
 

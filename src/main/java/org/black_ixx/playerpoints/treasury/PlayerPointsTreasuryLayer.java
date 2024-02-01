@@ -1,13 +1,5 @@
 package org.black_ixx.playerpoints.treasury;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
-import java.util.stream.Collectors;
 import me.lokka30.treasury.api.economy.EconomyProvider;
 import me.lokka30.treasury.api.economy.account.Account;
 import me.lokka30.treasury.api.economy.account.PlayerAccount;
@@ -18,6 +10,15 @@ import me.lokka30.treasury.api.economy.response.EconomyFailureReason;
 import me.lokka30.treasury.api.economy.response.EconomySubscriber;
 import org.black_ixx.playerpoints.PlayerPoints;
 import org.black_ixx.playerpoints.models.SortedPlayer;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class PlayerPointsTreasuryLayer implements EconomyProvider {
 

@@ -5,6 +5,12 @@ import com.google.common.cache.CacheBuilder;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.mojang.util.UUIDTypeAdapter;
+import org.black_ixx.playerpoints.PlayerPoints;
+import org.black_ixx.playerpoints.manager.DataManager;
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -13,11 +19,6 @@ import java.net.URL;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
-import org.black_ixx.playerpoints.PlayerPoints;
-import org.black_ixx.playerpoints.manager.DataManager;
-import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Player;
 
 public final class NameFetcher {
 

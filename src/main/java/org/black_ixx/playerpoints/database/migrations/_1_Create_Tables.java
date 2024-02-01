@@ -4,6 +4,13 @@ import dev.rosewood.rosegarden.database.DataMigration;
 import dev.rosewood.rosegarden.database.DatabaseConnector;
 import dev.rosewood.rosegarden.database.MySQLConnector;
 import dev.rosewood.rosegarden.database.SQLiteConnector;
+import org.black_ixx.playerpoints.PlayerPoints;
+import org.black_ixx.playerpoints.manager.DataManager;
+import org.black_ixx.playerpoints.models.SortedPlayer;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
+
 import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,12 +20,6 @@ import java.util.Collections;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.UUID;
-import org.black_ixx.playerpoints.PlayerPoints;
-import org.black_ixx.playerpoints.manager.DataManager;
-import org.black_ixx.playerpoints.models.SortedPlayer;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 
 /**
  * Creates the database tables

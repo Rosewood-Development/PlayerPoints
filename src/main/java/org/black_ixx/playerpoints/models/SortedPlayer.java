@@ -1,7 +1,8 @@
 package org.black_ixx.playerpoints.models;
 
-import java.util.UUID;
 import org.black_ixx.playerpoints.util.NameFetcher;
+
+import java.util.UUID;
 
 /**
  * Stores information about a player and how many points they have.

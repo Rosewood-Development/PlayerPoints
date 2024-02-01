@@ -1,7 +1,8 @@
 package org.black_ixx.playerpoints.commands;
 
-import java.util.List;
 import org.bukkit.permissions.Permissible;
+
+import java.util.List;
 
 public interface NamedExecutor {
 

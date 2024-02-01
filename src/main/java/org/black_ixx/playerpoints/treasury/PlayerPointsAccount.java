@@ -1,11 +1,5 @@
 package org.black_ixx.playerpoints.treasury;
 
-import java.math.BigDecimal;
-import java.time.temporal.Temporal;
-import java.util.Collection;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.UUID;
 import me.lokka30.treasury.api.economy.account.PlayerAccount;
 import me.lokka30.treasury.api.economy.currency.Currency;
 import me.lokka30.treasury.api.economy.response.EconomyException;
@@ -15,6 +9,13 @@ import me.lokka30.treasury.api.economy.transaction.EconomyTransaction;
 import me.lokka30.treasury.api.economy.transaction.EconomyTransactionInitiator;
 import org.black_ixx.playerpoints.PlayerPoints;
 import org.black_ixx.playerpoints.util.NameFetcher;
+
+import java.math.BigDecimal;
+import java.time.temporal.Temporal;
+import java.util.Collection;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.UUID;
 
 public class PlayerPointsAccount implements PlayerAccount {
 

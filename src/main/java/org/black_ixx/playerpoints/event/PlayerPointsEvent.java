@@ -1,9 +1,10 @@
 package org.black_ixx.playerpoints.event;
 
-import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
+
+import java.util.UUID;
 
 /**
  * Events extending this may run on either the main thread or an async thread as needed. Always assume it is being run

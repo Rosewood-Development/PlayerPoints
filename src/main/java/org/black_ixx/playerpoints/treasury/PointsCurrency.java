@@ -1,10 +1,6 @@
 package org.black_ixx.playerpoints.treasury;
 
 import dev.rosewood.rosegarden.RosePlugin;
-import java.math.BigDecimal;
-import java.util.Locale;
-import java.util.Objects;
-import java.util.UUID;
 import me.lokka30.treasury.api.economy.currency.Currency;
 import me.lokka30.treasury.api.economy.response.EconomyException;
 import me.lokka30.treasury.api.economy.response.EconomyFailureReason;
@@ -12,6 +8,11 @@ import me.lokka30.treasury.api.economy.response.EconomySubscriber;
 import org.black_ixx.playerpoints.manager.ConfigurationManager.Setting;
 import org.black_ixx.playerpoints.manager.LocaleManager;
 import org.black_ixx.playerpoints.util.PointsUtils;
+
+import java.math.BigDecimal;
+import java.util.Locale;
+import java.util.Objects;
+import java.util.UUID;
 
 public class PointsCurrency implements Currency {
 

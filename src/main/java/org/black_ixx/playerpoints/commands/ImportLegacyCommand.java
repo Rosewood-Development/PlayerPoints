@@ -1,15 +1,16 @@
 package org.black_ixx.playerpoints.commands;
 
+import cn.handyplus.lib.adapter.HandySchedulerUtil;
 import dev.rosewood.rosegarden.database.MySQLConnector;
 import dev.rosewood.rosegarden.utils.StringPlaceholders;
-import java.util.Collections;
-import java.util.List;
 import org.black_ixx.playerpoints.PlayerPoints;
 import org.black_ixx.playerpoints.manager.CommandManager;
 import org.black_ixx.playerpoints.manager.DataManager;
 import org.black_ixx.playerpoints.manager.LocaleManager;
-import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
+
+import java.util.Collections;
+import java.util.List;
 
 public class ImportLegacyCommand extends PointsCommand {
 
@@ -19,7 +20,7 @@ public class ImportLegacyCommand extends PointsCommand {
 
     @Override
     public void execute(PlayerPoints plugin, CommandSender sender, String[] args) {
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+        HandySchedulerUtil.runTaskAsynchronously(() -> {
             LocaleManager localeManager = plugin.getManager(LocaleManager.class);
             if (!(plugin.getManager(DataManager.class).getDatabaseConnector() instanceof MySQLConnector)) {
                 localeManager.sendMessage(sender, "command-importlegacy-only-mysql");

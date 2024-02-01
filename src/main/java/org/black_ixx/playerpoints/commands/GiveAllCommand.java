@@ -1,10 +1,7 @@
 package org.black_ixx.playerpoints.commands;
 
+import cn.handyplus.lib.adapter.HandySchedulerUtil;
 import dev.rosewood.rosegarden.utils.StringPlaceholders;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
 import org.black_ixx.playerpoints.PlayerPoints;
 import org.black_ixx.playerpoints.manager.CommandManager;
 import org.black_ixx.playerpoints.manager.DataManager;
@@ -13,6 +10,11 @@ import org.black_ixx.playerpoints.util.PointsUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class GiveAllCommand extends PointsCommand {
 
@@ -38,7 +40,7 @@ public class GiveAllCommand extends PointsCommand {
 
         boolean includeOffline = args.length > 1 && args[1].equals("*");
 
-        Bukkit.getScheduler().runTaskAsynchronously(PlayerPoints.getInstance(), () -> {
+        HandySchedulerUtil.runTaskAsynchronously(() -> {
             boolean success;
             if (includeOffline) {
                 success = plugin.getManager(DataManager.class).offsetAllPoints(amount);

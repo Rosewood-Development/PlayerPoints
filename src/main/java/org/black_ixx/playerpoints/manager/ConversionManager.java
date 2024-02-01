@@ -2,12 +2,13 @@ package org.black_ixx.playerpoints.manager;
 
 import dev.rosewood.rosegarden.RosePlugin;
 import dev.rosewood.rosegarden.manager.Manager;
+import org.black_ixx.playerpoints.conversion.CurrencyConverter;
+import org.black_ixx.playerpoints.conversion.CurrencyPlugin;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
-import org.black_ixx.playerpoints.conversion.CurrencyConverter;
-import org.black_ixx.playerpoints.conversion.CurrencyPlugin;
 
 public class ConversionManager extends Manager {
 

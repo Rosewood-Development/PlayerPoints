@@ -1,5 +1,6 @@
 package org.black_ixx.playerpoints.manager;
 
+import cn.handyplus.lib.adapter.HandySchedulerUtil;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
@@ -10,6 +11,20 @@ import dev.rosewood.rosegarden.RosePlugin;
 import dev.rosewood.rosegarden.database.DataMigration;
 import dev.rosewood.rosegarden.database.SQLiteConnector;
 import dev.rosewood.rosegarden.manager.AbstractDataManager;
+import org.black_ixx.playerpoints.database.migrations._1_Create_Tables;
+import org.black_ixx.playerpoints.database.migrations._2_Add_Table_Username_Cache;
+import org.black_ixx.playerpoints.listeners.PointsMessageListener;
+import org.black_ixx.playerpoints.manager.ConfigurationManager.Setting;
+import org.black_ixx.playerpoints.models.PendingTransaction;
+import org.black_ixx.playerpoints.models.SortedPlayer;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+
 import java.nio.charset.StandardCharsets;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -31,19 +46,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
-import org.black_ixx.playerpoints.database.migrations._1_Create_Tables;
-import org.black_ixx.playerpoints.database.migrations._2_Add_Table_Username_Cache;
-import org.black_ixx.playerpoints.listeners.PointsMessageListener;
-import org.black_ixx.playerpoints.manager.ConfigurationManager.Setting;
-import org.black_ixx.playerpoints.models.PendingTransaction;
-import org.black_ixx.playerpoints.models.SortedPlayer;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
 
 public class DataManager extends AbstractDataManager implements Listener {
 
@@ -59,7 +61,7 @@ public class DataManager extends AbstractDataManager implements Listener {
         this.pendingUsernameUpdates = new ConcurrentHashMap<>();
 
         Bukkit.getPluginManager().registerEvents(this, rosePlugin);
-        Bukkit.getScheduler().runTaskTimerAsynchronously(rosePlugin, this::update, 10L, 10L);
+        HandySchedulerUtil.runTaskTimerAsynchronously(this::update, 10L, 10L);
     }
 
     @Override

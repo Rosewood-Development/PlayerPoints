@@ -4,13 +4,14 @@ import com.google.common.collect.Lists;
 import dev.rosewood.rosegarden.RosePlugin;
 import dev.rosewood.rosegarden.config.CommentedFileConfiguration;
 import dev.rosewood.rosegarden.manager.Manager;
+import org.black_ixx.playerpoints.PlayerPoints;
+import org.black_ixx.playerpoints.commands.Commander;
+import org.bukkit.command.PluginCommand;
+
 import java.io.File;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.black_ixx.playerpoints.PlayerPoints;
-import org.black_ixx.playerpoints.commands.Commander;
-import org.bukkit.command.PluginCommand;
 
 public class CommandManager extends Manager {
 

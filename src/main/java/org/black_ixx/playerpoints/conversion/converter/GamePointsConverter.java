@@ -1,6 +1,14 @@
 package org.black_ixx.playerpoints.conversion.converter;
 
 import dev.rosewood.rosegarden.RosePlugin;
+import org.black_ixx.playerpoints.conversion.CurrencyConverter;
+import org.black_ixx.playerpoints.manager.DataManager;
+import org.black_ixx.playerpoints.models.SortedPlayer;
+import org.bukkit.Bukkit;
+import su.nexmedia.engine.api.data.AbstractDataHandler;
+import su.nightexpress.gamepoints.GamePoints;
+import su.nightexpress.gamepoints.data.PointsDataHandler;
+
 import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -11,13 +19,6 @@ import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.UUID;
-import org.black_ixx.playerpoints.conversion.CurrencyConverter;
-import org.black_ixx.playerpoints.manager.DataManager;
-import org.black_ixx.playerpoints.models.SortedPlayer;
-import org.bukkit.Bukkit;
-import su.nexmedia.engine.api.data.AbstractDataHandler;
-import su.nightexpress.gamepoints.GamePoints;
-import su.nightexpress.gamepoints.data.PointsDataHandler;
 
 public class GamePointsConverter extends CurrencyConverter {
 

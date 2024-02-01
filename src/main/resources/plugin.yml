@@ -1,11 +1,12 @@
 name: PlayerPoints
 version: '@version@'
-authors: [Esophose, Black_ixx]
+authors: [Esophose, Black_ixx, handy]
 website: 'https://www.spigotmc.org/resources/playerpoints.80745/'
 description: A point based currency system
 main: org.black_ixx.playerpoints.PlayerPoints
 api-version: '1.13'
 load: STARTUP
+folia-supported: true
 softdepend: [Vault, Treasury, Votifier, PlaceholderAPI, TokenManager, GamePoints, NexEngine]
 loadbefore: [mcMMO]
 commands:

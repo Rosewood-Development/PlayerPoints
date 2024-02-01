@@ -1,7 +1,18 @@
 package org.black_ixx.playerpoints.commands;
 
+import cn.handyplus.lib.adapter.HandySchedulerUtil;
 import dev.rosewood.rosegarden.database.MySQLConnector;
 import dev.rosewood.rosegarden.utils.StringPlaceholders;
+import org.black_ixx.playerpoints.PlayerPoints;
+import org.black_ixx.playerpoints.manager.CommandManager;
+import org.black_ixx.playerpoints.manager.DataManager;
+import org.black_ixx.playerpoints.manager.LocaleManager;
+import org.black_ixx.playerpoints.models.SortedPlayer;
+import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
+
 import java.io.File;
 import java.util.Collections;
 import java.util.HashMap;
@@ -10,16 +21,6 @@ import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.UUID;
-import org.black_ixx.playerpoints.PlayerPoints;
-import org.black_ixx.playerpoints.manager.CommandManager;
-import org.black_ixx.playerpoints.manager.DataManager;
-import org.black_ixx.playerpoints.manager.LocaleManager;
-import org.black_ixx.playerpoints.models.SortedPlayer;
-import org.bukkit.Bukkit;
-import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 
 public class ImportCommand extends PointsCommand {
 
@@ -42,7 +43,7 @@ public class ImportCommand extends PointsCommand {
             return;
         }
 
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+        HandySchedulerUtil.runTaskAsynchronously(() -> {
             FileConfiguration configuration = YamlConfiguration.loadConfiguration(file);
             ConfigurationSection pointsSection = configuration.getConfigurationSection("Points");
             if (pointsSection == null)

@@ -1,17 +1,18 @@
 package org.black_ixx.playerpoints.conversion.converter;
 
 import dev.rosewood.rosegarden.RosePlugin;
-import java.lang.reflect.Field;
-import java.util.Collections;
-import java.util.SortedSet;
-import java.util.TreeSet;
-import java.util.UUID;
 import me.realized.tokenmanager.TokenManagerPlugin;
 import me.realized.tokenmanager.data.DataManager;
 import me.realized.tokenmanager.data.database.Database;
 import org.black_ixx.playerpoints.conversion.CurrencyConverter;
 import org.black_ixx.playerpoints.models.SortedPlayer;
 import org.bukkit.Bukkit;
+
+import java.lang.reflect.Field;
+import java.util.Collections;
+import java.util.SortedSet;
+import java.util.TreeSet;
+import java.util.UUID;
 
 public class TokenManagerConverter extends CurrencyConverter {
 
