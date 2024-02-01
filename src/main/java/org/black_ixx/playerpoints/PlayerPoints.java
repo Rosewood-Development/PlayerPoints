@@ -43,6 +43,7 @@ public class PlayerPoints extends RosePlugin {
 
     @Override
     public void enable() {
+        HandySchedulerUtil.init(this);
         this.api = new PlayerPointsAPI(this);
 
         if (Setting.VAULT.getBoolean() && Bukkit.getPluginManager().isPluginEnabled("Vault")) {
