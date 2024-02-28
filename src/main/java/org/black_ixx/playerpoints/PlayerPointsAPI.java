@@ -41,7 +41,7 @@ public class PlayerPointsAPI {
         if (event.isCancelled())
             return false;
 
-        return this.plugin.getManager(DataManager.class).offsetPoints(playerId, amount);
+        return this.plugin.getManager(DataManager.class).offsetPoints(playerId, event.getChange());
     }
 
     /**
@@ -151,7 +151,7 @@ public class PlayerPointsAPI {
         if (event.isCancelled())
             return false;
 
-        return dataManager.setPoints(playerId, amount);
+        return dataManager.setPoints(playerId, points + event.getChange());
     }
 
     /**
