@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.NavigableMap;
 import java.util.TreeMap;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
+import java.util.function.Consumer;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import org.black_ixx.playerpoints.PlayerPoints;
@@ -100,32 +100,56 @@ public final class PointsUtils {
      * Warning: This method can cause a blocking call to the database for UUID lookups.
      *
      * @param name The name of the player
-     * @return A tuple of the player's UUID and name, or null if not found
+     * @param callback A callback to run with a tuple of the player's UUID and name, or null if not found
      */
     @SuppressWarnings("deprecation")
-    public static CompletableFuture<Tuple<UUID, String>> getPlayerByName(String name) {
+    public static void getPlayerByName(String name, Consumer<Tuple<UUID, String>> callback) {
         Player player = Bukkit.getPlayer(name);
-        if (player != null)
-            return CompletableFuture.completedFuture(new Tuple<>(player.getUniqueId(), player.getName()));
+        if (player != null) {
+            callback.accept(new Tuple<>(player.getUniqueId(), player.getName()));
+            return;
+        }
 
-        CompletableFuture<Tuple<UUID, String>> completableFuture = new CompletableFuture<>();
         Bukkit.getScheduler().runTaskAsynchronously(PlayerPoints.getInstance(), () -> {
             OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(name);
             if (offlinePlayer.getName() != null && offlinePlayer.hasPlayedBefore()) {
-                completableFuture.complete(new Tuple<>(offlinePlayer.getUniqueId(), offlinePlayer.getName()));
+                Tuple<UUID, String> tuple = new Tuple<>(offlinePlayer.getUniqueId(), offlinePlayer.getName());
+                Bukkit.getScheduler().runTask(PlayerPoints.getInstance(), () -> callback.accept(tuple));
                 return;
             }
 
             UUID uuid = PlayerPoints.getInstance().getManager(DataManager.class).lookupCachedUUID(name);
             if (uuid != null) {
-                completableFuture.complete(new Tuple<>(uuid, name));
+                Tuple<UUID, String> tuple = new Tuple<>(uuid, name);
+                Bukkit.getScheduler().runTask(PlayerPoints.getInstance(), () -> callback.accept(tuple));
                 return;
             }
 
-            completableFuture.complete(null);
+            Bukkit.getScheduler().runTask(PlayerPoints.getInstance(), () -> callback.accept(null));
         });
+    }
 
-        return completableFuture;
+    /**
+     * Gets an OfflinePlayer by name, prioritizing online players.
+     * Warning: This method can cause a blocking call to the database for UUID lookups.
+     *
+     * @param name The name of the player
+     * @return a tuple of the player's UUID and name, or null if not found
+     */
+    public static Tuple<UUID, String> getPlayerByName(String name) {
+        Player player = Bukkit.getPlayer(name);
+        if (player != null)
+            return new Tuple<>(player.getUniqueId(), player.getName());
+
+        OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(name);
+        if (offlinePlayer.getName() != null && offlinePlayer.hasPlayedBefore())
+            return new Tuple<>(offlinePlayer.getUniqueId(), offlinePlayer.getName());
+
+        UUID uuid = PlayerPoints.getInstance().getManager(DataManager.class).lookupCachedUUID(name);
+        if (uuid != null)
+            return new Tuple<>(uuid, name);
+
+        return null;
     }
 
     /**

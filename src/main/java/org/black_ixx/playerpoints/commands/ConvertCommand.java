@@ -31,18 +31,18 @@ public class ConvertCommand extends PointsCommand {
         CurrencyPlugin currencyPlugin = CurrencyPlugin.get(args[0]);
         ConversionManager conversionManager = plugin.getManager(ConversionManager.class);
         if (currencyPlugin == null || !conversionManager.getEnabledConverters().contains(currencyPlugin)) {
-            localeManager.sendMessage(sender, "command-convert-invalid", StringPlaceholders.single("plugin", args[0]));
+            localeManager.sendMessage(sender, "command-convert-invalid", StringPlaceholders.of("plugin", args[0]));
             return;
         }
 
         if (args.length != 2 || !args[1].equalsIgnoreCase("confirm")) {
-            localeManager.sendMessage(sender, "command-convert-warning", StringPlaceholders.single("plugin", args[0]));
+            localeManager.sendMessage(sender, "command-convert-warning", StringPlaceholders.of("plugin", args[0]));
             return;
         }
 
         Bukkit.getScheduler().runTaskAsynchronously(PlayerPoints.getInstance(), () -> {
             if (conversionManager.convert(currencyPlugin)) {
-                localeManager.sendMessage(sender, "command-convert-success", StringPlaceholders.single("plugin", args[0]));
+                localeManager.sendMessage(sender, "command-convert-success", StringPlaceholders.of("plugin", args[0]));
             } else {
                 localeManager.sendMessage(sender, "command-convert-failure");
             }

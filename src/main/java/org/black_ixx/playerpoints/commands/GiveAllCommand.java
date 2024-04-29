@@ -50,12 +50,12 @@ public class GiveAllCommand extends PointsCommand {
             if (success) {
                 for (Player player : Bukkit.getOnlinePlayers()) {
                     localeManager.sendMessage(player, "command-give-received", StringPlaceholders.builder("amount", PointsUtils.formatPoints(amount))
-                            .addPlaceholder("currency", localeManager.getCurrencyName(amount))
+                            .add("currency", localeManager.getCurrencyName(amount))
                             .build());
                 }
 
                 localeManager.sendMessage(sender, "command-giveall-success", StringPlaceholders.builder("amount", PointsUtils.formatPoints(amount))
-                        .addPlaceholder("currency", localeManager.getCurrencyName(amount))
+                        .add("currency", localeManager.getCurrencyName(amount))
                         .build());
             }
         });

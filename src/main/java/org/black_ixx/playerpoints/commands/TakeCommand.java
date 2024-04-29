@@ -26,9 +26,9 @@ public class TakeCommand extends PointsCommand {
             return;
         }
 
-        PointsUtils.getPlayerByName(args[0]).thenAccept(player -> {
+        PointsUtils.getPlayerByName(args[0], player -> {
             if (player == null) {
-                localeManager.sendMessage(sender, "unknown-player", StringPlaceholders.single("player", args[0]));
+                localeManager.sendMessage(sender, "unknown-player", StringPlaceholders.of("player", args[0]));
                 return;
             }
 
@@ -46,12 +46,12 @@ public class TakeCommand extends PointsCommand {
 
             if (plugin.getAPI().take(player.getFirst(), amount)) {
                 localeManager.sendMessage(sender, "command-take-success", StringPlaceholders.builder("player", player.getSecond())
-                        .addPlaceholder("currency", localeManager.getCurrencyName(amount))
-                        .addPlaceholder("amount", PointsUtils.formatPoints(amount))
+                        .add("currency", localeManager.getCurrencyName(amount))
+                        .add("amount", PointsUtils.formatPoints(amount))
                         .build());
             } else {
                 localeManager.sendMessage(sender, "command-take-lacking-funds", StringPlaceholders.builder("player", player.getSecond())
-                        .addPlaceholder("currency", localeManager.getCurrencyName(amount))
+                        .add("currency", localeManager.getCurrencyName(amount))
                         .build());
                 plugin.getAPI().reset(player.getFirst());
             }

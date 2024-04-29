@@ -60,7 +60,7 @@ public class LeadCommand extends CommandHandler {
             }
 
             localeManager.sendMessage(sender, "command-lead-title", StringPlaceholders.builder("page", currentPage + 1)
-                    .addPlaceholder("pages", numPages).build());
+                    .add("pages", numPages).build());
 
             // Page through
             for (int i = 0; i < listedPlayers.size(); i++) {
@@ -68,9 +68,9 @@ public class LeadCommand extends CommandHandler {
                 SortedPlayer player = listedPlayers.get(i);
 
                 localeManager.sendSimpleMessage(sender, "command-lead-entry", StringPlaceholders.builder("position", position)
-                        .addPlaceholder("player", player.getUsername())
-                        .addPlaceholder("amount", PointsUtils.formatPoints(player.getPoints()))
-                        .addPlaceholder("currency", localeManager.getCurrencyName(player.getPoints()))
+                        .add("player", player.getUsername())
+                        .add("amount", PointsUtils.formatPoints(player.getPoints()))
+                        .add("currency", localeManager.getCurrencyName(player.getPoints()))
                         .build());
             }
         });

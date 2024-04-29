@@ -27,7 +27,7 @@ public class VotifierListener implements Listener {
             return;
 
         String name = event.getVote().getUsername();
-        PointsUtils.getPlayerByName(name).thenAccept(playerInfo -> {
+        PointsUtils.getPlayerByName(name, playerInfo -> {
             if (playerInfo == null)
                 return;
 
@@ -38,7 +38,7 @@ public class VotifierListener implements Listener {
                 this.plugin.getAPI().give(playerInfo.getFirst(), amount);
                 if (player != null)
                     this.plugin.getManager(LocaleManager.class).sendMessage(player, "votifier-voted", StringPlaceholders.builder("service", event.getVote().getServiceName())
-                            .addPlaceholder("amount", Setting.VOTE_AMOUNT.getInt())
+                            .add("amount", Setting.VOTE_AMOUNT.getInt())
                             .build());
             }
         });

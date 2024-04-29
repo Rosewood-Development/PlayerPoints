@@ -47,7 +47,6 @@ import org.bukkit.event.player.PlayerJoinEvent;
 
 public class DataManager extends AbstractDataManager implements Listener {
 
-    private final Set<UUID> locks = ConcurrentHashMap.newKeySet();
     private LoadingCache<UUID, Integer> pointsCache;
     private final Map<UUID, Deque<PendingTransaction>> pendingTransactions;
     private final Map<UUID, String> pendingUsernameUpdates;
@@ -234,21 +233,12 @@ public class DataManager extends AbstractDataManager implements Listener {
      * @return true if the transaction was successful, false otherwise
      */
     public boolean offsetPoints(UUID playerId, int amount) {
-        if (this.locks.contains(playerId))
+        int points = this.getEffectivePoints(playerId);
+        if (points + amount < 0)
             return false;
 
-        try {
-            this.locks.add(playerId);
-
-            int points = this.getEffectivePoints(playerId);
-            if (points + amount < 0)
-                return false;
-
-            this.getPendingTransactions(playerId).add(new PendingTransaction(PendingTransaction.TransactionType.OFFSET, amount));
-            return true;
-        } finally {
-            this.locks.remove(playerId);
-        }
+        this.getPendingTransactions(playerId).add(new PendingTransaction(PendingTransaction.TransactionType.OFFSET, amount));
+        return true;
     }
 
     private void updatePoints(Map<UUID, Integer> transactions) {

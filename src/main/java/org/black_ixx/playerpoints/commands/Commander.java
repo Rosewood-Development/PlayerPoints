@@ -65,7 +65,7 @@ public class Commander extends CommandHandler {
 
     @Override
     public void unknownCommand(CommandSender sender, String[] args) {
-        this.plugin.getManager(LocaleManager.class).sendMessage(sender, "unknown-command", StringPlaceholders.single("input", args[0]));
+        this.plugin.getManager(LocaleManager.class).sendMessage(sender, "unknown-command", StringPlaceholders.of("input", args[0]));
     }
 
 }

@@ -26,15 +26,15 @@ public class ResetCommand extends PointsCommand {
             return;
         }
 
-        PointsUtils.getPlayerByName(args[0]).thenAccept(player -> {
+        PointsUtils.getPlayerByName(args[0], player -> {
             if (player == null) {
-                localeManager.sendMessage(sender, "unknown-player", StringPlaceholders.single("player", args[0]));
+                localeManager.sendMessage(sender, "unknown-player", StringPlaceholders.of("player", args[0]));
                 return;
             }
 
             if (plugin.getAPI().reset(player.getFirst())) {
                 localeManager.sendMessage(sender, "command-reset-success", StringPlaceholders.builder("player", player.getSecond())
-                        .addPlaceholder("currency", localeManager.getCurrencyName(0))
+                        .add("currency", localeManager.getCurrencyName(0))
                         .build());
             }
         });

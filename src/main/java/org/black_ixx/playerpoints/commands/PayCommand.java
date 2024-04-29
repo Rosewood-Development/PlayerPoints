@@ -46,9 +46,9 @@ public class PayCommand extends PointsCommand {
 
         PAY_COOLDOWN.put(player.getUniqueId(), System.currentTimeMillis());
 
-        PointsUtils.getPlayerByName(args[0]).thenAccept(target -> {
+        PointsUtils.getPlayerByName(args[0], target -> {
             if (target == null) {
-                localeManager.sendMessage(player, "unknown-player", StringPlaceholders.single("player", args[0]));
+                localeManager.sendMessage(player, "unknown-player", StringPlaceholders.of("player", args[0]));
                 return;
             }
 
@@ -73,20 +73,20 @@ public class PayCommand extends PointsCommand {
             if (plugin.getAPI().pay(player.getUniqueId(), target.getFirst(), amount)) {
                 // Send success message to sender
                 localeManager.sendMessage(player, "command-pay-sent", StringPlaceholders.builder("amount", PointsUtils.formatPoints(amount))
-                        .addPlaceholder("currency", localeManager.getCurrencyName(amount))
-                        .addPlaceholder("player", target.getSecond())
+                        .add("currency", localeManager.getCurrencyName(amount))
+                        .add("player", target.getSecond())
                         .build());
 
                 // Send success message to target
                 Player onlinePlayer = Bukkit.getPlayer(target.getFirst());
                 if (onlinePlayer != null) {
                     localeManager.sendMessage(onlinePlayer, "command-pay-received", StringPlaceholders.builder("amount", PointsUtils.formatPoints(amount))
-                            .addPlaceholder("currency", localeManager.getCurrencyName(amount))
-                            .addPlaceholder("player", player.getName())
+                            .add("currency", localeManager.getCurrencyName(amount))
+                            .add("player", player.getName())
                             .build());
                 }
             } else {
-                localeManager.sendMessage(player, "command-pay-lacking-funds", StringPlaceholders.single("currency", localeManager.getCurrencyName(0)));
+                localeManager.sendMessage(player, "command-pay-lacking-funds", StringPlaceholders.of("currency", localeManager.getCurrencyName(0)));
             }
         });
     }

@@ -32,9 +32,9 @@ public class ImportLegacyCommand extends PointsCommand {
             }
 
             if (plugin.getManager(DataManager.class).importLegacyTable(args[0])) {
-                localeManager.sendMessage(sender, "command-importlegacy-success", StringPlaceholders.single("table", args[0]));
+                localeManager.sendMessage(sender, "command-importlegacy-success", StringPlaceholders.of("table", args[0]));
             } else {
-                localeManager.sendMessage(sender, "command-importlegacy-failure", StringPlaceholders.single("table", args[0]));
+                localeManager.sendMessage(sender, "command-importlegacy-failure", StringPlaceholders.of("table", args[0]));
             }
         });
     }
