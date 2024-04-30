@@ -43,7 +43,7 @@ command-giveall-success: '&aTrao &b%amount% &a%currency% cho tất cả người
 command-take-description: '&8 - &d/points take &7- Lấy points từ người chơi'
 command-take-usage: '&cSử dụng: &e/points take <người chơi> <số lượng>'
 command-take-success: '&aLấy đi &b%amount% &a%currency% từ &b%player%&a.'
-command-take-lacking-funds: '&b%player% &ckhông có đủ %currency% cho điều này, vì vậy số dư của họ được đặt thành 0.'
+command-take-not-enough: '&b%player% &ckhông có đủ %currency% cho điều này.'
 
 # Look Command
 command-look-description: '&8 - &d/points look &7- Xem points của người chơi'

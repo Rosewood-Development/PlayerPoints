@@ -43,7 +43,7 @@ command-giveall-success: '&aAdtál &b%amount% &a%currency%ot az összes elérhet
 command-take-description: '&8 - &d/points take &7- Elvesz pontot a játékostól'
 command-take-usage: '&cHasználat: &e/points take <játékos> <mennyiség>'
 command-take-success: '&aElvettél &b%amount% &a%currency%ot &b%player% &ajátékostól.'
-command-take-lacking-funds: '&b%player%-nak/nek &cnincs elég %currency%ja ehhez, ezért az egyenlege beállítva 0-ra.'
+command-take-not-enough: '&b%player%-nak/nek &cnincs elég %currency%ja ehhez.'
 
 # Look Command
 command-look-description: '&8 - &d/points look &7- Játékos pontjainak megtekintése'

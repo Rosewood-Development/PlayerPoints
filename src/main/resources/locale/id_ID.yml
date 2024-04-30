@@ -2,13 +2,13 @@
 prefix: '&7[<g:#E8A230:#ECD32D>PlayerPoints&7] '
 
 # Currency
-currency-singular: Poin
-currency-plural: Poin
+currency-singular: 'Poin'
+currency-plural: 'Poin'
 currency-separator: ','
-currency-decimal: .
-number-abbreviation-thousands: k
-number-abbreviation-millions: m
-number-abbreviation-billions: b
+currency-decimal: '.'
+number-abbreviation-thousands: 'k'
+number-abbreviation-millions: 'm'
+number-abbreviation-billions: 'b'
 
 # Misc
 no-permission: '&cKamu tidak punya izin untuk itu!'
@@ -17,7 +17,7 @@ invalid-amount: '&cJumlah harus berupa bilangan bulat positif.'
 unknown-player: '&cPemain tidak dapat ditemukan: &b%player%'
 unknown-command: '&cPerintah tidak diketahui: &b%input%'
 votifier-voted: '&eTerima kasih sudah voting di %service%! &b%amount% &etelah ditambahkan ke saldomu.'
-leaderboard-empty-entry: Ini bisa jadi kamu!
+leaderboard-empty-entry: 'Ini bisa jadi kamu!'
 command-cooldown: '&cHarap tunggu sebelum menggunakan perintah itu lagi.'
 
 # Base Command Message
@@ -43,7 +43,7 @@ command-giveall-success: '&aMemberikan &b%amount% &a%currency% kepada semua play
 command-take-description: '&8 - &d/points take &7- Ambil poin dari pemain'
 command-take-usage: '&cPenggunaan: &e/points take <player> <amount>'
 command-take-success: '&aMengambil &b%amount% &a%currency% dari &b%player%&a.'
-command-take-lacking-funds: '&b%player% &ctidak memiliki %currency% yang cukup untuk itu, jadi saldonya diatur ke 0.'
+command-take-not-enough: '&b%player% &ctidak memiliki %currency% yang cukup untuk itu.'
 
 # Look Command
 command-look-description: '&8 - &d/points look &7- Melihat poin pemain'

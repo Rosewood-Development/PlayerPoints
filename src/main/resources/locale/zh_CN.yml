@@ -43,7 +43,7 @@ command-giveall-success: '&a已成功给予 &b%amount% &a%currency% 给所有在
 command-take-description: '&8 - &d/points take &7- 从玩家那取走点劵'
 command-take-usage: '&c用法: &e/points take <玩家> <数值>'
 command-take-success: '&a成功从玩家 &b%player% 那拿走 &b%amount% &a%currency% 。'
-command-take-lacking-funds: '&b%player% &c没有足够的点劵 %currency% 来被拿走, 所以账户余额已设为 0。'
+command-take-not-enough: '&b%player% &c没有足够的点劵 %currency% 来被拿走。'
 
 # 查看命令
 command-look-description: '&8 - &d/points look &7- 查看一名玩家的点卷数'

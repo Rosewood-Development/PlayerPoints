@@ -43,7 +43,7 @@ command-giveall-success: '&a現在ログインしている全プレイヤーに 
 command-take-description: '&8 - &d/points take &7- プレイヤーからポイントを剥奪する。'
 command-take-usage: '&c構文: &e/points take <player> <amount>'
 command-take-success: '&b%player%&a から &b%amount% &a%currency% 剥奪しました。'
-command-take-lacking-funds: '&b%player% &cの所持%currency%が足りないため、所持%currency%が0に設定されました。'
+command-take-not-enough: '&b%player% &cの所持%currency%が足りないため。'
 
 # Look Command
 command-look-description: '&8 - &d/points look &7- プレイヤーの所持ポイントを確認する。'

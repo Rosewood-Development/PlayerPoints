@@ -43,7 +43,7 @@ command-giveall-success: '&aDeste &b%amount% &a%currency% a todos os jogadores o
 command-take-description: '&8 - &d/points take &7- Tira pontos de um jogador'
 command-take-usage: '&cUso: &e/points take <jogador> <quantidade>'
 command-take-success: '&aTiraste &b%amount% &a%currency% de &b%player%&a.'
-command-take-lacking-funds: '&b%player% &cnão possui %currency% suficientes para isso, então o saldo foi definido como 0.'
+command-take-not-enough: '&b%player% &cnão possui %currency% suficientes para isso.'
 
 # Comando de Look
 command-look-description: '&8 - &d/points look &7- Vê os pontos de um jogador'

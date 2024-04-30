@@ -43,7 +43,7 @@ command-giveall-success: '&a給予所有玩家 &b%amount% &a點&a%currency%.'
 command-take-description: '&8 - &d/points take  <玩家> <數量> &7- 拿走玩家點數'
 command-take-usage: '&c用法: &e/points take <玩家> <數量>'
 command-take-success: '&a從 &b%player% &a拿走 &b%amount% &a點&a%currency%.'
-command-take-lacking-funds: '&b%player% &c沒有足夠的%currency%, 所以他的%currency%將會被設為 0.'
+command-take-not-enough: '&b%player% &c沒有足夠的%currency%.'
 
 # Look Command
 command-look-description: '&8 - &d/points look <玩家> &7- 查看玩家的點數'

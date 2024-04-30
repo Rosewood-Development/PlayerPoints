@@ -43,7 +43,7 @@ command-giveall-success: '&aΔόθηκαν &b%amount% &a%currency% σε όλου
 command-take-description: '&8 - &d/points take &7- Πάρε πόντους απο έναν παίκτη.'
 command-take-usage: '&cΧρήση εντολής: &e/points take <παίκτης> <ποσό>'
 command-take-success: '&aΈλαβε &b%amount% &a%currency% από &b%player%&a.'
-command-take-lacking-funds: '&b%player% &cδεν έχει αρκετά %currency% για αυτό, οπότε το υπόλοιπό τους μηδενίστηκε.'
+command-take-not-enough: '&b%player% &cδεν έχει αρκετά %currency% για αυτό.'
 
 # Look Command
 command-look-description: '&8 - &d/points look &7- Δες τους πόντου ενός παίκτη.'
