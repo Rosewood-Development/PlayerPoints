@@ -23,7 +23,7 @@ public class ExportCommand extends PointsCommand {
 
     @Override
     public void execute(PlayerPoints plugin, CommandSender sender, String[] args) {
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+        plugin.getScheduler().runTaskAsync(() -> {
             LocaleManager localeManager = plugin.getManager(LocaleManager.class);
             File file = new File(plugin.getDataFolder(), "storage.yml");
             if (file.exists() && (args.length < 1 || !args[0].equalsIgnoreCase("confirm"))) {

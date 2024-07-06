@@ -8,6 +8,7 @@ api-version: '1.13'
 load: STARTUP
 softdepend: [Vault, Treasury, Votifier, PlaceholderAPI, TokenManager, GamePoints, NexEngine]
 loadbefore: [mcMMO]
+folia-supported: true
 commands:
   points:
     aliases: [p]

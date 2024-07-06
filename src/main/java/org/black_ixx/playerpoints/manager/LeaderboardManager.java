@@ -2,6 +2,7 @@ package org.black_ixx.playerpoints.manager;
 
 import dev.rosewood.rosegarden.RosePlugin;
 import dev.rosewood.rosegarden.manager.Manager;
+import dev.rosewood.rosegarden.scheduler.task.ScheduledTask;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,7 +18,7 @@ import org.bukkit.scheduler.BukkitTask;
 
 public class LeaderboardManager extends Manager implements Listener {
 
-    private BukkitTask refreshTask;
+    private ScheduledTask refreshTask;
     private final DataManager dataManager;
     private long refreshInterval;
 
@@ -42,7 +43,7 @@ public class LeaderboardManager extends Manager implements Listener {
     @Override
     public void reload() {
         if (!Setting.LEADERBOARD_DISABLE.getBoolean()) {
-            this.refreshTask = Bukkit.getScheduler().runTaskTimerAsynchronously(this.rosePlugin, this::refresh, 10L, 20L);
+            this.refreshTask = this.rosePlugin.getScheduler().runTaskTimerAsync(this::refresh, 10L, 20L);
             this.refreshInterval = Setting.LEADERBOARD_PLACEHOLDER_REFRESH_INTERVAL.getLong() * 1000;
         }
     }

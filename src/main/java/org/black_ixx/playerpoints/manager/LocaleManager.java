@@ -24,7 +24,7 @@ public class LocaleManager extends AbstractLocaleManager {
     @Override
     protected void handleMessage(CommandSender sender, String message) {
         if (!Bukkit.isPrimaryThread() && (sender instanceof BlockCommandSender || sender instanceof CommandMinecart)) {
-            Bukkit.getScheduler().runTask(this.rosePlugin, () -> super.handleMessage(sender, message));
+            this.rosePlugin.getScheduler().runTask(() -> super.handleMessage(sender, message));
         } else {
             super.handleMessage(sender, message);
         }

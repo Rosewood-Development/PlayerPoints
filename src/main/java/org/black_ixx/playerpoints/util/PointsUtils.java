@@ -110,22 +110,23 @@ public final class PointsUtils {
             return;
         }
 
-        Bukkit.getScheduler().runTaskAsynchronously(PlayerPoints.getInstance(), () -> {
+        PlayerPoints plugin = PlayerPoints.getInstance();
+        plugin.getScheduler().runTaskAsync(() -> {
             OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(name);
             if (offlinePlayer.getName() != null && offlinePlayer.hasPlayedBefore()) {
                 Tuple<UUID, String> tuple = new Tuple<>(offlinePlayer.getUniqueId(), offlinePlayer.getName());
-                Bukkit.getScheduler().runTask(PlayerPoints.getInstance(), () -> callback.accept(tuple));
+                plugin.getScheduler().runTask(() -> callback.accept(tuple));
                 return;
             }
 
-            UUID uuid = PlayerPoints.getInstance().getManager(DataManager.class).lookupCachedUUID(name);
+            UUID uuid = plugin.getManager(DataManager.class).lookupCachedUUID(name);
             if (uuid != null) {
                 Tuple<UUID, String> tuple = new Tuple<>(uuid, name);
-                Bukkit.getScheduler().runTask(PlayerPoints.getInstance(), () -> callback.accept(tuple));
+                plugin.getScheduler().runTask(() -> callback.accept(tuple));
                 return;
             }
 
-            Bukkit.getScheduler().runTask(PlayerPoints.getInstance(), () -> callback.accept(null));
+            plugin.getScheduler().runTask(() -> callback.accept(null));
         });
     }
 

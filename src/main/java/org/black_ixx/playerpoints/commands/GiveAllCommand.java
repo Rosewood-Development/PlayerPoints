@@ -38,7 +38,7 @@ public class GiveAllCommand extends PointsCommand {
 
         boolean includeOffline = args.length > 1 && args[1].equals("*");
 
-        Bukkit.getScheduler().runTaskAsynchronously(PlayerPoints.getInstance(), () -> {
+        plugin.getScheduler().runTaskAsync(() -> {
             boolean success;
             if (includeOffline) {
                 success = plugin.getManager(DataManager.class).offsetAllPoints(amount);

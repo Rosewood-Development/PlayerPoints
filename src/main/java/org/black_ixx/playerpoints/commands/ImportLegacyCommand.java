@@ -19,7 +19,7 @@ public class ImportLegacyCommand extends PointsCommand {
 
     @Override
     public void execute(PlayerPoints plugin, CommandSender sender, String[] args) {
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+        plugin.getScheduler().runTaskAsync(() -> {
             LocaleManager localeManager = plugin.getManager(LocaleManager.class);
             if (!(plugin.getManager(DataManager.class).getDatabaseConnector() instanceof MySQLConnector)) {
                 localeManager.sendMessage(sender, "command-importlegacy-only-mysql");

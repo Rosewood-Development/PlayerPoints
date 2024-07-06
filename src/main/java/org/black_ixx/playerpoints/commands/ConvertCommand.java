@@ -40,7 +40,7 @@ public class ConvertCommand extends PointsCommand {
             return;
         }
 
-        Bukkit.getScheduler().runTaskAsynchronously(PlayerPoints.getInstance(), () -> {
+        plugin.getScheduler().runTaskAsync(() -> {
             if (conversionManager.convert(currencyPlugin)) {
                 localeManager.sendMessage(sender, "command-convert-success", StringPlaceholders.of("plugin", args[0]));
             } else {

@@ -88,7 +88,7 @@ public class PlayerPoints extends RosePlugin {
             Bukkit.getMessenger().registerIncomingPluginChannel(this, PointsMessageListener.CHANNEL, new PointsMessageListener(this));
         }
 
-        Bukkit.getScheduler().runTask(this, () -> {
+        this.getScheduler().runTask(() -> {
             // Register placeholders, if applicable
             if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI"))
                 new PointsPlaceholderExpansion(this).register();

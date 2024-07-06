@@ -57,7 +57,7 @@ public class DataManager extends AbstractDataManager implements Listener {
         this.pendingUsernameUpdates = new ConcurrentHashMap<>();
 
         Bukkit.getPluginManager().registerEvents(this, rosePlugin);
-        Bukkit.getScheduler().runTaskTimerAsynchronously(rosePlugin, this::update, 10L, 10L);
+        rosePlugin.getScheduler().runTaskTimerAsync(this::update, 10L, 10L);
     }
 
     @Override
