@@ -9,6 +9,9 @@ load: STARTUP
 softdepend: [Vault, Treasury, Votifier, PlaceholderAPI, TokenManager, GamePoints, NexEngine]
 loadbefore: [mcMMO]
 folia-supported: true
+libraries:
+  - 'com.mysql:mysql-connector-j:9.0.0'
+  - 'org.xerial:sqlite-jdbc:3.46.0.0'
 commands:
   points:
     aliases: [p]
