@@ -29,11 +29,11 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import org.black_ixx.playerpoints.database.migrations._1_Create_Tables;
 import org.black_ixx.playerpoints.database.migrations._2_Add_Table_Username_Cache;
 import org.black_ixx.playerpoints.listeners.PointsMessageListener;
-import org.black_ixx.playerpoints.manager.ConfigurationManager.Setting;
 import org.black_ixx.playerpoints.models.PendingTransaction;
 import org.black_ixx.playerpoints.models.SortedPlayer;
 import org.bukkit.Bukkit;
@@ -67,7 +67,7 @@ public class DataManager extends AbstractDataManager implements Listener {
         this.pointsCache = CacheBuilder.newBuilder()
                 .concurrencyLevel(2)
                 .expireAfterAccess(5, TimeUnit.MINUTES)
-                .refreshAfterWrite(Setting.CACHE_DURATION.getInt(), TimeUnit.SECONDS)
+                .refreshAfterWrite(org.black_ixx.playerpoints.setting.SettingKey.CACHE_DURATION.get(), TimeUnit.SECONDS)
                 .build(new CacheLoader<UUID, Integer>() {
                     @Override
                     public Integer load(UUID uuid) throws Exception {
@@ -197,7 +197,7 @@ public class DataManager extends AbstractDataManager implements Listener {
         });
 
         if (generate.get()) {
-            int startingBalance = Setting.STARTING_BALANCE.getInt();
+            int startingBalance = org.black_ixx.playerpoints.setting.SettingKey.STARTING_BALANCE.get();
             this.setPoints(playerId, startingBalance);
             value.set(startingBalance);
         }
@@ -253,7 +253,7 @@ public class DataManager extends AbstractDataManager implements Listener {
                     this.pointsCache.put(entry.getKey(), entry.getValue());
 
                     // Send update to BungeeCord if enabled
-                    if (Setting.BUNGEECORD_SEND_UPDATES.getBoolean() && this.rosePlugin.isEnabled()) {
+                    if (org.black_ixx.playerpoints.setting.SettingKey.BUNGEECORD_SEND_UPDATES.get() && this.rosePlugin.isEnabled()) {
                         ByteArrayDataOutput output = ByteStreams.newDataOutput();
                         output.writeUTF("Forward");
                         output.writeUTF("ONLINE");
@@ -463,7 +463,7 @@ public class DataManager extends AbstractDataManager implements Listener {
     public UUID lookupCachedUUID(String username) {
         AtomicReference<UUID> value = new AtomicReference<>();
         this.databaseConnector.connect(connection -> {
-            String query = "SELECT uuid FROM " + this.getTablePrefix() + "username_cache WHERE username = ?";
+            String query = "SELECT uuid FROM " + this.getTablePrefix() + "username_cache WHERE LOWER(username) = LOWER(?)";
             try (PreparedStatement statement = connection.prepareStatement(query)) {
                 statement.setString(1, username);
                 ResultSet result = statement.executeQuery();
@@ -476,15 +476,15 @@ public class DataManager extends AbstractDataManager implements Listener {
     }
 
     private String getPointsTableName() {
-        if (ConfigurationManager.Setting.LEGACY_DATABASE_MODE.getBoolean()) {
-            return ConfigurationManager.Setting.LEGACY_DATABASE_NAME.getString();
+        if (org.black_ixx.playerpoints.setting.SettingKey.LEGACY_DATABASE_MODE.get()) {
+            return org.black_ixx.playerpoints.setting.SettingKey.LEGACY_DATABASE_NAME.get();
         } else {
             return super.getTablePrefix() + "points";
         }
     }
 
     private String getUuidColumnName() {
-        if (ConfigurationManager.Setting.LEGACY_DATABASE_MODE.getBoolean()) {
+        if (org.black_ixx.playerpoints.setting.SettingKey.LEGACY_DATABASE_MODE.get()) {
             return "playername";
         } else {
             return "uuid";
@@ -492,11 +492,10 @@ public class DataManager extends AbstractDataManager implements Listener {
     }
 
     @Override
-    public List<Class<? extends DataMigration>> getDataMigrations() {
+    public List<Supplier<? extends DataMigration>> getDataMigrations() {
         return Arrays.asList(
-                _1_Create_Tables.class,
-                _2_Add_Table_Username_Cache.class
+                _1_Create_Tables::new,
+                _2_Add_Table_Username_Cache::new
         );
     }
-
 }

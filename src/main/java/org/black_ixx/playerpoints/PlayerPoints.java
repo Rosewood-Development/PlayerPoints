@@ -1,6 +1,7 @@
 package org.black_ixx.playerpoints;
 
 import dev.rosewood.rosegarden.RosePlugin;
+import dev.rosewood.rosegarden.config.RoseSetting;
 import dev.rosewood.rosegarden.manager.Manager;
 import java.util.Arrays;
 import java.util.List;
@@ -11,11 +12,10 @@ import org.black_ixx.playerpoints.hook.PointsPlaceholderExpansion;
 import org.black_ixx.playerpoints.listeners.PointsMessageListener;
 import org.black_ixx.playerpoints.listeners.VotifierListener;
 import org.black_ixx.playerpoints.manager.CommandManager;
-import org.black_ixx.playerpoints.manager.ConfigurationManager;
-import org.black_ixx.playerpoints.manager.ConfigurationManager.Setting;
 import org.black_ixx.playerpoints.manager.DataManager;
 import org.black_ixx.playerpoints.manager.LeaderboardManager;
 import org.black_ixx.playerpoints.manager.LocaleManager;
+import org.black_ixx.playerpoints.setting.SettingKey;
 import org.black_ixx.playerpoints.treasury.PlayerPointsTreasuryLayer;
 import org.black_ixx.playerpoints.util.PointsUtils;
 import org.bukkit.Bukkit;
@@ -33,7 +33,7 @@ public class PlayerPoints extends RosePlugin {
     private PlayerPointsTreasuryLayer treasuryLayer;
 
     public PlayerPoints() {
-        super(80745, 10234, ConfigurationManager.class, DataManager.class, LocaleManager.class, null);
+        super(80745, 10234, DataManager.class, LocaleManager.class, null);
         instance = this;
     }
 
@@ -41,12 +41,12 @@ public class PlayerPoints extends RosePlugin {
     public void enable() {
         this.api = new PlayerPointsAPI(this);
 
-        if (Setting.VAULT.getBoolean() && Bukkit.getPluginManager().isPluginEnabled("Vault")) {
+        if (SettingKey.VAULT.get() && Bukkit.getPluginManager().isPluginEnabled("Vault")) {
             this.vaultLayer = new PlayerPointsVaultLayer(this);
 
             // Check valid values for the priorities
             ServicePriority priority = null;
-            String desiredPriority = Setting.VAULT_PRIORITY.getString();
+            String desiredPriority = SettingKey.VAULT_PRIORITY.get();
             for (ServicePriority value : ServicePriority.values()) {
                 if (value.name().equalsIgnoreCase(desiredPriority)) {
                     priority = value;
@@ -62,12 +62,12 @@ public class PlayerPoints extends RosePlugin {
             Bukkit.getServicesManager().register(Economy.class, this.vaultLayer, this, priority);
         }
 
-        if (Setting.TREASURY.getBoolean() && Bukkit.getPluginManager().isPluginEnabled("Treasury")) {
+        if (SettingKey.TREASURY.get() && Bukkit.getPluginManager().isPluginEnabled("Treasury")) {
             this.treasuryLayer = new PlayerPointsTreasuryLayer(this);
 
             // Check valid values for the priorities
             me.lokka30.treasury.api.common.service.ServicePriority priority = null;
-            String desiredPriority = Setting.TREASURY_PRIORITY.getString();
+            String desiredPriority = SettingKey.TREASURY_PRIORITY.get();
             for (me.lokka30.treasury.api.common.service.ServicePriority value : me.lokka30.treasury.api.common.service.ServicePriority.values()) {
                 if (value.name().equalsIgnoreCase(desiredPriority)) {
                     priority = value;
@@ -83,7 +83,7 @@ public class PlayerPoints extends RosePlugin {
             ServiceRegistry.INSTANCE.registerService(EconomyProvider.class, new PlayerPointsTreasuryLayer(this), this.getName(), priority);
         }
 
-        if (Setting.BUNGEECORD_SEND_UPDATES.getBoolean()) {
+        if (SettingKey.BUNGEECORD_SEND_UPDATES.get()) {
             Bukkit.getMessenger().registerOutgoingPluginChannel(this, PointsMessageListener.CHANNEL);
             Bukkit.getMessenger().registerIncomingPluginChannel(this, PointsMessageListener.CHANNEL, new PointsMessageListener(this));
         }
@@ -94,7 +94,7 @@ public class PlayerPoints extends RosePlugin {
                 new PointsPlaceholderExpansion(this).register();
 
             // Register votifier listener, if applicable
-            if (Setting.VOTE_ENABLED.getBoolean()) {
+            if (SettingKey.VOTE_ENABLED.get()) {
                 Plugin votifier = Bukkit.getPluginManager().getPlugin("Votifier");
                 if (votifier != null) {
                     Bukkit.getPluginManager().registerEvents(new VotifierListener(this), this);
@@ -113,7 +113,7 @@ public class PlayerPoints extends RosePlugin {
         if (this.treasuryLayer != null)
             ServiceRegistry.INSTANCE.unregister(EconomyProvider.class, this.treasuryLayer);
 
-        if (Setting.BUNGEECORD_SEND_UPDATES.getBoolean()) {
+        if (SettingKey.BUNGEECORD_SEND_UPDATES.get()) {
             Bukkit.getMessenger().unregisterOutgoingPluginChannel(this);
             Bukkit.getMessenger().unregisterIncomingPluginChannel(this);
         }
@@ -131,6 +131,23 @@ public class PlayerPoints extends RosePlugin {
                 CommandManager.class,
                 LeaderboardManager.class
         );
+    }
+
+    @Override
+    protected List<RoseSetting<?>> getRoseConfigSettings() {
+        return SettingKey.getKeys();
+    }
+
+    @Override
+    protected String[] getRoseConfigHeader() {
+        return new String[] {
+                "__________ __                           __________       __        __",
+                "\\______   \\  | _____  ___ __  __________\\______   \\____ |__| _____/  |_  ______",
+                " |     ___/  | \\__  \\<   |  |/ __ \\_  __ \\     ___/  _ \\|  |/    \\   __\\/  ___/",
+                " |    |   |  |__/ __ \\\\___  \\  ___/|  | \\/    |  (  <_> )  |   |  \\  |  \\___ \\",
+                " |____|   |____(____  / ____|\\___  >__|  |____|   \\____/|__|___|  /__| /____  >",
+                "                    \\/\\/         \\/                             \\/          \\/"
+        };
     }
 
     public static PlayerPoints getInstance() {

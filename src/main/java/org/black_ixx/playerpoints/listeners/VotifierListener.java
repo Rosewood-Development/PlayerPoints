@@ -3,8 +3,8 @@ package org.black_ixx.playerpoints.listeners;
 import com.vexsoftware.votifier.model.VotifierEvent;
 import dev.rosewood.rosegarden.utils.StringPlaceholders;
 import org.black_ixx.playerpoints.PlayerPoints;
-import org.black_ixx.playerpoints.manager.ConfigurationManager.Setting;
 import org.black_ixx.playerpoints.manager.LocaleManager;
+import org.black_ixx.playerpoints.setting.SettingKey;
 import org.black_ixx.playerpoints.util.PointsUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -29,14 +29,14 @@ public class VotifierListener implements Listener {
             if (playerInfo == null)
                 return;
 
-            int amount = Setting.VOTE_AMOUNT.getInt();
+            int amount = SettingKey.VOTE_AMOUNT.get();
             Player player = Bukkit.getPlayer(playerInfo.getFirst());
 
-            if (!Setting.VOTE_ONLINE.getBoolean() || player != null) {
+            if (!SettingKey.VOTE_ONLINE.get() || player != null) {
                 this.plugin.getAPI().give(playerInfo.getFirst(), amount);
                 if (player != null)
                     this.plugin.getManager(LocaleManager.class).sendMessage(player, "votifier-voted", StringPlaceholders.builder("service", event.getVote().getServiceName())
-                            .add("amount", Setting.VOTE_AMOUNT.getInt())
+                            .add("amount", SettingKey.VOTE_AMOUNT.get())
                             .build());
             }
         });

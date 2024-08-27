@@ -9,8 +9,8 @@ import me.lokka30.treasury.api.economy.currency.Currency;
 import me.lokka30.treasury.api.economy.response.EconomyException;
 import me.lokka30.treasury.api.economy.response.EconomyFailureReason;
 import me.lokka30.treasury.api.economy.response.EconomySubscriber;
-import org.black_ixx.playerpoints.manager.ConfigurationManager.Setting;
 import org.black_ixx.playerpoints.manager.LocaleManager;
+import org.black_ixx.playerpoints.setting.SettingKey;
 import org.black_ixx.playerpoints.util.PointsUtils;
 
 public class PointsCurrency implements Currency {
@@ -79,7 +79,7 @@ public class PointsCurrency implements Currency {
 
     @Override
     public BigDecimal getStartingBalance(UUID playerID) {
-        return new BigDecimal(Setting.STARTING_BALANCE.getInt());
+        return new BigDecimal(SettingKey.STARTING_BALANCE.get());
     }
 
     @Override

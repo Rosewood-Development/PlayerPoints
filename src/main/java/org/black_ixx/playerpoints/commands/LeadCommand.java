@@ -9,12 +9,11 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import org.black_ixx.playerpoints.PlayerPoints;
 import org.black_ixx.playerpoints.manager.CommandManager;
-import org.black_ixx.playerpoints.manager.ConfigurationManager.Setting;
 import org.black_ixx.playerpoints.manager.DataManager;
 import org.black_ixx.playerpoints.manager.LocaleManager;
 import org.black_ixx.playerpoints.models.SortedPlayer;
+import org.black_ixx.playerpoints.setting.SettingKey;
 import org.black_ixx.playerpoints.util.PointsUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.permissions.Permissible;
@@ -33,7 +32,7 @@ public class LeadCommand extends CommandHandler {
     @Override
     public void noArgs(CommandSender sender) {
         LocaleManager localeManager = this.plugin.getManager(LocaleManager.class);
-        int limit = Setting.LEADERBOARD_PER_PAGE.getInt();
+        int limit = SettingKey.LEADERBOARD_PER_PAGE.get();
 
         this.plugin.getScheduler().runTaskAsync(() -> {
             List<SortedPlayer> leaders = this.plugin.getManager(DataManager.class).getTopSortedPoints(null);
@@ -49,15 +48,15 @@ public class LeadCommand extends CommandHandler {
                 this.pageMap.put(sender.getName(), currentPage);
             }
 
-            List<SortedPlayer> listedPlayers = leaders.stream()
-                    .skip((long) currentPage * limit)
-                    .limit(limit)
-                    .collect(Collectors.toList());
-
             if (leaders.isEmpty()) {
                 currentPage = 0;
                 numPages = 0;
             }
+
+            List<SortedPlayer> listedPlayers = leaders.stream()
+                    .skip((long) currentPage * limit)
+                    .limit(limit)
+                    .collect(Collectors.toList());
 
             localeManager.sendMessage(sender, "command-lead-title", StringPlaceholders.builder("page", currentPage + 1)
                     .add("pages", numPages).build());

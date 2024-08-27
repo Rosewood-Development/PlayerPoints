@@ -97,7 +97,6 @@ public final class PointsUtils {
 
     /**
      * Gets an OfflinePlayer by name, prioritizing online players.
-     * Warning: This method can cause a blocking call to the database for UUID lookups.
      *
      * @param name The name of the player
      * @param callback A callback to run with a tuple of the player's UUID and name, or null if not found

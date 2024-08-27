@@ -3,8 +3,8 @@ package org.black_ixx.playerpoints.commands;
 import dev.rosewood.rosegarden.utils.StringPlaceholders;
 import org.black_ixx.playerpoints.PlayerPoints;
 import org.black_ixx.playerpoints.manager.CommandManager;
-import org.black_ixx.playerpoints.manager.ConfigurationManager;
 import org.black_ixx.playerpoints.manager.LocaleManager;
+import org.black_ixx.playerpoints.setting.SettingKey;
 import org.bukkit.command.CommandSender;
 
 /**
@@ -41,7 +41,7 @@ public class Commander extends CommandHandler {
 
     @Override
     public void noArgs(CommandSender sender) {
-        String redirect = ConfigurationManager.Setting.BASE_COMMAND_REDIRECT.getString().trim().toLowerCase();
+        String redirect = SettingKey.BASE_COMMAND_REDIRECT.get().trim().toLowerCase();
         PointsCommand command = this.registeredCommands.get(redirect);
         CommandHandler handler = this.registeredHandlers.get(redirect);
         if (command != null) {

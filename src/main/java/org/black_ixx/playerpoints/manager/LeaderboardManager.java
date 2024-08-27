@@ -8,13 +8,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import org.black_ixx.playerpoints.manager.ConfigurationManager.Setting;
 import org.black_ixx.playerpoints.models.SortedPlayer;
+import org.black_ixx.playerpoints.setting.SettingKey;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.scheduler.BukkitTask;
 
 public class LeaderboardManager extends Manager implements Listener {
 
@@ -42,9 +41,9 @@ public class LeaderboardManager extends Manager implements Listener {
 
     @Override
     public void reload() {
-        if (!Setting.LEADERBOARD_DISABLE.getBoolean()) {
+        if (!SettingKey.LEADERBOARD_DISABLE.get()) {
             this.refreshTask = this.rosePlugin.getScheduler().runTaskTimerAsync(this::refresh, 10L, 20L);
-            this.refreshInterval = Setting.LEADERBOARD_PLACEHOLDER_REFRESH_INTERVAL.getLong() * 1000;
+            this.refreshInterval = SettingKey.LEADERBOARD_PLACEHOLDER_REFRESH_INTERVAL.get() * 1000;
         }
     }
 
@@ -66,7 +65,7 @@ public class LeaderboardManager extends Manager implements Listener {
         if (this.usedLeaderboardSinceLastRefresh && System.currentTimeMillis() - this.lastLeaderboardRefreshTime >= this.refreshInterval) {
             this.usedLeaderboardSinceLastRefresh = false;
             this.lastLeaderboardRefreshTime = System.currentTimeMillis();
-            this.leaderboard = this.dataManager.getTopSortedPoints(Setting.LEADERBOARD_PLACEHOLDER_ENTRIES.getInt());
+            this.leaderboard = this.dataManager.getTopSortedPoints(SettingKey.LEADERBOARD_PLACEHOLDER_ENTRIES.get());
         }
 
         if (this.usedPositionsSinceLastRefresh && System.currentTimeMillis() - this.lastPositionsRefreshTime >= this.refreshInterval) {
