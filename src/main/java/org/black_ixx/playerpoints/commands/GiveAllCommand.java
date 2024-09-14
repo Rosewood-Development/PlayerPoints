@@ -37,6 +37,7 @@ public class GiveAllCommand extends PointsCommand {
         }
 
         boolean includeOffline = args.length > 1 && args[1].equals("*");
+        boolean silent = args.length > 2 && args[2].equalsIgnoreCase("-s");
 
         plugin.getScheduler().runTaskAsync(() -> {
             boolean success;
@@ -47,7 +48,7 @@ public class GiveAllCommand extends PointsCommand {
                 success = plugin.getAPI().giveAll(playerIds, amount);
             }
 
-            if (success) {
+            if (success && !silent) {
                 for (Player player : Bukkit.getOnlinePlayers()) {
                     localeManager.sendMessage(player, "command-give-received", StringPlaceholders.builder("amount", PointsUtils.formatPoints(amount))
                             .add("currency", localeManager.getCurrencyName(amount))
@@ -57,6 +58,8 @@ public class GiveAllCommand extends PointsCommand {
                 localeManager.sendMessage(sender, "command-giveall-success", StringPlaceholders.builder("amount", PointsUtils.formatPoints(amount))
                         .add("currency", localeManager.getCurrencyName(amount))
                         .build());
+            } else if (!silent) {
+                localeManager.sendMessage(sender, "command-giveall-failed");
             }
         });
     }
@@ -68,6 +71,8 @@ public class GiveAllCommand extends PointsCommand {
                 return Collections.singletonList("<amount>");
             case 2:
                 return Collections.singletonList("*");
+            case 3:
+                return Collections.singletonList("-s");
             default:
                 return Collections.emptyList();
         }
