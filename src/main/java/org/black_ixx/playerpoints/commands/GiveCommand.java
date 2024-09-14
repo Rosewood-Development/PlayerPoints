@@ -20,14 +20,24 @@ public class GiveCommand extends PointsCommand {
     @Override
     public void execute(PlayerPoints plugin, CommandSender sender, String[] args) {
         LocaleManager localeManager = plugin.getManager(LocaleManager.class);
+        
+        // Ensure there are at least two arguments
         if (args.length < 2) {
             localeManager.sendMessage(sender, "command-give-usage");
             return;
         }
 
+        // Check if -s (silent) flag is present
+        boolean silent = false;
+        if (args.length > 2 && args[2].equalsIgnoreCase("-s")) {
+            silent = true;
+        }
+
         PointsUtils.getPlayerByName(args[0], player -> {
             if (player == null) {
-                localeManager.sendMessage(sender, "unknown-player", StringPlaceholders.of("player", args[0]));
+                if (!silent) {
+                    localeManager.sendMessage(sender, "unknown-player", StringPlaceholders.of("player", args[0]));
+                }
                 return;
             }
 
@@ -35,29 +45,35 @@ public class GiveCommand extends PointsCommand {
             try {
                 amount = Integer.parseInt(args[1]);
             } catch (NumberFormatException e) {
-                localeManager.sendMessage(sender, "invalid-amount");
+                if (!silent) {
+                    localeManager.sendMessage(sender, "invalid-amount");
+                }
                 return;
             }
 
             if (amount <= 0) {
-                localeManager.sendMessage(sender, "invalid-amount");
+                if (!silent) {
+                    localeManager.sendMessage(sender, "invalid-amount");
+                }
                 return;
             }
 
             if (plugin.getAPI().give(player.getFirst(), amount)) {
-                // Send message to receiver
+                // Send message to receiver if not in silent mode
                 Player onlinePlayer = Bukkit.getPlayer(player.getFirst());
-                if (onlinePlayer != null) {
+                if (onlinePlayer != null && !silent) {
                     localeManager.sendMessage(onlinePlayer, "command-give-received", StringPlaceholders.builder("amount", PointsUtils.formatPoints(amount))
                             .add("currency", localeManager.getCurrencyName(amount))
                             .build());
                 }
 
-                // Send message to sender
-                localeManager.sendMessage(sender, "command-give-success", StringPlaceholders.builder("amount", PointsUtils.formatPoints(amount))
-                        .add("currency", localeManager.getCurrencyName(amount))
-                        .add("player", player.getSecond())
-                        .build());
+                // Send message to sender if not in silent mode
+                if (!silent) {
+                    localeManager.sendMessage(sender, "command-give-success", StringPlaceholders.builder("amount", PointsUtils.formatPoints(amount))
+                            .add("currency", localeManager.getCurrencyName(amount))
+                            .add("player", player.getSecond())
+                            .build());
+                }
             }
         });
     }
@@ -68,6 +84,8 @@ public class GiveCommand extends PointsCommand {
             return PointsUtils.getPlayerTabComplete(args[0]);
         } else if (args.length == 2) {
             return Collections.singletonList("<amount>");
+        } else if (args.length == 3) {
+            return Collections.singletonList("-s");
         } else {
             return Collections.emptyList();
         }

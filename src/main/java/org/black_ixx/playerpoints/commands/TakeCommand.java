@@ -18,14 +18,24 @@ public class TakeCommand extends PointsCommand {
     @Override
     public void execute(PlayerPoints plugin, CommandSender sender, String[] args) {
         LocaleManager localeManager = plugin.getManager(LocaleManager.class);
+        
+        // Ensure there are at least two arguments
         if (args.length < 2) {
             localeManager.sendMessage(sender, "command-take-usage");
             return;
         }
 
+        // Check if -s (silent) flag is present
+        boolean silent = false;
+        if (args.length > 2 && args[2].equalsIgnoreCase("-s")) {
+            silent = true;
+        }
+
         PointsUtils.getPlayerByName(args[0], player -> {
             if (player == null) {
-                localeManager.sendMessage(sender, "unknown-player", StringPlaceholders.of("player", args[0]));
+                if (!silent) {
+                    localeManager.sendMessage(sender, "unknown-player", StringPlaceholders.of("player", args[0]));
+                }
                 return;
             }
 
@@ -33,23 +43,32 @@ public class TakeCommand extends PointsCommand {
             try {
                 amount = Integer.parseInt(args[1]);
                 if (amount <= 0) {
-                    localeManager.sendMessage(sender, "invalid-amount");
+                    if (!silent) {
+                        localeManager.sendMessage(sender, "invalid-amount");
+                    }
                     return;
                 }
             } catch (NumberFormatException e) {
-                localeManager.sendMessage(sender, "invalid-amount");
+                if (!silent) {
+                    localeManager.sendMessage(sender, "invalid-amount");
+                }
                 return;
             }
 
+            // Try to take points from the player
             if (plugin.getAPI().take(player.getFirst(), amount)) {
-                localeManager.sendMessage(sender, "command-take-success", StringPlaceholders.builder("player", player.getSecond())
-                        .add("currency", localeManager.getCurrencyName(amount))
-                        .add("amount", PointsUtils.formatPoints(amount))
-                        .build());
+                if (!silent) {
+                    localeManager.sendMessage(sender, "command-take-success", StringPlaceholders.builder("player", player.getSecond())
+                            .add("currency", localeManager.getCurrencyName(amount))
+                            .add("amount", PointsUtils.formatPoints(amount))
+                            .build());
+                }
             } else {
-                localeManager.sendMessage(sender, "command-take-not-enough", StringPlaceholders.builder("player", player.getSecond())
-                        .add("currency", localeManager.getCurrencyName(amount))
-                        .build());
+                if (!silent) {
+                    localeManager.sendMessage(sender, "command-take-not-enough", StringPlaceholders.builder("player", player.getSecond())
+                            .add("currency", localeManager.getCurrencyName(amount))
+                            .build());
+                }
             }
         });
     }
@@ -60,9 +79,10 @@ public class TakeCommand extends PointsCommand {
             return PointsUtils.getPlayerTabComplete(args[0]);
         } else if (args.length == 2) {
             return Collections.singletonList("<amount>");
+        } else if (args.length == 3) {
+            return Collections.singletonList("-s");
         } else {
             return Collections.emptyList();
         }
     }
-
 }
