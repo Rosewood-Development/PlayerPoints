@@ -23,6 +23,7 @@ public class GiveAllCommand extends PointsCommand {
     @Override
     public void execute(PlayerPoints plugin, CommandSender sender, String[] args) {
         LocaleManager localeManager = plugin.getManager(LocaleManager.class);
+
         if (args.length < 1) {
             localeManager.sendMessage(sender, "command-giveall-usage");
             return;
@@ -36,11 +37,13 @@ public class GiveAllCommand extends PointsCommand {
             return;
         }
 
+        // Check for * (include offline players) and -s (silent mode) flags
         boolean includeOffline = args.length > 1 && args[1].equals("*");
         boolean silent = args.length > 2 && args[2].equalsIgnoreCase("-s");
 
         plugin.getScheduler().runTaskAsync(() -> {
             boolean success;
+
             if (includeOffline) {
                 success = plugin.getManager(DataManager.class).offsetAllPoints(amount);
             } else {
