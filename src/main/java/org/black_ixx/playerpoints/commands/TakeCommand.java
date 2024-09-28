@@ -25,13 +25,10 @@ public class TakeCommand extends PointsCommand {
             return;
         }
 
-        // Check if -s (silent) flag is present
-        boolean silent = false;
-        if (args.length > 2 && args[2].equalsIgnoreCase("-s")) {
-            silent = true;
-        }
-
         PointsUtils.getPlayerByName(args[0], player -> {
+            // Check if -s (silent) flag is present
+            boolean silent = args.length > 2 && args[2].equalsIgnoreCase("-s");
+
             if (player == null) {
                 if (!silent) {
                     localeManager.sendMessage(sender, "unknown-player", StringPlaceholders.of("player", args[0]));
