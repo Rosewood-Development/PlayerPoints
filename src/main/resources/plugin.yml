@@ -14,7 +14,7 @@ libraries:
   - 'org.xerial:sqlite-jdbc:3.46.0.0'
 commands:
   points:
-    aliases: [p]
+#    aliases: [p] Handled by custom command aliases in config now.
     description: Root command for PlayerPoints
 permissions:
   playerpoints.*:
