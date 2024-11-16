@@ -1,63 +1,55 @@
 package org.black_ixx.playerpoints.commands;
 
+import dev.rosewood.rosegarden.command.argument.ArgumentHandlers;
+import dev.rosewood.rosegarden.command.framework.ArgumentsDefinition;
+import dev.rosewood.rosegarden.command.framework.CommandContext;
+import dev.rosewood.rosegarden.command.framework.CommandInfo;
+import dev.rosewood.rosegarden.command.framework.annotation.RoseExecutable;
 import dev.rosewood.rosegarden.utils.StringPlaceholders;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
 import org.black_ixx.playerpoints.PlayerPoints;
 import org.black_ixx.playerpoints.conversion.CurrencyPlugin;
-import org.black_ixx.playerpoints.manager.CommandManager;
 import org.black_ixx.playerpoints.manager.ConversionManager;
-import org.black_ixx.playerpoints.manager.LocaleManager;
-import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
-import org.bukkit.util.StringUtil;
 
-public class ConvertCommand extends PointsCommand {
+public class ConvertCommand extends BasePointsCommand {
 
-    public ConvertCommand() {
-        super("convert", CommandManager.CommandAliases.CONVERT);
+    public ConvertCommand(PlayerPoints playerPoints) {
+        super(playerPoints);
     }
 
-    @Override
-    public void execute(PlayerPoints plugin, CommandSender sender, String[] args) {
-        LocaleManager localeManager = plugin.getManager(LocaleManager.class);
-        if (args.length < 1) {
-            localeManager.sendMessage(sender, "command-convert-usage");
+    @RoseExecutable
+    public void execute(CommandContext context, CurrencyPlugin currencyPlugin, String confirm) {
+        CommandSender sender = context.getSender();
+        ConversionManager conversionManager = this.rosePlugin.getManager(ConversionManager.class);
+        if (!conversionManager.getEnabledConverters().contains(currencyPlugin)) {
+            this.localeManager.sendCommandMessage(sender, "command-convert-invalid", StringPlaceholders.of("plugin", currencyPlugin.name().toLowerCase()));
             return;
         }
 
-        CurrencyPlugin currencyPlugin = CurrencyPlugin.get(args[0]);
-        ConversionManager conversionManager = plugin.getManager(ConversionManager.class);
-        if (currencyPlugin == null || !conversionManager.getEnabledConverters().contains(currencyPlugin)) {
-            localeManager.sendMessage(sender, "command-convert-invalid", StringPlaceholders.of("plugin", args[0]));
+        if (confirm == null) {
+            this.localeManager.sendCommandMessage(sender, "command-convert-warning", StringPlaceholders.of("plugin", currencyPlugin.name().toLowerCase()));
             return;
         }
 
-        if (args.length != 2 || !args[1].equalsIgnoreCase("confirm")) {
-            localeManager.sendMessage(sender, "command-convert-warning", StringPlaceholders.of("plugin", args[0]));
-            return;
-        }
-
-        plugin.getScheduler().runTaskAsync(() -> {
+        this.rosePlugin.getScheduler().runTaskAsync(() -> {
             if (conversionManager.convert(currencyPlugin)) {
-                localeManager.sendMessage(sender, "command-convert-success", StringPlaceholders.of("plugin", args[0]));
+                this.localeManager.sendCommandMessage(sender, "command-convert-success", StringPlaceholders.of("plugin", currencyPlugin.name().toLowerCase()));
             } else {
-                localeManager.sendMessage(sender, "command-convert-failure");
+                this.localeManager.sendCommandMessage(sender, "command-convert-failure");
             }
         });
     }
 
     @Override
-    public List<String> tabComplete(PlayerPoints plugin, CommandSender sender, String[] args) {
-        if (args.length != 1)
-            return Collections.emptyList();
-
-        List<String> validPlugins = plugin.getManager(ConversionManager.class).getEnabledConverters().stream().map(Enum::name).collect(Collectors.toList());
-        List<String> completions = new ArrayList<>();
-        StringUtil.copyPartialMatches(args[0], validPlugins, completions);
-        return completions;
+    protected CommandInfo createCommandInfo() {
+        return CommandInfo.builder("convert")
+                .descriptionKey("command-convert-description")
+                .permission("playerpoints.convert")
+                .arguments(ArgumentsDefinition.builder()
+                        .required("plugin", ArgumentHandlers.forEnum(CurrencyPlugin.class))
+                        .optional("confirm", ArgumentHandlers.forValues(String.class, "confirm"))
+                        .build())
+                .build();
     }
 
 }

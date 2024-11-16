@@ -10,12 +10,8 @@ softdepend: [Vault, Treasury, Votifier, PlaceholderAPI, TokenManager, GamePoints
 loadbefore: [mcMMO]
 folia-supported: true
 libraries:
-  - 'com.mysql:mysql-connector-j:9.0.0'
+  - 'com.mysql:mysql-connector-j:9.1.0'
   - 'org.xerial:sqlite-jdbc:3.46.0.0'
-commands:
-  points:
-    aliases: [p]
-    description: Root command for PlayerPoints
 permissions:
   playerpoints.*:
     description: Gives access to all PlayerPoints commands
@@ -36,6 +32,9 @@ permissions:
       playerpoints.convert: true
       playerpoints.importlegacy: true
       playerpoints.version: true
+  playerpoints.basecommand:
+    description: Gives access to the base command
+    default: true
   playerpoints.give:
     description: Gives access to the give command
     default: op

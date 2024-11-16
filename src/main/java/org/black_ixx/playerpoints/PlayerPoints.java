@@ -12,6 +12,7 @@ import org.black_ixx.playerpoints.hook.PointsPlaceholderExpansion;
 import org.black_ixx.playerpoints.listeners.PointsMessageListener;
 import org.black_ixx.playerpoints.listeners.VotifierListener;
 import org.black_ixx.playerpoints.manager.CommandManager;
+import org.black_ixx.playerpoints.manager.ConversionManager;
 import org.black_ixx.playerpoints.manager.DataManager;
 import org.black_ixx.playerpoints.manager.LeaderboardManager;
 import org.black_ixx.playerpoints.manager.LocaleManager;
@@ -28,19 +29,18 @@ import org.bukkit.plugin.ServicePriority;
 public class PlayerPoints extends RosePlugin {
 
     private static PlayerPoints instance;
-    private PlayerPointsAPI api;
+    private final PlayerPointsAPI api;
     private PlayerPointsVaultLayer vaultLayer;
     private PlayerPointsTreasuryLayer treasuryLayer;
 
     public PlayerPoints() {
-        super(80745, 10234, DataManager.class, LocaleManager.class, null);
+        super(80745, 10234, DataManager.class, LocaleManager.class, CommandManager.class);
         instance = this;
+        this.api = new PlayerPointsAPI(this);
     }
 
     @Override
     public void enable() {
-        this.api = new PlayerPointsAPI(this);
-
         if (SettingKey.VAULT.get() && Bukkit.getPluginManager().isPluginEnabled("Vault")) {
             this.vaultLayer = new PlayerPointsVaultLayer(this);
 
@@ -128,7 +128,7 @@ public class PlayerPoints extends RosePlugin {
     @Override
     protected List<Class<? extends Manager>> getManagerLoadPriority() {
         return Arrays.asList(
-                CommandManager.class,
+                ConversionManager.class,
                 LeaderboardManager.class
         );
     }

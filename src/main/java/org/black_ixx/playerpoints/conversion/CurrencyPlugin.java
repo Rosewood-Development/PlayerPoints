@@ -7,8 +7,8 @@ import org.black_ixx.playerpoints.conversion.converter.TokenManagerConverter;
 
 public enum CurrencyPlugin {
 
-    TokenManager(TokenManagerConverter.class),
-    GamePoints(GamePointsConverter.class);
+    TOKENMANAGER(TokenManagerConverter.class),
+    GAMEPOINTS(GamePointsConverter.class);
 
     private final Class<? extends CurrencyConverter> converterClass;
 

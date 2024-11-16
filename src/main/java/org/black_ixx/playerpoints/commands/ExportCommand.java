@@ -1,40 +1,49 @@
 package org.black_ixx.playerpoints.commands;
 
+import dev.rosewood.rosegarden.command.argument.ArgumentHandlers;
+import dev.rosewood.rosegarden.command.framework.ArgumentsDefinition;
+import dev.rosewood.rosegarden.command.framework.CommandContext;
+import dev.rosewood.rosegarden.command.framework.CommandInfo;
+import dev.rosewood.rosegarden.command.framework.annotation.RoseExecutable;
+import dev.rosewood.rosegarden.database.MySQLConnector;
+import dev.rosewood.rosegarden.utils.StringPlaceholders;
 import java.io.File;
 import java.io.IOException;
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.SortedSet;
+import java.util.TreeSet;
+import java.util.UUID;
 import org.black_ixx.playerpoints.PlayerPoints;
-import org.black_ixx.playerpoints.manager.CommandManager;
 import org.black_ixx.playerpoints.manager.DataManager;
 import org.black_ixx.playerpoints.manager.LocaleManager;
 import org.black_ixx.playerpoints.models.SortedPlayer;
-import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-public class ExportCommand extends PointsCommand {
+public class ExportCommand extends BasePointsCommand {
 
-    public ExportCommand() {
-        super("export", CommandManager.CommandAliases.EXPORT);
+    public ExportCommand(PlayerPoints playerPoints) {
+        super(playerPoints);
     }
 
-    @Override
-    public void execute(PlayerPoints plugin, CommandSender sender, String[] args) {
-        plugin.getScheduler().runTaskAsync(() -> {
-            LocaleManager localeManager = plugin.getManager(LocaleManager.class);
-            File file = new File(plugin.getDataFolder(), "storage.yml");
-            if (file.exists() && (args.length < 1 || !args[0].equalsIgnoreCase("confirm"))) {
-                localeManager.sendMessage(sender, "command-export-warning");
+    @RoseExecutable
+    public void execute(CommandContext context, String confirm) {
+        this.rosePlugin.getScheduler().runTaskAsync(() -> {
+            CommandSender sender = context.getSender();
+            File file = new File(this.rosePlugin.getDataFolder(), "storage.yml");
+            if (file.exists() && confirm == null) {
+                this.localeManager.sendCommandMessage(sender, "command-export-warning");
                 return;
             }
 
             if (file.exists())
                 file.delete();
 
-            List<SortedPlayer> data = plugin.getManager(DataManager.class).getTopSortedPoints(null);
+            List<SortedPlayer> data = this.rosePlugin.getManager(DataManager.class).getTopSortedPoints(null);
             FileConfiguration configuration = YamlConfiguration.loadConfiguration(file);
             ConfigurationSection pointsSection = configuration.createSection("Points");
             ConfigurationSection uuidSection = configuration.createSection("UUIDs");
@@ -51,13 +60,19 @@ public class ExportCommand extends PointsCommand {
                 e.printStackTrace();
             }
 
-            localeManager.sendMessage(sender, "command-export-success");
+            this.localeManager.sendCommandMessage(sender, "command-export-success");
         });
     }
 
     @Override
-    public List<String> tabComplete(PlayerPoints plugin, CommandSender sender, String[] args) {
-        return Collections.emptyList();
+    protected CommandInfo createCommandInfo() {
+        return CommandInfo.builder("export")
+                .descriptionKey("command-export-description")
+                .permission("playerpoints.export")
+                .arguments(ArgumentsDefinition.builder()
+                        .optional("confirm", ArgumentHandlers.forValues(String.class, "confirm"))
+                        .build())
+                .build();
     }
 
 }

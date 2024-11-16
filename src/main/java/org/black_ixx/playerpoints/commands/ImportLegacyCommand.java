@@ -1,47 +1,49 @@
 package org.black_ixx.playerpoints.commands;
 
+import dev.rosewood.rosegarden.command.argument.ArgumentHandlers;
+import dev.rosewood.rosegarden.command.framework.ArgumentsDefinition;
+import dev.rosewood.rosegarden.command.framework.CommandContext;
+import dev.rosewood.rosegarden.command.framework.CommandInfo;
+import dev.rosewood.rosegarden.command.framework.annotation.RoseExecutable;
 import dev.rosewood.rosegarden.database.MySQLConnector;
 import dev.rosewood.rosegarden.utils.StringPlaceholders;
-import java.util.Collections;
-import java.util.List;
 import org.black_ixx.playerpoints.PlayerPoints;
-import org.black_ixx.playerpoints.manager.CommandManager;
 import org.black_ixx.playerpoints.manager.DataManager;
-import org.black_ixx.playerpoints.manager.LocaleManager;
-import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 
-public class ImportLegacyCommand extends PointsCommand {
+public class ImportLegacyCommand extends BasePointsCommand {
 
-    public ImportLegacyCommand() {
-        super("importlegacy", CommandManager.CommandAliases.IMPORTLEGACY);
+    public ImportLegacyCommand(PlayerPoints playerPoints) {
+        super(playerPoints);
     }
 
-    @Override
-    public void execute(PlayerPoints plugin, CommandSender sender, String[] args) {
-        plugin.getScheduler().runTaskAsync(() -> {
-            LocaleManager localeManager = plugin.getManager(LocaleManager.class);
-            if (!(plugin.getManager(DataManager.class).getDatabaseConnector() instanceof MySQLConnector)) {
-                localeManager.sendMessage(sender, "command-importlegacy-only-mysql");
-                return;
-            }
+    @RoseExecutable
+    public void execute(CommandContext context, String tableName) {
+        CommandSender sender = context.getSender();
+        DataManager dataManager = this.rosePlugin.getManager(DataManager.class);
+        if (!(dataManager.getDatabaseConnector() instanceof MySQLConnector)) {
+            this.localeManager.sendCommandMessage(sender, "command-importlegacy-only-mysql");
+            return;
+        }
 
-            if (args.length < 1) {
-                localeManager.sendMessage(sender, "command-importlegacy-usage");
-                return;
-            }
-
-            if (plugin.getManager(DataManager.class).importLegacyTable(args[0])) {
-                localeManager.sendMessage(sender, "command-importlegacy-success", StringPlaceholders.of("table", args[0]));
+        this.rosePlugin.getScheduler().runTaskAsync(() -> {
+            if (dataManager.importLegacyTable(tableName)) {
+                this.localeManager.sendCommandMessage(sender, "command-importlegacy-success", StringPlaceholders.of("table", tableName));
             } else {
-                localeManager.sendMessage(sender, "command-importlegacy-failure", StringPlaceholders.of("table", args[0]));
+                this.localeManager.sendCommandMessage(sender, "command-importlegacy-failure", StringPlaceholders.of("table", tableName));
             }
         });
     }
 
     @Override
-    public List<String> tabComplete(PlayerPoints plugin, CommandSender sender, String[] args) {
-        return Collections.emptyList();
+    protected CommandInfo createCommandInfo() {
+        return CommandInfo.builder("importlegacy")
+                .descriptionKey("command-importlegacy-description")
+                .permission("playerpoints.importlegacy")
+                .arguments(ArgumentsDefinition.builder()
+                        .required("tableName", ArgumentHandlers.STRING)
+                        .build())
+                .build();
     }
 
 }

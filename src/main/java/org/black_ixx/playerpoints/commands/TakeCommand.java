@@ -1,85 +1,63 @@
 package org.black_ixx.playerpoints.commands;
 
+import dev.rosewood.rosegarden.command.argument.ArgumentHandlers;
+import dev.rosewood.rosegarden.command.framework.ArgumentsDefinition;
+import dev.rosewood.rosegarden.command.framework.CommandContext;
+import dev.rosewood.rosegarden.command.framework.CommandInfo;
+import dev.rosewood.rosegarden.command.framework.annotation.RoseExecutable;
 import dev.rosewood.rosegarden.utils.StringPlaceholders;
-import java.util.Collections;
-import java.util.List;
 import org.black_ixx.playerpoints.PlayerPoints;
-import org.black_ixx.playerpoints.manager.CommandManager;
-import org.black_ixx.playerpoints.manager.LocaleManager;
+import org.black_ixx.playerpoints.commands.arguments.StringSuggestingArgumentHandler;
 import org.black_ixx.playerpoints.util.PointsUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
-public class TakeCommand extends PointsCommand {
+public class TakeCommand extends BasePointsCommand {
 
-    public TakeCommand() {
-        super("take", CommandManager.CommandAliases.TAKE);
+    public TakeCommand(PlayerPoints playerPoints) {
+        super(playerPoints);
     }
 
-    @Override
-    public void execute(PlayerPoints plugin, CommandSender sender, String[] args) {
-        LocaleManager localeManager = plugin.getManager(LocaleManager.class);
-        
-        // Ensure there are at least two arguments
-        if (args.length < 2) {
-            localeManager.sendMessage(sender, "command-take-usage");
-            return;
-        }
-
-        PointsUtils.getPlayerByName(args[0], player -> {
-            // Check if -s (silent) flag is present
-            boolean silent = args.length > 2 && args[2].equalsIgnoreCase("-s");
-
+    @RoseExecutable
+    public void execute(CommandContext context, String target, Integer amount, String silentFlag) {
+        PointsUtils.getPlayerByName(target, player -> {
+            CommandSender sender = context.getSender();
             if (player == null) {
-                if (!silent) {
-                    localeManager.sendMessage(sender, "unknown-player", StringPlaceholders.of("player", args[0]));
-                }
+                this.localeManager.sendCommandMessage(sender, "unknown-player", StringPlaceholders.of("player", target));
                 return;
             }
 
-            int amount;
-            try {
-                amount = Integer.parseInt(args[1]);
-                if (amount <= 0) {
-                    if (!silent) {
-                        localeManager.sendMessage(sender, "invalid-amount");
-                    }
-                    return;
-                }
-            } catch (NumberFormatException e) {
-                if (!silent) {
-                    localeManager.sendMessage(sender, "invalid-amount");
-                }
+            if (amount <= 0) {
+                this.localeManager.sendCommandMessage(sender, "invalid-amount");
                 return;
             }
 
             // Try to take points from the player
-            if (plugin.getAPI().take(player.getFirst(), amount)) {
-                if (!silent) {
-                    localeManager.sendMessage(sender, "command-take-success", StringPlaceholders.builder("player", player.getSecond())
-                            .add("currency", localeManager.getCurrencyName(amount))
-                            .add("amount", PointsUtils.formatPoints(amount))
-                            .build());
-                }
-            } else {
-                if (!silent) {
-                    localeManager.sendMessage(sender, "command-take-not-enough", StringPlaceholders.builder("player", player.getSecond())
-                            .add("currency", localeManager.getCurrencyName(amount))
-                            .build());
-                }
+            if (this.api.take(player.getFirst(), amount) && silentFlag == null) {
+                this.localeManager.sendCommandMessage(sender, "command-take-success", StringPlaceholders.builder("player", player.getSecond())
+                        .add("currency", this.localeManager.getCurrencyName(amount))
+                        .add("amount", PointsUtils.formatPoints(amount))
+                        .build());
+            } else if (silentFlag == null) {
+                this.localeManager.sendCommandMessage(sender, "command-take-not-enough", StringPlaceholders.builder("player", player.getSecond())
+                        .add("currency", this.localeManager.getCurrencyName(amount))
+                        .build());
             }
         });
     }
 
     @Override
-    public List<String> tabComplete(PlayerPoints plugin, CommandSender sender, String[] args) {
-        if (args.length == 1) {
-            return PointsUtils.getPlayerTabComplete(args[0]);
-        } else if (args.length == 2) {
-            return Collections.singletonList("<amount>");
-        } else if (args.length == 3) {
-            return Collections.singletonList("-s");
-        } else {
-            return Collections.emptyList();
-        }
+    protected CommandInfo createCommandInfo() {
+        return CommandInfo.builder("take")
+                .descriptionKey("command-take-description")
+                .permission("playerpoints.take")
+                .arguments(ArgumentsDefinition.builder()
+                        .required("target", new StringSuggestingArgumentHandler(PointsUtils::getPlayerTabComplete))
+                        .required("amount", ArgumentHandlers.INTEGER)
+                        .optional("-s", ArgumentHandlers.forValues(String.class, "-s"))
+                        .build())
+                .build();
     }
+
 }

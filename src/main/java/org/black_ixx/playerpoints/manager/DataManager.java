@@ -353,6 +353,9 @@ public class DataManager extends AbstractDataManager implements Listener {
     }
 
     public void importData(SortedSet<SortedPlayer> data, Map<UUID, String> cachedUsernames) {
+        this.pointsCache.invalidateAll();
+        this.pendingTransactions.clear();
+
         this.databaseConnector.connect(connection -> {
             String purgeQuery = "DELETE FROM " + this.getPointsTableName();
             try (Statement statement = connection.createStatement()) {
@@ -375,6 +378,9 @@ public class DataManager extends AbstractDataManager implements Listener {
     }
 
     public boolean importLegacyTable(String tableName) {
+        this.pointsCache.invalidateAll();
+        this.pendingTransactions.clear();
+
         AtomicBoolean value = new AtomicBoolean();
         this.databaseConnector.connect(connection -> {
             try {

@@ -1,45 +1,49 @@
 package org.black_ixx.playerpoints.commands;
 
+import dev.rosewood.rosegarden.command.argument.ArgumentHandlers;
+import dev.rosewood.rosegarden.command.framework.ArgumentsDefinition;
+import dev.rosewood.rosegarden.command.framework.CommandContext;
+import dev.rosewood.rosegarden.command.framework.CommandInfo;
+import dev.rosewood.rosegarden.command.framework.annotation.RoseExecutable;
 import dev.rosewood.rosegarden.utils.StringPlaceholders;
-import java.util.Collections;
-import java.util.List;
 import org.black_ixx.playerpoints.PlayerPoints;
-import org.black_ixx.playerpoints.manager.CommandManager;
+import org.black_ixx.playerpoints.commands.arguments.StringSuggestingArgumentHandler;
 import org.black_ixx.playerpoints.manager.LocaleManager;
 import org.black_ixx.playerpoints.util.PointsUtils;
 import org.bukkit.command.CommandSender;
 
-public class ResetCommand extends PointsCommand {
+public class ResetCommand extends BasePointsCommand {
 
-    public ResetCommand() {
-        super("reset", CommandManager.CommandAliases.RESET);
+    public ResetCommand(PlayerPoints playerPoints) {
+        super(playerPoints);
     }
 
-    @Override
-    public void execute(PlayerPoints plugin, CommandSender sender, String[] args) {
-        LocaleManager localeManager = plugin.getManager(LocaleManager.class);
-        if (args.length < 1) {
-            localeManager.sendMessage(sender, "command-reset-usage");
-            return;
-        }
-
-        PointsUtils.getPlayerByName(args[0], player -> {
+    @RoseExecutable
+    public void execute(CommandContext context, String target) {
+        PointsUtils.getPlayerByName(target, player -> {
+            CommandSender sender = context.getSender();
             if (player == null) {
-                localeManager.sendMessage(sender, "unknown-player", StringPlaceholders.of("player", args[0]));
+                this.localeManager.sendCommandMessage(sender, "unknown-player", StringPlaceholders.of("player", target));
                 return;
             }
 
-            if (plugin.getAPI().reset(player.getFirst())) {
-                localeManager.sendMessage(sender, "command-reset-success", StringPlaceholders.builder("player", player.getSecond())
-                        .add("currency", localeManager.getCurrencyName(0))
+            if (this.api.reset(player.getFirst())) {
+                this.localeManager.sendCommandMessage(sender, "command-reset-success", StringPlaceholders.builder("player", player.getSecond())
+                        .add("currency", this.localeManager.getCurrencyName(0))
                         .build());
             }
         });
     }
 
     @Override
-    public List<String> tabComplete(PlayerPoints plugin, CommandSender sender, String[] args) {
-        return args.length == 1 ? PointsUtils.getPlayerTabComplete(args[0]) : Collections.emptyList();
+    protected CommandInfo createCommandInfo() {
+        return CommandInfo.builder("reset")
+                .descriptionKey("command-reset-description")
+                .permission("playerpoints.reset")
+                .arguments(ArgumentsDefinition.builder()
+                        .required("target", new StringSuggestingArgumentHandler(PointsUtils::getPlayerTabComplete))
+                        .build())
+                .build();
     }
 
 }

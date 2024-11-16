@@ -1,48 +1,49 @@
 package org.black_ixx.playerpoints.commands;
 
+import dev.rosewood.rosegarden.command.argument.ArgumentHandlers;
+import dev.rosewood.rosegarden.command.framework.ArgumentsDefinition;
+import dev.rosewood.rosegarden.command.framework.CommandContext;
+import dev.rosewood.rosegarden.command.framework.CommandInfo;
+import dev.rosewood.rosegarden.command.framework.annotation.RoseExecutable;
 import dev.rosewood.rosegarden.utils.StringPlaceholders;
-import java.util.Collections;
-import java.util.List;
 import org.black_ixx.playerpoints.PlayerPoints;
-import org.black_ixx.playerpoints.manager.CommandManager;
-import org.black_ixx.playerpoints.manager.LocaleManager;
+import org.black_ixx.playerpoints.commands.arguments.StringSuggestingArgumentHandler;
 import org.black_ixx.playerpoints.util.PointsUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class BroadcastCommand extends PointsCommand {
+public class BroadcastCommand extends BasePointsCommand {
 
-    public BroadcastCommand() {
-        super("broadcast", CommandManager.CommandAliases.BROADCAST);
+    public BroadcastCommand(PlayerPoints playerPoints) {
+        super(playerPoints);
     }
 
-    @Override
-    public void execute(PlayerPoints plugin, CommandSender sender, String[] args) {
-        LocaleManager localeManager = plugin.getManager(LocaleManager.class);
-        if (args.length < 1) {
-            localeManager.sendMessage(sender, "command-broadcast-usage");
-            return;
-        }
-
-        PointsUtils.getPlayerByName(args[0], player -> {
+    @RoseExecutable
+    public void execute(CommandContext context, String target) {
+        PointsUtils.getPlayerByName(target, player -> {
             if (player == null) {
-                localeManager.sendMessage(sender, "unknown-player", StringPlaceholders.of("player", args[0]));
+                this.localeManager.sendCommandMessage(context.getSender(), "unknown-player", StringPlaceholders.of("player", target));
                 return;
             }
 
-            int points = plugin.getAPI().look(player.getFirst());
+            int points = this.api.look(player.getFirst());
             for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
-                localeManager.sendMessage(onlinePlayer, "command-broadcast-message", StringPlaceholders.builder("player", player.getSecond())
+                this.localeManager.sendCommandMessage(onlinePlayer, "command-broadcast-message", StringPlaceholders.builder("player", player.getSecond())
                         .add("amount", PointsUtils.formatPoints(points))
-                        .add("currency", localeManager.getCurrencyName(points)).build());
+                        .add("currency", this.localeManager.getCurrencyName(points)).build());
             }
         });
     }
 
     @Override
-    public List<String> tabComplete(PlayerPoints plugin, CommandSender sender, String[] args) {
-        return args.length != 1 ? Collections.emptyList() : PointsUtils.getPlayerTabComplete(args[0]);
+    protected CommandInfo createCommandInfo() {
+        return CommandInfo.builder("broadcast")
+                .descriptionKey("command-broadcast-description")
+                .permission("playerpoints.broadcast")
+                .arguments(ArgumentsDefinition.builder()
+                        .required("target", new StringSuggestingArgumentHandler(PointsUtils::getPlayerTabComplete))
+                        .build())
+                .build();
     }
 
 }

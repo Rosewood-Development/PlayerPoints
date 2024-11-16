@@ -1,12 +1,15 @@
 package org.black_ixx.playerpoints.commands;
 
+import dev.rosewood.rosegarden.command.argument.ArgumentHandlers;
+import dev.rosewood.rosegarden.command.framework.ArgumentsDefinition;
+import dev.rosewood.rosegarden.command.framework.CommandContext;
+import dev.rosewood.rosegarden.command.framework.CommandInfo;
+import dev.rosewood.rosegarden.command.framework.annotation.RoseExecutable;
 import dev.rosewood.rosegarden.utils.StringPlaceholders;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import org.black_ixx.playerpoints.PlayerPoints;
-import org.black_ixx.playerpoints.manager.CommandManager;
 import org.black_ixx.playerpoints.manager.DataManager;
 import org.black_ixx.playerpoints.manager.LocaleManager;
 import org.black_ixx.playerpoints.util.PointsUtils;
@@ -14,71 +17,51 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class GiveAllCommand extends PointsCommand {
+public class GiveAllCommand extends BasePointsCommand {
 
-    public GiveAllCommand() {
-        super("giveall", CommandManager.CommandAliases.GIVEALL);
+    public GiveAllCommand(PlayerPoints playerPoints) {
+        super(playerPoints);
     }
 
-    @Override
-    public void execute(PlayerPoints plugin, CommandSender sender, String[] args) {
-        LocaleManager localeManager = plugin.getManager(LocaleManager.class);
-
-        if (args.length < 1) {
-            localeManager.sendMessage(sender, "command-giveall-usage");
-            return;
-        }
-
-        int amount;
-        try {
-            amount = Integer.parseInt(args[0]);
-        } catch (NumberFormatException e) {
-            localeManager.sendMessage(sender, "invalid-amount");
-            return;
-        }
-
-        // Check for * (include offline players) and -s (silent mode) flags
-        boolean includeOffline = args.length > 1 && args[1].equals("*");
-        boolean silent = args.length > 2 && args[2].equalsIgnoreCase("-s");
-
-        plugin.getScheduler().runTaskAsync(() -> {
+    @RoseExecutable
+    public void execute(CommandContext context, Integer amount, String includeOffline, String silentFlag) {
+        this.rosePlugin.getScheduler().runTaskAsync(() -> {
             boolean success;
-
-            if (includeOffline) {
-                success = plugin.getManager(DataManager.class).offsetAllPoints(amount);
+            if (includeOffline != null) {
+                success = this.rosePlugin.getManager(DataManager.class).offsetAllPoints(amount);
             } else {
                 List<UUID> playerIds = Bukkit.getOnlinePlayers().stream().map(Player::getUniqueId).collect(Collectors.toList());
-                success = plugin.getAPI().giveAll(playerIds, amount);
+                success = this.api.giveAll(playerIds, amount);
             }
 
-            if (success && !silent) {
+            CommandSender sender = context.getSender();
+            if (success && silentFlag == null) {
                 for (Player player : Bukkit.getOnlinePlayers()) {
-                    localeManager.sendMessage(player, "command-give-received", StringPlaceholders.builder("amount", PointsUtils.formatPoints(amount))
-                            .add("currency", localeManager.getCurrencyName(amount))
+                    this.localeManager.sendCommandMessage(player, "command-give-received", StringPlaceholders.builder("amount", PointsUtils.formatPoints(amount))
+                            .add("currency", this.localeManager.getCurrencyName(amount))
                             .build());
                 }
 
-                localeManager.sendMessage(sender, "command-giveall-success", StringPlaceholders.builder("amount", PointsUtils.formatPoints(amount))
-                        .add("currency", localeManager.getCurrencyName(amount))
+                this.localeManager.sendCommandMessage(sender, "command-giveall-success", StringPlaceholders.builder("amount", PointsUtils.formatPoints(amount))
+                        .add("currency", this.localeManager.getCurrencyName(amount))
                         .build());
-            } else if (!silent) {
-                localeManager.sendMessage(sender, "command-giveall-failed");
+            } else if (silentFlag == null) {
+                this.localeManager.sendCommandMessage(sender, "command-giveall-failed");
             }
         });
     }
 
     @Override
-    public List<String> tabComplete(PlayerPoints plugin, CommandSender sender, String[] args) {
-        switch (args.length) {
-            case 1:
-                return Collections.singletonList("<amount>");
-            case 2:
-                return Collections.singletonList("*");
-            case 3:
-                return Collections.singletonList("-s");
-            default:
-                return Collections.emptyList();
-        }
+    protected CommandInfo createCommandInfo() {
+        return CommandInfo.builder("giveall")
+                .descriptionKey("command-giveall-description")
+                .permission("playerpoints.giveall")
+                .arguments(ArgumentsDefinition.builder()
+                        .required("amount", ArgumentHandlers.INTEGER)
+                        .optional("*", ArgumentHandlers.forValues(String.class, "*"))
+                        .optional("-s", ArgumentHandlers.forValues(String.class, "-s"))
+                        .build())
+                .build();
     }
 
 }

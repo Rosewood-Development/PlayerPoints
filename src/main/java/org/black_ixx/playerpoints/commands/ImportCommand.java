@@ -1,55 +1,59 @@
 package org.black_ixx.playerpoints.commands;
 
+import dev.rosewood.rosegarden.command.argument.ArgumentHandlers;
+import dev.rosewood.rosegarden.command.framework.ArgumentsDefinition;
+import dev.rosewood.rosegarden.command.framework.CommandContext;
+import dev.rosewood.rosegarden.command.framework.CommandInfo;
+import dev.rosewood.rosegarden.command.framework.annotation.RoseExecutable;
 import dev.rosewood.rosegarden.database.MySQLConnector;
 import dev.rosewood.rosegarden.utils.StringPlaceholders;
 import java.io.File;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.UUID;
 import org.black_ixx.playerpoints.PlayerPoints;
-import org.black_ixx.playerpoints.manager.CommandManager;
+import org.black_ixx.playerpoints.conversion.CurrencyPlugin;
+import org.black_ixx.playerpoints.manager.ConversionManager;
 import org.black_ixx.playerpoints.manager.DataManager;
 import org.black_ixx.playerpoints.manager.LocaleManager;
 import org.black_ixx.playerpoints.models.SortedPlayer;
-import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-public class ImportCommand extends PointsCommand {
+public class ImportCommand extends BasePointsCommand {
 
-    public ImportCommand() {
-        super("import", CommandManager.CommandAliases.IMPORT);
+    public ImportCommand(PlayerPoints playerPoints) {
+        super(playerPoints);
     }
 
-    @Override
-    public void execute(PlayerPoints plugin, CommandSender sender, String[] args) {
-        LocaleManager localeManager = plugin.getManager(LocaleManager.class);
-        File file = new File(plugin.getDataFolder(), "storage.yml");
+    @RoseExecutable
+    public void execute(CommandContext context, String confirm) {
+        CommandSender sender = context.getSender();
+        File file = new File(this.rosePlugin.getDataFolder(), "storage.yml");
         if (!file.exists()) {
-            localeManager.sendMessage(sender, "command-import-no-backup");
+            this.localeManager.sendMessage(sender, "command-import-no-backup");
             return;
         }
 
-        if (args.length < 1 || !args[0].equalsIgnoreCase("confirm")) {
-            String databaseType = plugin.getManager(DataManager.class).getDatabaseConnector() instanceof MySQLConnector ? "MySQL" : "SQLite";
-            localeManager.sendMessage(sender, "command-import-warning", StringPlaceholders.of("type", databaseType));
+        DataManager dataManager = this.rosePlugin.getManager(DataManager.class);
+        if (confirm == null) {
+            String databaseType = dataManager.getDatabaseConnector() instanceof MySQLConnector ? "MySQL" : "SQLite";
+            this.localeManager.sendMessage(sender, "command-import-warning", StringPlaceholders.of("type", databaseType));
             return;
         }
 
-        plugin.getScheduler().runTaskAsync(() -> {
+        this.rosePlugin.getScheduler().runTaskAsync(() -> {
             FileConfiguration configuration = YamlConfiguration.loadConfiguration(file);
             ConfigurationSection pointsSection = configuration.getConfigurationSection("Points");
             if (pointsSection == null)
                 pointsSection = configuration.getConfigurationSection("Players");
 
             if (pointsSection == null) {
-                plugin.getLogger().warning("Malformed storage.yml file.");
+                this.rosePlugin.getLogger().warning("Malformed storage.yml file.");
                 return;
             }
 
@@ -76,14 +80,20 @@ public class ImportCommand extends PointsCommand {
                 }
             }
 
-            plugin.getManager(DataManager.class).importData(data, uuidMap);
-            localeManager.sendMessage(sender, "command-import-success");
+            dataManager.importData(data, uuidMap);
+            this.localeManager.sendCommandMessage(sender, "command-import-success");
         });
     }
 
     @Override
-    public List<String> tabComplete(PlayerPoints plugin, CommandSender sender, String[] args) {
-        return Collections.emptyList();
+    protected CommandInfo createCommandInfo() {
+        return CommandInfo.builder("import")
+                .descriptionKey("command-import-description")
+                .permission("playerpoints.import")
+                .arguments(ArgumentsDefinition.builder()
+                        .optional("confirm", ArgumentHandlers.forValues(String.class, "confirm"))
+                        .build())
+                .build();
     }
 
 }

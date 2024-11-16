@@ -1,6 +1,7 @@
 package org.black_ixx.playerpoints.util;
 
 import dev.rosewood.rosegarden.RosePlugin;
+import dev.rosewood.rosegarden.command.framework.CommandContext;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
@@ -8,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.NavigableMap;
+import java.util.Objects;
 import java.util.TreeMap;
 import java.util.UUID;
 import java.util.function.Consumer;
@@ -19,6 +21,7 @@ import org.black_ixx.playerpoints.manager.LocaleManager;
 import org.black_ixx.playerpoints.models.Tuple;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.util.StringUtil;
@@ -153,19 +156,18 @@ public final class PointsUtils {
     }
 
     /**
-     * Gets a list of player names to show in tab completions, vanished players are excluded.
-     *
-     * @param arg The argument for the name
-     * @return a list of online players excluding the
+     * @return a list of online players excluding vanished players
      */
-    public static List<String> getPlayerTabComplete(String arg) {
-        List<String> players = Bukkit.getOnlinePlayers().stream()
-                .filter(x -> x.getMetadata("vanished").stream().noneMatch(MetadataValue::asBoolean))
+    public static List<String> getPlayerTabComplete(CommandContext context) {
+        return Bukkit.getOnlinePlayers().stream()
+                .filter(PointsUtils::isVisible)
+                .filter(x -> Objects.equals(x, context.getSender()))
                 .map(Player::getName)
                 .collect(Collectors.toList());
-        List<String> completions = new ArrayList<>();
-        StringUtil.copyPartialMatches(arg, players, completions);
-        return completions;
+    }
+
+    public static boolean isVisible(Player player) {
+        return player.getMetadata("vanished").stream().noneMatch(MetadataValue::asBoolean);
     }
 
 }
