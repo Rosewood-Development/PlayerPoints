@@ -13,6 +13,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Collections;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -56,7 +57,8 @@ public final class NameFetcher {
             return onlinePlayer.getName();
 
         // Attempt to find name from our username cache in the database
-        String name = PlayerPoints.getInstance().getManager(DataManager.class).lookupCachedUsername(uuid);
+        DataManager dataManager = PlayerPoints.getInstance().getManager(DataManager.class);
+        String name = dataManager.lookupCachedUsername(uuid);
         if (name != null) {
             UUID_NAME_LOOKUP.put(uuid, name);
             return name;
@@ -67,6 +69,7 @@ public final class NameFetcher {
         name = offlinePlayer.getName();
         if (name != null) {
             UUID_NAME_LOOKUP.put(uuid, name);
+            dataManager.updateCachedUsernames(Collections.singletonMap(uuid, name));
             return name;
         }
 
@@ -78,6 +81,7 @@ public final class NameFetcher {
                 NameResponse[] names = gson.fromJson(reader, NameResponse[].class);
                 name = names[names.length - 1].getName();
                 UUID_NAME_LOOKUP.put(uuid, name);
+                dataManager.updateCachedUsernames(Collections.singletonMap(uuid, name));
                 return name;
             }
         } catch (Exception e) {

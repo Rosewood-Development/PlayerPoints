@@ -26,16 +26,15 @@ public class GiveAllCommand extends BasePointsCommand {
     @RoseExecutable
     public void execute(CommandContext context, Integer amount, String includeOffline, String silentFlag) {
         this.rosePlugin.getScheduler().runTaskAsync(() -> {
-            boolean success;
             if (includeOffline != null) {
-                success = this.rosePlugin.getManager(DataManager.class).offsetAllPoints(amount);
+                this.rosePlugin.getManager(DataManager.class).offsetAllPoints(amount);
             } else {
                 List<UUID> playerIds = Bukkit.getOnlinePlayers().stream().map(Player::getUniqueId).collect(Collectors.toList());
-                success = this.api.giveAll(playerIds, amount);
+                this.api.giveAll(playerIds, amount);
             }
 
             CommandSender sender = context.getSender();
-            if (success && silentFlag == null) {
+            if (silentFlag == null) {
                 for (Player player : Bukkit.getOnlinePlayers()) {
                     this.localeManager.sendCommandMessage(player, "command-give-received", StringPlaceholders.builder("amount", PointsUtils.formatPoints(amount))
                             .add("currency", this.localeManager.getCurrencyName(amount))
@@ -45,8 +44,6 @@ public class GiveAllCommand extends BasePointsCommand {
                 this.localeManager.sendCommandMessage(sender, "command-giveall-success", StringPlaceholders.builder("amount", PointsUtils.formatPoints(amount))
                         .add("currency", this.localeManager.getCurrencyName(amount))
                         .build());
-            } else if (silentFlag == null) {
-                this.localeManager.sendCommandMessage(sender, "command-giveall-failed");
             }
         });
     }

@@ -6,6 +6,7 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.NavigableMap;
@@ -113,18 +114,20 @@ public final class PointsUtils {
         }
 
         PlayerPoints plugin = PlayerPoints.getInstance();
+        DataManager dataManager = plugin.getManager(DataManager.class);
         plugin.getScheduler().runTaskAsync(() -> {
-            OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(name);
-            if (offlinePlayer.getName() != null && offlinePlayer.hasPlayedBefore()) {
-                Tuple<UUID, String> tuple = new Tuple<>(offlinePlayer.getUniqueId(), offlinePlayer.getName());
-                plugin.getScheduler().runTask(() -> callback.accept(tuple));
-                return;
-            }
-
             UUID uuid = plugin.getManager(DataManager.class).lookupCachedUUID(name);
             if (uuid != null) {
                 Tuple<UUID, String> tuple = new Tuple<>(uuid, name);
                 plugin.getScheduler().runTask(() -> callback.accept(tuple));
+                return;
+            }
+
+            OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(name);
+            if (offlinePlayer.getName() != null && offlinePlayer.hasPlayedBefore()) {
+                Tuple<UUID, String> tuple = new Tuple<>(offlinePlayer.getUniqueId(), offlinePlayer.getName());
+                plugin.getScheduler().runTask(() -> callback.accept(tuple));
+                dataManager.updateCachedUsernames(Collections.singletonMap(tuple.getFirst(), tuple.getSecond()));
                 return;
             }
 
