@@ -10,7 +10,7 @@ import me.lokka30.treasury.api.economy.response.EconomyException;
 import me.lokka30.treasury.api.economy.response.EconomyFailureReason;
 import me.lokka30.treasury.api.economy.response.EconomySubscriber;
 import org.black_ixx.playerpoints.manager.LocaleManager;
-import org.black_ixx.playerpoints.setting.SettingKey;
+import org.black_ixx.playerpoints.config.SettingKey;
 import org.black_ixx.playerpoints.util.PointsUtils;
 
 public class PointsCurrency implements Currency {

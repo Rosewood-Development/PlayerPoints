@@ -12,21 +12,29 @@ number-abbreviation-billions: 'b'
 
 # Misc
 no-permission: '&cTu não tens permissão para isso!'
-no-console: '&cApenas jogadores podem executar este comando.'
+only-player: '&cEste comando só pode ser executado por um jogador.'
 invalid-amount: '&cQuantidade deve ser um numero inteiro positivo.'
 unknown-player: '&cJogador não pode ser encontrado: &b%player%'
 unknown-command: '&cComando desconhecido: &b%input%'
+invalid-argument: '&cArgumento inválido: %message%.'
+command-usage: '&cUtilização: &b/%cmd% %args%'
+argument-handler-string: 'O texto não pode estar vazio'
+argument-handler-enum: '%enum% tipo [%input%] não existe'
+argument-handler-enum-list: 'O tipo %enum% [%input%] não existe. Tipos válidos: %types%'
+argument-handler-value: 'O valor [%input%] não é válido'
 votifier-voted: '&eObrigado por votar em %service%! &b%amount% &eforam adicionados ao seu saldo.'
 leaderboard-empty-entry: 'Este poderia ser você!'
 command-cooldown: '&cAguarde antes de utilizar esse comando novamente.'
 
 # Mensagem de comandos base
 base-command-color: '&e'
-base-command-help: '&eUse &b/points help &epara obter informação sobre o comando.'
+base-command-help: '&eUse &b/%cmd% help &epara obter informação sobre o comando.'
 
 # Comando de Ajuda
 command-help-description: 'Mostra um menu de ajuda... Tu chegaste'
 command-help-title: '&eComandos disponíveis:'
+command-help-list-description: '&8 - &d/%cmd% %subcmd% %args% &7- %desc%'
+command-help-list-description-no-args: '&8 - &d/%cmd% %subcmd% &7- %desc%'
 
 # Comando de Give
 command-give-description: 'Dá pontos a um jogador'
@@ -77,7 +85,7 @@ command-broadcast-message: '&b%player% &etem &b%amount% &e%currency%.'
 
 # Comando de Reload
 command-reload-description: 'Recarrega o plugin'
-command-reload-success: '&aArquivos de configuração e linguagem foram recarregados.'
+command-reload-reloaded: '&aArquivos de configuração e linguagem foram recarregados.'
 
 # Comando de Export
 command-export-description: 'Exporta os dados para storage.yml'

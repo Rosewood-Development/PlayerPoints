@@ -12,21 +12,29 @@ number-abbreviation-billions: 'b'
 
 # Misc
 no-permission: '&cVous n''avez pas la permission pour ça!'
-no-console: '&cSeuls les joueurs peuvent exécuter cette commande.'
+only-player: '&cCette commande ne peut être exécutée que par un joueur.'
 invalid-amount: '&cLe montant doit être un nombre entier positif.'
 unknown-player: '&cLe joueur est introuvable: &b%player%'
 unknown-command: '&cCommande inconnue: &b%input%'
+invalid-argument: 'Argument non valide: %message%'
+command-usage: '&cUtilisation: &b/%cmd% %args%'
+argument-handler-string: 'Vous devez saisir le texte'
+argument-handler-enum: 'Le type %enum% [%input%] n''existe pas'
+argument-handler-enum-list: 'Le type %enum% [%input%] n''existe pas. Types valides: %types%'
+argument-handler-value: 'La valeur [%input%] n''est pas valide'
 votifier-voted: '&eMerci d''avoir voté sur %service%! &b%amount% &ea été ajouté à votre solde.'
 leaderboard-empty-entry: 'Cela pourrait être vous!'
 command-cooldown: '&cVeuillez attendre avant d''utiliser à nouveau cette commande.'
 
 # Base Command Message
 base-command-color: '&e'
-base-command-help: '&eUtilise &b/points help &epour les informations de commande.'
+base-command-help: '&eUtilise &b/%cmd% help &epour les informations de commande.'
 
 # Help Command
 command-help-description: 'Affiche le menu d''aide ... Vous êtes arrivé'
 command-help-title: '&eCommandes disponibles:'
+command-help-list-description: '&8 - &d/%cmd% %subcmd% %args% &7- %desc%'
+command-help-list-description-no-args: '&8 - &d/%cmd% %subcmd% &7- %desc%'
 
 # Give Command
 command-give-description: 'Donner des points à un joueur'
@@ -77,7 +85,7 @@ command-broadcast-message: '&b%player% &epossède &b%amount% &e%currency%.'
 
 # Reload Command
 command-reload-description: 'Recharge le plugin'
-command-reload-success: '&aLes fichiers de configuration et de paramètres régionaux ont été rechargés.'
+command-reload-reloaded: '&aLes fichiers de configuration et de paramètres régionaux ont été rechargés.'
 
 # Export Command
 command-export-description: 'Exporte les données vers storage.yml'

@@ -12,21 +12,29 @@ number-abbreviation-billions: 'b'
 
 # Misc
 no-permission: '&c你沒有權限!'
-no-console: '&c只有玩家可以使用此指令.'
+only-player: '&c這個指令只能由玩家執行。'
 invalid-amount: '&c數量必須是一個正整數.'
 unknown-player: '&c找不到此玩家: &b%player%'
 unknown-command: '&c未知指令: &b%input%'
+invalid-argument: '&c無效參數：%message%。'
+command-usage: '&使用方式: &b/%cmd% %args%'
+argument-handler-string: '文字不能為空'
+argument-handler-enum: '%enum% 類型 [%input%] 不存在'
+argument-handler-enum-list: '%enum% 類型 [%input%] 不存在。有效的類型：%types%'
+argument-handler-value: '值 [%input%] 無效'
 votifier-voted: '&e謝謝你對於 %service% &e的投票! &b%amount% &e點%currency%已進入你的點數庫.'
 leaderboard-empty-entry: '這可能是你！'
 command-cooldown: '&c請等待一段時間再使用此指令.'
 
 # Base Command Message
 base-command-color: '&e'
-base-command-help: '&e使用 &b/points help &e顯示幫助畫面.'
+base-command-help: '&e使用 &b/%cmd% help &e顯示幫助畫面.'
 
 # Help Command
 command-help-description: '顯示幫助畫面... 你已經做到了'
 command-help-title: '&e可使用指令:'
+command-help-list-description: '&8 - &d/%cmd% %subcmd% %args% &7- %desc%'
+command-help-list-description-no-args: '&8 - &d/%cmd% %subcmd% &7- %desc%'
 
 # Give Command
 command-give-description: '&8 - &d/points give <玩家> <數量> &7- 給予玩家點數'
@@ -77,7 +85,7 @@ command-broadcast-message: '&e玩家 &b%player% &e擁有 &b%amount% &e點&e%curr
 
 # Reload Command
 command-reload-description: '重載此插件'
-command-reload-success: '&a設定檔和語言檔已重載.'
+command-reload-reloaded: '&a設定檔和語言檔已重載.'
 
 # Export Command
 command-export-description: '輸出資料至 storage.yml'

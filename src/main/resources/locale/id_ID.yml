@@ -12,21 +12,29 @@ number-abbreviation-billions: 'b'
 
 # Misc
 no-permission: '&cKamu tidak punya izin untuk itu!'
-no-console: '&cHanya pemain yang dapat mengeksekusi perintah ini.'
+only-player: '&cPerintah ini hanya dapat dijalankan oleh pemain.'
 invalid-amount: '&cJumlah harus berupa bilangan bulat positif.'
 unknown-player: '&cPemain tidak dapat ditemukan: &b%player%'
 unknown-command: '&cPerintah tidak diketahui: &b%input%'
+invalid-argument: '&cInvalid argument: %message%.'
+command-usage: '&cPenggunaan: &b/%cmd% %args%'
+argument-handler-string: 'Teks tidak boleh kosong'
+argument-handler-enum: '%enum% tipe [%input%] tidak ada'
+argument-handler-enum-list: 'Jenis %enum% [%input%] tidak ada. Jenis yang valid: %jenis%'
+argument-handler-value: 'Nilai [%input%] tidak valid'
 votifier-voted: '&eTerima kasih sudah voting di %service%! &b%amount% &etelah ditambahkan ke saldomu.'
 leaderboard-empty-entry: 'Ini bisa jadi kamu!'
 command-cooldown: '&cHarap tunggu sebelum menggunakan perintah itu lagi.'
 
 # Base Command Message
 base-command-color: '&e'
-base-command-help: '&eGunakan &b/points help &euntuk informasi perintah.'
+base-command-help: '&eGunakan &b/%cmd% help &euntuk informasi perintah.'
 
 # Help Command
 command-help-description: 'Menampilkan menu bantuan... Kamu sudah disini'
 command-help-title: '&ePerintah yang Tersedia:'
+command-help-list-description: '&8 - &d/%cmd% %subcmd% %args% &7- %desc%'
+command-help-list-description-no-args: '&8 - &d/%cmd% %subcmd% &7- %desc%'
 
 # Give Command
 command-give-description: 'Memberikan poin kepada pemain'
@@ -77,7 +85,7 @@ command-broadcast-message: '&b%player% &ememiliki &b%amount% &e%currency%.'
 
 # Reload Command
 command-reload-description: 'Memuat ulang plugin'
-command-reload-success: '&aFile konfigurasi dan bahasa telah dimuat ulang.'
+command-reload-reloaded: '&aFile konfigurasi dan bahasa telah dimuat ulang.'
 
 # Export Command
 command-export-description: 'Ekspor data ke storage.yml'

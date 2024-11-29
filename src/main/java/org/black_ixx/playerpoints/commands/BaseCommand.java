@@ -11,7 +11,7 @@ import dev.rosewood.rosegarden.command.framework.RoseCommand;
 import dev.rosewood.rosegarden.command.framework.annotation.RoseExecutable;
 import java.util.Optional;
 import org.black_ixx.playerpoints.PlayerPoints;
-import org.black_ixx.playerpoints.setting.SettingKey;
+import org.black_ixx.playerpoints.config.SettingKey;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 

@@ -12,21 +12,29 @@ number-abbreviation-billions: 'b'
 
 # 杂项
 no-permission: '&c您没有权限那么做!'
-no-console: '&c只有玩家才能执行该命令。'
+only-player: '&c该命令只能由玩家执行。'
 invalid-amount: '&c数值必须为正数。'
 unknown-player: '&c找不到玩家: &b%player%'
 unknown-command: '&c未知命令: &b%input%'
+invalid-argument: '无效参数: %message%。'
+command-usage: '&c使用方法: &b/%cmd% %args%'
+argument-handler-string: '文本不能为空'
+argument-handler-enum: '%enum% 类型 [%input%] 不存在'
+argument-handler-enum-list: '%enum% 类型 [%input%] 不存在。有效类型：%types%'
+argument-handler-value: '值 [%input%] 无效'
 votifier-voted: '&e感谢您在 %service% 上为我们投票! &b%amount% &e已经被添加到您的账户。'
 leaderboard-empty-entry: '这可能是你!'
 command-cooldown: '&c请等待一段时间再使用该命令。'
 
 # 基础命令信息
 base-command-color: '&e'
-base-command-help: '&e使用 &b/points help &e来获取命令信息。'
+base-command-help: '&e使用 &b/%cmd% help &e来获取命令信息。'
 
 # 帮助命令
 command-help-description: '显示帮助菜单... 就是您现在看着的这个'
 command-help-title: '&e可用命令:'
+command-help-list-description: '&8 - &d/%cmd% %subcmd% %args% &7- %desc%'
+command-help-list-description-no-args: '&8 - &d/%cmd% %subcmd% &7- %desc%'
 
 # 给予命令
 command-give-description: '给一名玩家点劵'
@@ -77,7 +85,7 @@ command-broadcast-message: '&b%player% &e有 &b%amount% &e%currency%。'
 
 # 重载命令
 command-reload-description: '重载插件'
-command-reload-success: '&a配置和语言文件已被重新加载。'
+command-reload-reloaded: '&a配置和语言文件已被重新加载。'
 
 # 导出命令
 command-export-description: '导出数据至 storage.yml'

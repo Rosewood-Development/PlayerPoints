@@ -12,21 +12,29 @@ number-abbreviation-billions: 'b'
 
 # Misc
 no-permission: '&cNincs jogod ehhez!'
-no-console: '&cCsak játékosok használhatják ezt a parancsot.'
+only-player: '&cEzt a parancsot csak egy játékos hajthatja végre.'
 invalid-amount: '&cMennyiségnek pozitív egész számnak kell lennie.'
 unknown-player: '&cJátékos nem található: &b%player%'
 unknown-command: '&cIsmeretlen parancs: &b%input%'
+invalid-argument: '&cInvalid argument: %message%.'
+command-usage: '&cHasználat: &b/%cmd% %args%'
+argument-handler-string: 'A szöveg nem lehet üres'
+argument-handler-enum: '%enum% típus [%input%] nem létezik'
+argument-handler-enum-list: '%enum% típus [%input%] nem létezik. Érvényes típusok: %types%'
+argument-handler-value: 'A [%input%] érték nem érvényes'
 votifier-voted: '&eKöszönjük hogy szavaztál ránk itt %service%! &b%amount% &ehozzáadva az egyenlegedhez.'
 leaderboard-empty-entry: 'Ez akár te is lehetsz!'
 command-cooldown: '&cKérjük, várjon, mielőtt újra használná ezt a parancsot.'
 
 # Base Command Message
 base-command-color: '&e'
-base-command-help: '&eHasználd a &b/points help &eparancsot segítségért.'
+base-command-help: '&eHasználd a &b/%cmd% help &eparancsot segítségért.'
 
 # Help Command
 command-help-description: 'Előhozza a segítségeket... Ahova megérkeztél'
 command-help-title: '&eElérhető Parancsok:'
+command-help-list-description: '&8 - &d/%cmd% %subcmd% %args% &7- %desc%'
+command-help-list-description-no-args: '&8 - &d/%cmd% %subcmd% &7- %desc%'
 
 # Give Command
 command-give-description: 'Ad a játékosnak pontot'
@@ -77,7 +85,7 @@ command-broadcast-message: '&b%player%-nak/nek &evan &b%amount% &e%currency%ja.'
 
 # Reload Command
 command-reload-description: 'Újratölti a plugint'
-command-reload-success: '&aKonfiguráció és a fordítások újratöltődtek.'
+command-reload-reloaded: '&aKonfiguráció és a fordítások újratöltődtek.'
 
 # Export Command
 command-export-description: 'Exportálja az adatokat a storage.yml fájlba'

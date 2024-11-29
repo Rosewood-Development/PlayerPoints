@@ -12,21 +12,29 @@ number-abbreviation-billions: 'b'
 
 # Misc
 no-permission: '&cΔεν έχεις άδεια για αυτό!'
-no-console: '&cΜόνο οι παίκτες μπορούν να εκτελέσουν αυτή την εντολή.'
+only-player: '&cΑυτή η εντολή μπορεί να εκτελεστεί μόνο από έναν παίκτη.'
 invalid-amount: '&cΤο ποσό πρέπει να είναι θετικός ακέραιος αριθμός.'
 unknown-player: '&cΔεν ήταν δυνατή η εύρεση του παίκτη: &b%player%'
 unknown-command: '&cΑγνωστη εντολή: &b%input%'
+invalid-argument: '&cΆκυρο όρισμα: %message%.'
+command-usage: '&cΧρήση: &b/%cmd% %args%'
+argument-handler-string: 'Το κείμενο δεν μπορεί να είναι κενό'
+argument-handler-enum: 'Ο τύπος %enum% [%input%] δεν υπάρχει'
+argument-handler-enum-list: 'Ο τύπος %enum% [%input%] δεν υπάρχει. Έγκυροι τύποι: %types%'
+argument-handler-value: 'Η τιμή [%input%] δεν είναι έγκυρη'
 votifier-voted: '&eΕυχαριστουμε που ψηφίσατε στο %service%! &b%amount% &έχουν προστεθεί στο υπόλοιπό σας.'
 leaderboard-empty-entry: 'Αυτό μπορεί να είσαι εσύ!'
 command-cooldown: '&cΠεριμένετε πριν χρησιμοποιήσετε ξανά αυτήν την εντολή.'
 
 # Base Command Message
 base-command-color: '&e'
-base-command-help: '&Χρησημοποιήστε το &b/points help &eγια πληροφορές σχετικά με την εντολή.'
+base-command-help: '&Χρησημοποιήστε το &b/%cmd% help &eγια πληροφορές σχετικά με την εντολή.'
 
 # Help Command
 command-help-description: 'Εμφανίζει το μενού βοήθειας... Είστε στο σωστό μέρος.'
 command-help-title: '&eΔιαθέσιμες εντολές:'
+command-help-list-description: '&8 - &d/%cmd% %subcmd% %args% &7- %desc%'
+command-help-list-description-no-args: '&8 - &d/%cmd% %subcmd% &7- %desc%'
 
 # Give Command
 command-give-description: 'Δώσε πόντους σε έναν παίκτη.'
@@ -77,7 +85,7 @@ command-broadcast-message: '&b%player% &eέχει &b%amount% &e%currency%.'
 
 # Reload Command
 command-reload-description: 'Φορτώνει ξανά το plugin'
-command-reload-success: '&aΤα configuration και locale αρχεία φορτώθηκαν ξανά.'
+command-reload-reloaded: '&aΤα configuration και locale αρχεία φορτώθηκαν ξανά.'
 
 # Export Command
 command-export-description: 'Εξάγει τα δεδομένα στο storage.yml'

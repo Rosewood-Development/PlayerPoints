@@ -12,21 +12,29 @@ number-abbreviation-billions: 'b'
 
 # その他
 no-permission: '&c権限不足です！'
-no-console: '&cこのコマンドはコンソールでは実行できません。プレイヤーが実行してください。'
+only-player: '&cこのコマンドはプレイヤーのだけ使うができる。'
 invalid-amount: '&c値は正の整数で指定してください。'
 unknown-player: '&c&b%player% という名前のプレイヤーは見つかりませんでした。'
 unknown-command: '&c無効なコマンド: &b%input%'
+invalid-argument: '無効な引数: %message%。'
+command-usage: '&c使い方: &b/%cmd% %args%'
+argument-handler-string: 'テキストを空にすることはできない'
+argument-handler-enum: '%enum% タイプ [%input%] がない'
+argument-handler-enum-list: '%enum% タイプ [%input%] がない。有効なタイプ： %types%'
+argument-handler-value: '[%input%] は無効です'
 votifier-voted: '&e%service% での投票ありがとうございます。 &b%amount% &eポイントがアカウントに追加されました。'
 leaderboard-empty-entry: '現在、ランキングは空です。'
 command-cooldown: '&cそのコマンドを再度使用する前にお待ちください。'
 
 # 基礎コマンドメッセージ
 base-command-color: '&e'
-base-command-help: '&eプラグインの使い方に関しては &b/points help &e で解説されています。'
+base-command-help: '&eプラグインの使い方に関しては &b/%cmd% help &e で解説されています。'
 
 # ヘルプコマンド
 command-help-description: 'ヘルプメニューを表示、、、ヘルプメニューへようこそ！'
 command-help-title: '&e使用可能なコマンド:'
+command-help-list-description: '&8 - &d/%cmd% %subcmd% %args% &7- %desc%'
+command-help-list-description-no-args: '&8 - &d/%cmd% %subcmd% &7- %desc%'
 
 # Give コマンド
 command-give-description: 'プレイヤーにポイントを付与する。'
@@ -77,7 +85,7 @@ command-broadcast-message: '&b%player% &eは &b%amount% &e%currency% 所持し�
 
 # Reload Command
 command-reload-description: 'プラグインをリロードする。'
-command-reload-success: '&a設定ファイルと言語ファイルをリロードしました。'
+command-reload-reloaded: '&a設定ファイルと言語ファイルをリロードしました。'
 
 # Export Command
 command-export-description: 'storage.ymlにデータを書き出す。'

@@ -1,4 +1,4 @@
-package org.black_ixx.playerpoints.setting;
+package org.black_ixx.playerpoints.config;
 
 import dev.rosewood.rosegarden.config.CommentedConfigurationSection;
 import dev.rosewood.rosegarden.config.RoseSetting;

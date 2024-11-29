@@ -67,7 +67,7 @@ public class DataManager extends AbstractDataManager implements Listener {
         this.pointsCache = CacheBuilder.newBuilder()
                 .concurrencyLevel(2)
                 .expireAfterAccess(5, TimeUnit.MINUTES)
-                .refreshAfterWrite(org.black_ixx.playerpoints.setting.SettingKey.CACHE_DURATION.get(), TimeUnit.SECONDS)
+                .refreshAfterWrite(org.black_ixx.playerpoints.config.SettingKey.CACHE_DURATION.get(), TimeUnit.SECONDS)
                 .build(new CacheLoader<UUID, Integer>() {
                     @Override
                     public Integer load(UUID uuid) throws Exception {
@@ -197,7 +197,7 @@ public class DataManager extends AbstractDataManager implements Listener {
         });
 
         if (generate.get()) {
-            int startingBalance = org.black_ixx.playerpoints.setting.SettingKey.STARTING_BALANCE.get();
+            int startingBalance = org.black_ixx.playerpoints.config.SettingKey.STARTING_BALANCE.get();
             this.setPoints(playerId, startingBalance);
             value.set(startingBalance);
         }
@@ -253,7 +253,7 @@ public class DataManager extends AbstractDataManager implements Listener {
                     this.pointsCache.put(entry.getKey(), entry.getValue());
 
                     // Send update to BungeeCord if enabled
-                    if (org.black_ixx.playerpoints.setting.SettingKey.BUNGEECORD_SEND_UPDATES.get() && this.rosePlugin.isEnabled()) {
+                    if (org.black_ixx.playerpoints.config.SettingKey.BUNGEECORD_SEND_UPDATES.get() && this.rosePlugin.isEnabled()) {
                         ByteArrayDataOutput output = ByteStreams.newDataOutput();
                         output.writeUTF("Forward");
                         output.writeUTF("ONLINE");
@@ -482,15 +482,15 @@ public class DataManager extends AbstractDataManager implements Listener {
     }
 
     private String getPointsTableName() {
-        if (org.black_ixx.playerpoints.setting.SettingKey.LEGACY_DATABASE_MODE.get()) {
-            return org.black_ixx.playerpoints.setting.SettingKey.LEGACY_DATABASE_NAME.get();
+        if (org.black_ixx.playerpoints.config.SettingKey.LEGACY_DATABASE_MODE.get()) {
+            return org.black_ixx.playerpoints.config.SettingKey.LEGACY_DATABASE_NAME.get();
         } else {
             return super.getTablePrefix() + "points";
         }
     }
 
     private String getUuidColumnName() {
-        if (org.black_ixx.playerpoints.setting.SettingKey.LEGACY_DATABASE_MODE.get()) {
+        if (org.black_ixx.playerpoints.config.SettingKey.LEGACY_DATABASE_MODE.get()) {
             return "playername";
         } else {
             return "uuid";

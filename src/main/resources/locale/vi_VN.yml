@@ -12,10 +12,16 @@ number-abbreviation-billions: 'b'
 
 # Misc
 no-permission: '&cBạn không có quyền để sử dụng!'
-no-console: '&cChỉ người chơi mới có thể thực hiện lệnh này.'
+only-player: '&cLệnh này chỉ có thể được thực hiện bởi người chơi.'
 invalid-amount: '&cSố tiền phải là một số nguyên dương.'
 unknown-player: '&cKhông thể tìm thấy người chơi: &b%player%'
 unknown-command: '&cLệnh không xác định: &b%input%'
+invalid-argument: '&cĐối số không hợp lệ: %message%.'
+command-usage: '&cCách sử dụng: &b/%cmd% %args%'
+argument-handler-string: 'Văn bản không được để trống'
+argument-handler-enum: '%enum% loại [%input%] không tồn tại'
+argument-handler-enum-list: 'Kiểu %enum% [%input%] không tồn tại. Các kiểu hợp lệ: %types%'
+argument-handler-value: 'Giá trị [%input%] không hợp lệ'
 votifier-voted: '&eCảm ơn vì đã bỏ phiếu trên %service%! &b%amount% &eđã được thêm vào số dư của bạn.'
 leaderboard-empty-entry: 'Đây có thể là bạn!'
 command-cooldown: '&cVui lòng đợi trước khi sử dụng lại lệnh đó.'
@@ -77,7 +83,7 @@ command-broadcast-message: '&b%player% &ecó &b%amount% &e%currency%.'
 
 # Reload Command
 command-reload-description: 'Tải lại plugin'
-command-reload-success: '&aCác tệp cấu hình và ngôn ngữ đã được tải lại.'
+command-reload-reloaded: '&aCác tệp cấu hình và ngôn ngữ đã được tải lại.'
 
 # Export Command
 command-export-description: 'Xuất dữ liệu sang storage.yml'

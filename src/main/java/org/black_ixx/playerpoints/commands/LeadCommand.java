@@ -12,9 +12,8 @@ import java.util.stream.Collectors;
 import org.black_ixx.playerpoints.PlayerPoints;
 import org.black_ixx.playerpoints.commands.arguments.StringSuggestingArgumentHandler;
 import org.black_ixx.playerpoints.manager.DataManager;
-import org.black_ixx.playerpoints.manager.LocaleManager;
 import org.black_ixx.playerpoints.models.SortedPlayer;
-import org.black_ixx.playerpoints.setting.SettingKey;
+import org.black_ixx.playerpoints.config.SettingKey;
 import org.black_ixx.playerpoints.util.PointsUtils;
 import org.bukkit.command.CommandSender;
 

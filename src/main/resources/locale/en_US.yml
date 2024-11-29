@@ -12,21 +12,29 @@ number-abbreviation-billions: 'b'
 
 # Misc
 no-permission: '&cYou don''t have permission for that!'
-no-console: '&cOnly players may execute this command.'
+only-player: '&cThis command can only be executed by a player.'
 invalid-amount: '&cAmount must be a positive whole number.'
 unknown-player: '&cPlayer could not be found: &b%player%'
 unknown-command: '&cUnknown command: &b%input%'
+invalid-argument: '&cInvalid argument: %message%.'
+command-usage: '&cUsage: &b/%cmd% %args%'
+argument-handler-string: 'String cannot be empty'
+argument-handler-enum: '%enum% type [%input%] does not exist'
+argument-handler-enum-list: '%enum% type [%input%] does not exist. Valid types: %types%'
+argument-handler-value: 'Value [%input%] is not valid'
 votifier-voted: '&eThanks for voting on %service%! &b%amount% &ehas been added to your balance.'
 leaderboard-empty-entry: 'This could be you!'
 command-cooldown: '&cPlease wait before using that command again.'
 
 # Base Command Message
 base-command-color: '&e'
-base-command-help: '&eUse &b/points help &efor command information.'
+base-command-help: '&eUse &b/%cmd% help &efor command information.'
 
 # Help Command
 command-help-description: 'Displays the help menu... You have arrived'
 command-help-title: '&eAvailable Commands:'
+command-help-list-description: '&8 - &d/%cmd% %subcmd% %args% &7- %desc%'
+command-help-list-description-no-args: '&8 - &d/%cmd% %subcmd% &7- %desc%'
 
 # Give Command
 command-give-description: 'Give a player points'
@@ -77,7 +85,7 @@ command-broadcast-message: '&b%player% &ehas &b%amount% &e%currency%.'
 
 # Reload Command
 command-reload-description: 'Reloads the plugin'
-command-reload-success: '&aConfiguration and locale files were reloaded.'
+command-reload-reloaded: '&aConfiguration and locale files were reloaded.'
 
 # Export Command
 command-export-description: 'Exports the data to storage.yml'

@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import org.black_ixx.playerpoints.models.SortedPlayer;
-import org.black_ixx.playerpoints.setting.SettingKey;
+import org.black_ixx.playerpoints.config.SettingKey;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
