@@ -30,7 +30,7 @@ repositories {
 }
 
 dependencies {
-    api 'dev.rosewood:rosegarden:1.4.5'
+    api 'dev.rosewood:rosegarden:1.4.6'
 
     compileOnly 'org.spigotmc:spigot-api:1.21.3-R0.1-SNAPSHOT'
     compileOnly 'com.github.milkbowl:vault:1.7.3'
