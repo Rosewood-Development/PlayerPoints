@@ -1,0 +1,116 @@
+# pl_PL translation by Bartek338
+# Plugin Message Prefix 
+prefix: '&7[<g:#E8A230:#ECD32D>{{PLUGIN_NAME}}&7] '
+
+# Currency
+currency-singular: 'Punkt'
+currency-plural: 'Punkty'
+currency-separator: ','
+currency-decimal: '.'
+number-abbreviation-thousands: 'k'
+number-abbreviation-millions: 'm'
+number-abbreviation-billions: 'mld'
+
+# Misc
+no-permission: '&cNie masz do tego uprawnień!'
+only-player: '&cTo polecenie może być wykonane tylko przez gracza.'
+invalid-amount: '&cKwota musi być dodatnią liczbą całkowitą.'
+unknown-player: '&cNie znaleziono gracza: &b%player%'
+unknown-command: '&cNieznane polecenie: &b%input%'
+invalid-argument: '&cNieprawidłowy argument: %message%.'
+command-usage: '&cUżycie: &b/%cmd% %args%'
+argument-handler-string: 'Ciąg znaków nie może być pusty'
+argument-handler-enum: 'Typ %enum% [%input%] nie istnieje'
+argument-handler-enum-list: 'Typ %enum% [%input%] nie istnieje. Prawidłowe typy: %types%'
+argument-handler-value: 'Wartość [%input%] jest nieprawidłowa'
+votifier-voted: '&eDziękujemy za głosowanie na %service%! &b%amount% &ezostało dodane do Twojego salda.'
+leaderboard-empty-entry: 'To możesz być Ty!'
+command-cooldown: '&cProszę poczekać przed ponownym użyciem tego polecenia.'
+
+# Base Command Message
+base-command-color: '&e'
+base-command-help: '&eUżyj &b/%cmd% help &edo uzyskania informacji o poleceniach.'
+
+# Help Command
+command-help-description: 'Wyświetla menu pomocy... Dotarłeś na miejsce'
+command-help-title: '&eDostępne polecenia:'
+command-help-list-description: '&8 - &d/%cmd% %subcmd% %args% &7- %desc%'
+command-help-list-description-no-args: '&8 - &d/%cmd% %subcmd% &7- %desc%'
+
+# Give Command
+command-give-description: 'Dodaj punkty graczowi'
+command-give-success: '&b%player% &aotrzymał &b%amount% &a%currency%.'
+command-give-received: '&eOtrzymałeś &b%amount% &e%currency%.'
+
+# Give All Command
+command-giveall-description: 'Dodaj punkty wszystkim obecnym graczom'
+command-giveall-success: '&aDodano &b%amount% &a%currency% wszystkim obecnym graczom.'
+
+# Take Command
+command-take-description: 'Odejmij punkty graczowi'
+command-take-success: '&aOdjęto &b%amount% &a%currency% od &b%player%&a.'
+command-take-not-enough: '&b%player% &cnie ma wystarczającej liczby %currency% na to.'
+
+# Look Command
+command-look-description: 'Wyświetl punkty gracza'
+command-look-success: '&b%player% &ema &b%amount% &e%currency%.'
+
+# Pay Command
+command-pay-description: 'Prześlij punkty do gracza'
+command-pay-self: '&cNie możesz przesłać punktów do siebie!'
+command-pay-sent: '&aPrzesłałeś &b%player% %amount% &a%currency%.'
+command-pay-received: '&eOtrzymałeś &b%amount% &e%currency% od &b%player%&e.'
+command-pay-lacking-funds: '&cNie masz wystarczającej liczby %currency% na to.'
+
+# Set Command
+command-set-description: 'Ustaw punkty gracza'
+command-set-success: '&aUstawiono %currency% dla &b%player% &ana &b%amount%&a.'
+
+# Reset Command
+command-reset-description: 'Zresetuj punkty gracza'
+command-reset-success: '&aZresetowano %currency% dla &b%player%&a.'
+
+# Me Command
+command-me-description: 'Wyświetl swoje punkty'
+command-me-success: '&eMasz &b%amount% &e%currency%.'
+
+# Lead Command
+command-lead-description: 'Wyświetl tablicę wyników'
+command-lead-title: '&eTablica wyników &7(Strona #%page%/%pages%)'
+command-lead-entry: '&b%position%). &e%player% &7- &6%amount% %currency%'
+command-lead-usage: '&cNieprawidłowa strona tablicy wyników.'
+
+# Broadcast Command
+command-broadcast-description: 'Ogłoś punkty gracza'
+command-broadcast-message: '&b%player% &ema &b%amount% &e%currency%.'
+
+# Reload Command
+command-reload-description: 'Przeładuj wtyczkę'
+command-reload-reloaded: '&aPliki konfiguracyjne i językowe zostały przeładowane.'
+
+# Export Command
+command-export-description: 'Eksportuj dane do storage.yml'
+command-export-success: '&aDane zostały wyeksportowane do storage.yml.'
+command-export-warning: '&cUwaga: Plik storage.yml już istnieje. Aby go nadpisać, użyj &b/points export confirm&c.'
+
+# Import Command
+command-import-description: 'Importuj dane z storage.yml'
+command-import-success: '&aDane zostały zaimportowane z storage.yml.'
+command-import-no-backup: '&cNie można zaimportować, plik storage.yml nie istnieje. Możesz go wygenerować za pomocą &b/points export &ci użyć do transferu danych między typami baz danych.'
+command-import-warning: '&cUwaga: Operacja ta usunie wszystkie dane z aktywnej bazy danych i zastąpi je zawartością storage.yml. &cAktywny typ bazy danych to &b&o&l%type%&c. &cJeśli jesteś tego pewien, użyj &b/points import confirm&c.'
+
+# Convert Command
+command-convert-description: 'Załaduj dane waluty z innej wtyczki'
+command-convert-invalid: '&b%plugin% &cnie jest prawidłową nazwą wtyczki obsługującej konwersję waluty.'
+command-convert-success: '&aDane waluty z &b%plugin% &asą konwertowane.'
+command-convert-failure: '&cWystąpił błąd podczas próby konwersji danych. Sprawdź swoją konsolę i zgłoś błędy do autora wtyczki PlayerPoints.'
+command-convert-warning: '&cUwaga: Operacja ta usunie wszystkie dane z aktywnej bazy danych i zastąpi je danymi z &b%plugin%&c. &cJeśli jesteś tego pewien, użyj &b/points convert %plugin% confirm&c.'
+
+# Import Legacy Command
+command-importlegacy-description: 'Importuj tabelę legacy'
+command-importlegacy-success: '&aPomyślnie zaimportowano dane z tabeli &b%table%&a.'
+command-importlegacy-failure: '&cNie udało się zaimportować danych z tabeli &b%table%&c. Czy tabela istnieje?'
+command-importlegacy-only-mysql: '&cTo polecenie jest dostępne tylko przy włączonej obsłudze MySQL.'
+
+# Version Command
+command-version-description: 'Wyświetl informacje o wersji wtyczki PlayerPoints'
