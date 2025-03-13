@@ -60,6 +60,7 @@ public class PlayerPoints extends RosePlugin {
             }
 
             Bukkit.getServicesManager().register(Economy.class, this.vaultLayer, this, priority);
+            this.getLogger().info("Vault enabled with priority set to " + priority.name());
         }
 
         if (SettingKey.TREASURY.get() && Bukkit.getPluginManager().isPluginEnabled("Treasury")) {
@@ -81,6 +82,7 @@ public class PlayerPoints extends RosePlugin {
             }
 
             ServiceRegistry.INSTANCE.registerService(EconomyProvider.class, new PlayerPointsTreasuryLayer(this), this.getName(), priority);
+            this.getLogger().info("Treasury enabled with priority set to " + priority);
         }
 
         if (SettingKey.BUNGEECORD_SEND_UPDATES.get()) {
