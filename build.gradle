@@ -90,4 +90,4 @@ publishing {
 }
 
 build.dependsOn shadowJar
-publishShadowPublicationToMavenRepository.dependsOn jar
+generateMetadataFileForShadowPublication.dependsOn jar
