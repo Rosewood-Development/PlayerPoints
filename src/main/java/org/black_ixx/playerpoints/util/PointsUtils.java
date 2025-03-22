@@ -165,11 +165,11 @@ public final class PointsUtils {
                 .map(Player::getName)
                 .collect(Collectors.toList());
 
-        List<String> offlinePlayers = PlayerPoints.getInstance().getManager(DataManager.class).getOfflinePlayerList();
+        List<String> accountList = PlayerPoints.getInstance().getManager(DataManager.class).getCachedAccountsList();
 
         // Remove duplicates
-        offlinePlayers.removeAll(onlinePlayers);
-        onlinePlayers.addAll(offlinePlayers);
+        accountList.removeAll(onlinePlayers);
+        onlinePlayers.addAll(accountList);
 
         return onlinePlayers;
     }
@@ -184,11 +184,11 @@ public final class PointsUtils {
             .map(Player::getName)
             .collect(Collectors.toList());
 
-        List<String> offlinePlayers = PlayerPoints.getInstance().getManager(DataManager.class).getOfflinePlayerList();
+        List<String> accountList = PlayerPoints.getInstance().getManager(DataManager.class).getCachedAccountsList();
 
         // Remove duplicates
-        offlinePlayers.removeAll(onlinePlayers);
-        onlinePlayers.addAll(offlinePlayers);
+        accountList.removeAll(onlinePlayers);
+        onlinePlayers.addAll(accountList);
 
         return onlinePlayers;
     }

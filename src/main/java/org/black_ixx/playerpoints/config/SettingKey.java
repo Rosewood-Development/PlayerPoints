@@ -28,7 +28,7 @@ public class SettingKey {
     public static final RoseSetting<Integer> LEADERBOARD_PLACEHOLDER_ENTRIES = create("leaderboard-placeholder-entries", INTEGER, 10, "The number of entries to keep updated in the leaderboard placeholder", "Only a certain number of leaderboard entries can be available at a time", "Accessing an entry that does not exist will display a placeholder message instead");
     public static final RoseSetting<Integer> LEADERBOARD_PLACEHOLDER_REFRESH_INTERVAL = create("leaderboard-placeholder-refresh-interval", INTEGER, 15, "The number of seconds between leaderboard placeholder updates");
     public static final RoseSetting<Integer> STARTING_BALANCE = create("starting-balance", INTEGER, 0, "The amount of points new players will start with");
-    public static final RoseSetting<Integer> OFFLINE_PLAYER_LIST_UPDATE_FREQUENCY = create("offline-player-list-update-frequency", INTEGER, 300, "How often (in seconds) we update the list of offline players and non-player accounts for tab completion purposes.");
+    public static final RoseSetting<Integer> CACHED_ACCOUNT_LIST_UPDATE_FREQUENCY = create("cached-account-list-update-frequency", INTEGER, 300, "How often (in seconds) we update the list of accounts for tab completion purposes.");
     public static final RoseSetting<CommentedConfigurationSection> VOTE = create("vote", "Votifier hook settings");
     public static final RoseSetting<Boolean> VOTE_ENABLED = create("vote.enabled", BOOLEAN, false, "If the votifier hook should be enabled");
     public static final RoseSetting<Integer> VOTE_AMOUNT = create("vote.amount", INTEGER, 100, "How many points should be awarded per vote");

@@ -51,7 +51,7 @@ public class DataManager extends AbstractDataManager implements Listener {
     private LoadingCache<UUID, Integer> pointsCache;
     private final Map<UUID, Deque<PendingTransaction>> pendingTransactions;
     private final Map<UUID, String> pendingUsernameUpdates;
-    private final List<String> offlinePlayerList = new ArrayList<>();
+    private final List<String> cachedAccountsList = new ArrayList<>();
 
     public DataManager(RosePlugin rosePlugin) {
         super(rosePlugin);
@@ -61,7 +61,7 @@ public class DataManager extends AbstractDataManager implements Listener {
 
         Bukkit.getPluginManager().registerEvents(this, rosePlugin);
         rosePlugin.getScheduler().runTaskTimerAsync(this::update, 10L, 10L);
-        rosePlugin.getScheduler().runTaskTimerAsync(this::updateOfflinePlayerList, 10L, org.black_ixx.playerpoints.config.SettingKey.OFFLINE_PLAYER_LIST_UPDATE_FREQUENCY.get());
+        rosePlugin.getScheduler().runTaskTimerAsync(this::updatedCachedAccountsList, 10L, org.black_ixx.playerpoints.config.SettingKey.CACHED_ACCOUNT_LIST_UPDATE_FREQUENCY.get());
     }
 
     @Override
@@ -119,22 +119,22 @@ public class DataManager extends AbstractDataManager implements Listener {
         }
     }
 
-    private void updateOfflinePlayerList() {
-        this.offlinePlayerList.clear();
+    private void updatedCachedAccountsList() {
+        this.cachedAccountsList.clear();
         this.databaseConnector.connect(connection -> {
             String query = "SELECT username FROM " + this.getTablePrefix() + "username_cache";
             try (Statement statement = connection.createStatement()) {
                 ResultSet result = statement.executeQuery(query);
                 while (result.next()) {
                     String username = result.getString(1);
-                    this.offlinePlayerList.add(username);
+                    this.cachedAccountsList.add(username);
                 }
             }
         });
     }
 
-    public List<String> getOfflinePlayerList() {
-        return this.offlinePlayerList;
+    public List<String> getCachedAccountsList() {
+        return this.cachedAccountsList;
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -152,7 +152,7 @@ public class DataManager extends AbstractDataManager implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
-        this.offlinePlayerList.add(player.getName());
+        this.cachedAccountsList.add(player.getName());
     }
 
     /**
