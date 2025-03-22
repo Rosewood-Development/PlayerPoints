@@ -79,7 +79,7 @@ public class PayCommand extends BasePointsCommand {
                 .descriptionKey("command-pay-description")
                 .permission("playerpoints.pay")
                 .arguments(ArgumentsDefinition.builder()
-                        .required("target", new StringSuggestingArgumentHandler(PointsUtils::getPlayerTabComplete))
+                        .required("target", new StringSuggestingArgumentHandler(PointsUtils::getPlayerPayTabComplete))
                         .required("amount", ArgumentHandlers.INTEGER)
                         .build())
                 .playerOnly()

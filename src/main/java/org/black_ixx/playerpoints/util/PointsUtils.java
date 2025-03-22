@@ -164,10 +164,24 @@ public final class PointsUtils {
     public static List<String> getPlayerTabComplete(CommandContext context) {
         return Bukkit.getOnlinePlayers().stream()
                 .filter(PointsUtils::isVisible)
-                .filter(x -> !Objects.equals(x, context.getSender()))
                 .map(Player::getName)
                 .collect(Collectors.toList());
     }
+
+    /**
+     * @return a list of online players excluding vanished players
+     */
+    public static List<String> getPlayerPayTabComplete(CommandContext context) {
+        return Bukkit.getOnlinePlayers().stream()
+            .filter(PointsUtils::isVisible)
+            .filter(x -> !Objects.equals(x, context.getSender()))
+            .map(Player::getName)
+            .collect(Collectors.toList());
+    }
+
+//    public static List<String> getAccountTabComplete(CommandContext context) {
+//
+//    }
 
     public static boolean isVisible(Player player) {
         return player.getMetadata("vanished").stream().noneMatch(MetadataValue::asBoolean);
