@@ -23,27 +23,33 @@ public class AccountCommand extends BasePointsCommand {
     String prefixedAccountName = accountName.startsWith("*") ? accountName : "*" + accountName;
 
     if (operation.equalsIgnoreCase("create")) {
+      if (confirm == null) {
+        this.localeManager.sendCommandMessage(context.getSender(), "command-account-create-warning", StringPlaceholders.of("account", prefixedAccountName));
+        return;
+      }
+
       if (dataManager.lookupCachedUUID(prefixedAccountName) != null) {
-        this.localeManager.sendMessage(context.getSender(), "command-account-create-exists", StringPlaceholders.of("account", accountName));
+        this.localeManager.sendCommandMessage(context.getSender(), "command-account-create-exists", StringPlaceholders.of("account", accountName));
         return;
       }
 
       dataManager.createNonPlayerAccount(UUID.randomUUID(), prefixedAccountName);
-      this.localeManager.sendMessage(context.getSender(), "command-account-create-success", StringPlaceholders.of("account", prefixedAccountName));
+      this.localeManager.sendCommandMessage(context.getSender(), "command-account-create-success", StringPlaceholders.of("account", prefixedAccountName));
       return;
     } else if (operation.equalsIgnoreCase("delete")) {
       if (confirm == null) {
-        this.localeManager.sendMessage(context.getSender(), "command-account-delete-warning", StringPlaceholders.of("account", accountName));
+        this.localeManager.sendCommandMessage(context.getSender(), "command-account-delete-warning", StringPlaceholders.of("account", accountName));
         return;
       }
 
-      UUID accountID = dataManager.lookupCachedUUID(prefixedAccountName);
+      UUID accountID = dataManager.lookupCachedUUID(accountName);
       if (accountID == null) {
-        this.localeManager.sendMessage(context.getSender(), "command-account-delete-does-not-exist", StringPlaceholders.of("account", accountName));
+        this.localeManager.sendCommandMessage(context.getSender(), "command-account-delete-does-not-exist", StringPlaceholders.of("account", accountName));
         return;
       }
 
       dataManager.deleteAccount(accountID);
+      this.localeManager.sendCommandMessage(context.getSender(), "command-account-delete-success", StringPlaceholders.of("account", accountName));
       return;
     }
 

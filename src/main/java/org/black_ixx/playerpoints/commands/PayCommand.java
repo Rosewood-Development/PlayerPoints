@@ -8,13 +8,14 @@ import dev.rosewood.rosegarden.command.framework.CommandContext;
 import dev.rosewood.rosegarden.command.framework.CommandInfo;
 import dev.rosewood.rosegarden.command.framework.annotation.RoseExecutable;
 import dev.rosewood.rosegarden.utils.StringPlaceholders;
-import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 import org.black_ixx.playerpoints.PlayerPoints;
 import org.black_ixx.playerpoints.commands.arguments.StringSuggestingArgumentHandler;
 import org.black_ixx.playerpoints.util.PointsUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 public class PayCommand extends BasePointsCommand {
 
@@ -38,7 +39,11 @@ public class PayCommand extends BasePointsCommand {
 
         PointsUtils.getPlayerByName(targetName, target -> {
             if (target == null) {
-                this.localeManager.sendCommandMessage(player, "unknown-player", StringPlaceholders.of("player", targetName));
+                if (targetName.startsWith("*")) {
+                    this.localeManager.sendCommandMessage(player, "unknown-account", StringPlaceholders.of("account", targetName));
+                } else {
+                    this.localeManager.sendCommandMessage(player, "unknown-player", StringPlaceholders.of("player", targetName));
+                }
                 return;
             }
 

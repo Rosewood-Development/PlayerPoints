@@ -24,7 +24,11 @@ public class SetCommand extends BasePointsCommand {
         PointsUtils.getPlayerByName(target, player -> {
             CommandSender sender = context.getSender();
             if (player == null) {
-                this.localeManager.sendCommandMessage(sender, "unknown-player", StringPlaceholders.of("player", target));
+                if (target.startsWith("*")) {
+                    this.localeManager.sendCommandMessage(sender, "unknown-account", StringPlaceholders.of("account", target));
+                } else {
+                    this.localeManager.sendCommandMessage(sender, "unknown-player", StringPlaceholders.of("player", target));
+                }
                 return;
             }
 

@@ -10,6 +10,20 @@ import dev.rosewood.rosegarden.RosePlugin;
 import dev.rosewood.rosegarden.database.DataMigration;
 import dev.rosewood.rosegarden.database.SQLiteConnector;
 import dev.rosewood.rosegarden.manager.AbstractDataManager;
+import org.black_ixx.playerpoints.database.migrations._1_Create_Tables;
+import org.black_ixx.playerpoints.database.migrations._2_Add_Table_Username_Cache;
+import org.black_ixx.playerpoints.listeners.PointsMessageListener;
+import org.black_ixx.playerpoints.models.PendingTransaction;
+import org.black_ixx.playerpoints.models.SortedPlayer;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
+
 import java.nio.charset.StandardCharsets;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -31,24 +45,13 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
-import org.black_ixx.playerpoints.database.migrations._1_Create_Tables;
-import org.black_ixx.playerpoints.database.migrations._2_Add_Table_Username_Cache;
-import org.black_ixx.playerpoints.listeners.PointsMessageListener;
-import org.black_ixx.playerpoints.models.PendingTransaction;
-import org.black_ixx.playerpoints.models.SortedPlayer;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
 
 public class DataManager extends AbstractDataManager implements Listener {
 
     private LoadingCache<UUID, Integer> pointsCache;
     private final Map<UUID, Deque<PendingTransaction>> pendingTransactions;
     private final Map<UUID, String> pendingUsernameUpdates;
+    private final List<String> offlinePlayerList = new ArrayList<>();
 
     public DataManager(RosePlugin rosePlugin) {
         super(rosePlugin);
@@ -58,6 +61,7 @@ public class DataManager extends AbstractDataManager implements Listener {
 
         Bukkit.getPluginManager().registerEvents(this, rosePlugin);
         rosePlugin.getScheduler().runTaskTimerAsync(this::update, 10L, 10L);
+        rosePlugin.getScheduler().runTaskTimerAsync(this::updateOfflinePlayerList, 10L, org.black_ixx.playerpoints.config.SettingKey.OFFLINE_PLAYER_LIST_UPDATE_FREQUENCY.get());
     }
 
     @Override
@@ -115,6 +119,24 @@ public class DataManager extends AbstractDataManager implements Listener {
         }
     }
 
+    private void updateOfflinePlayerList() {
+        this.offlinePlayerList.clear();
+        this.databaseConnector.connect(connection -> {
+            String query = "SELECT username FROM " + this.getTablePrefix() + "username_cache";
+            try (Statement statement = connection.createStatement()) {
+                ResultSet result = statement.executeQuery(query);
+                while (result.next()) {
+                    String username = result.getString(1);
+                    this.offlinePlayerList.add(username);
+                }
+            }
+        });
+    }
+
+    public List<String> getOfflinePlayerList() {
+        return this.offlinePlayerList;
+    }
+
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerPreLogin(AsyncPlayerPreLoginEvent event) {
         if (event.getLoginResult() == AsyncPlayerPreLoginEvent.Result.ALLOWED)
@@ -125,6 +147,12 @@ public class DataManager extends AbstractDataManager implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         this.pendingUsernameUpdates.put(player.getUniqueId(), player.getName());
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onPlayerQuit(PlayerQuitEvent event) {
+        Player player = event.getPlayer();
+        this.offlinePlayerList.add(player.getName());
     }
 
     /**
@@ -350,6 +378,31 @@ public class DataManager extends AbstractDataManager implements Listener {
             }
         });
         return players;
+    }
+
+    public void createNonPlayerAccount(UUID accountID, String accountName) {
+        this.pendingUsernameUpdates.put(accountID, accountName);
+        int startingBalance = org.black_ixx.playerpoints.config.SettingKey.STARTING_BALANCE.get();
+        this.setPoints(accountID, startingBalance);
+        this.pointsCache.put(accountID, startingBalance);
+    }
+
+    public void deleteAccount(UUID accountID) {
+        this.pointsCache.invalidate(accountID);
+        this.pendingTransactions.remove(accountID);
+
+        this.databaseConnector.connect(connection -> {
+            String usernameDeleteQuery = "DELETE FROM " + this.getPointsTableName() + " WHERE " + this.getUuidColumnName() + " = ?";
+            try (PreparedStatement statement = connection.prepareStatement(usernameDeleteQuery)) {
+                statement.setString(1, accountID.toString());
+                statement.executeUpdate();
+            }
+            String pointsDeleteQuery = "DELETE FROM " + this.getTablePrefix() + "username_cache WHERE uuid = ?";
+            try (PreparedStatement statement = connection.prepareStatement(pointsDeleteQuery)) {
+                statement.setString(1, accountID.toString());
+                statement.executeUpdate();
+            }
+        });
     }
 
     public void importData(SortedSet<SortedPlayer> data, Map<UUID, String> cachedUsernames) {

@@ -55,6 +55,7 @@ public class BaseCommand extends PrimaryCommand {
                 .permission("playerpoints.basecommand")
                 .arguments(ArgumentsDefinition.builder()
                         .optionalSub(
+                                new AccountCommand(this.playerPoints),
                                 new BroadcastCommand(this.playerPoints),
                                 new ConvertCommand(this.playerPoints),
                                 new ExportCommand(this.playerPoints),

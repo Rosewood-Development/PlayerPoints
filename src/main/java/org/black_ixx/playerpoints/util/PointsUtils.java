@@ -2,10 +2,18 @@ package org.black_ixx.playerpoints.util;
 
 import dev.rosewood.rosegarden.RosePlugin;
 import dev.rosewood.rosegarden.command.framework.CommandContext;
+import org.black_ixx.playerpoints.PlayerPoints;
+import org.black_ixx.playerpoints.manager.DataManager;
+import org.black_ixx.playerpoints.manager.LocaleManager;
+import org.black_ixx.playerpoints.models.Tuple;
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
+import org.bukkit.metadata.MetadataValue;
+
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -16,16 +24,6 @@ import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import org.black_ixx.playerpoints.PlayerPoints;
-import org.black_ixx.playerpoints.manager.DataManager;
-import org.black_ixx.playerpoints.manager.LocaleManager;
-import org.black_ixx.playerpoints.models.Tuple;
-import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.bukkit.metadata.MetadataValue;
-import org.bukkit.util.StringUtil;
 
 public final class PointsUtils {
 
@@ -162,26 +160,38 @@ public final class PointsUtils {
      * @return a list of online players excluding vanished players
      */
     public static List<String> getPlayerTabComplete(CommandContext context) {
-        return Bukkit.getOnlinePlayers().stream()
+        List<String> onlinePlayers =  Bukkit.getOnlinePlayers().stream()
                 .filter(PointsUtils::isVisible)
                 .map(Player::getName)
                 .collect(Collectors.toList());
+
+        List<String> offlinePlayers = PlayerPoints.getInstance().getManager(DataManager.class).getOfflinePlayerList();
+
+        // Remove duplicates
+        offlinePlayers.removeAll(onlinePlayers);
+        onlinePlayers.addAll(offlinePlayers);
+
+        return onlinePlayers;
     }
 
     /**
      * @return a list of online players excluding vanished players
      */
     public static List<String> getPlayerPayTabComplete(CommandContext context) {
-        return Bukkit.getOnlinePlayers().stream()
+        List<String> onlinePlayers = Bukkit.getOnlinePlayers().stream()
             .filter(PointsUtils::isVisible)
             .filter(x -> !Objects.equals(x, context.getSender()))
             .map(Player::getName)
             .collect(Collectors.toList());
-    }
 
-//    public static List<String> getAccountTabComplete(CommandContext context) {
-//
-//    }
+        List<String> offlinePlayers = PlayerPoints.getInstance().getManager(DataManager.class).getOfflinePlayerList();
+
+        // Remove duplicates
+        offlinePlayers.removeAll(onlinePlayers);
+        onlinePlayers.addAll(offlinePlayers);
+
+        return onlinePlayers;
+    }
 
     public static boolean isVisible(Player player) {
         return player.getMetadata("vanished").stream().noneMatch(MetadataValue::asBoolean);

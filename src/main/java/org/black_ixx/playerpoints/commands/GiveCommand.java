@@ -8,7 +8,6 @@ import dev.rosewood.rosegarden.command.framework.annotation.RoseExecutable;
 import dev.rosewood.rosegarden.utils.StringPlaceholders;
 import org.black_ixx.playerpoints.PlayerPoints;
 import org.black_ixx.playerpoints.commands.arguments.StringSuggestingArgumentHandler;
-import org.black_ixx.playerpoints.manager.LocaleManager;
 import org.black_ixx.playerpoints.util.PointsUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -25,7 +24,11 @@ public class GiveCommand extends BasePointsCommand {
         PointsUtils.getPlayerByName(target, player -> {
             CommandSender sender = context.getSender();
             if (player == null) {
-                this.localeManager.sendCommandMessage(sender, "unknown-player", StringPlaceholders.of("player", target));
+                if (target.startsWith("*")) {
+                    this.localeManager.sendCommandMessage(sender, "unknown-account", StringPlaceholders.of("account", target));
+                } else {
+                    this.localeManager.sendCommandMessage(sender, "unknown-player", StringPlaceholders.of("player", target));
+                }
                 return;
             }
 
