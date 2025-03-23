@@ -110,6 +110,7 @@ command-convert-warning: '&cNotice: This operation will delete all data from the
 command-account-description: 'Manages the creation and deletion of accounts'
 command-account-create-success: '&aSuccessfully created account: %account%'
 command-account-create-exists: '&cFailed to create account. An account named %account% already exists.'
+command-account-create-name-invalid: '&cFailed to create account. Account names must be between 3-16 characters long and can only contain letters, numbers, and underscores.'
 command-account-create-warning: '&cNotice: This operation will create a non-player account called %account%. If you are absolutely sure about this, use &b/points account create %account% confirm&c.'
 command-account-delete-success: '&aSuccessfully deleted account.'
 command-account-delete-does-not-exist: '&cFailed to delete account. An account named %account% does not exist.'

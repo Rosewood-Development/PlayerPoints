@@ -23,8 +23,8 @@ public class AccountCommand extends BasePointsCommand {
     String prefixedAccountName = accountName.startsWith("*") ? accountName : "*" + accountName;
 
     if (operation.equalsIgnoreCase("create")) {
-      if (confirm == null) {
-        this.localeManager.sendCommandMessage(context.getSender(), "command-account-create-warning", StringPlaceholders.of("account", prefixedAccountName));
+      if (!accountName.matches("^\\*?\\w+$")) {
+        this.localeManager.sendCommandMessage(context.getSender(), "command-account-create-name-invalid");
         return;
       }
 
@@ -33,18 +33,23 @@ public class AccountCommand extends BasePointsCommand {
         return;
       }
 
+      if (confirm == null) {
+        this.localeManager.sendCommandMessage(context.getSender(), "command-account-create-warning", StringPlaceholders.of("account", prefixedAccountName));
+        return;
+      }
+
       dataManager.createNonPlayerAccount(UUID.randomUUID(), prefixedAccountName);
       this.localeManager.sendCommandMessage(context.getSender(), "command-account-create-success", StringPlaceholders.of("account", prefixedAccountName));
       return;
     } else if (operation.equalsIgnoreCase("delete")) {
-      if (confirm == null) {
-        this.localeManager.sendCommandMessage(context.getSender(), "command-account-delete-warning", StringPlaceholders.of("account", accountName));
-        return;
-      }
-
       UUID accountID = dataManager.lookupCachedUUID(accountName);
       if (accountID == null) {
         this.localeManager.sendCommandMessage(context.getSender(), "command-account-delete-does-not-exist", StringPlaceholders.of("account", accountName));
+        return;
+      }
+
+      if (confirm == null) {
+        this.localeManager.sendCommandMessage(context.getSender(), "command-account-delete-warning", StringPlaceholders.of("account", accountName));
         return;
       }
 
