@@ -15,6 +15,7 @@ no-permission: '&cΔεν έχεις άδεια για αυτό!'
 only-player: '&cΑυτή η εντολή μπορεί να εκτελεστεί μόνο από έναν παίκτη.'
 invalid-amount: '&cΤο ποσό πρέπει να είναι θετικός ακέραιος αριθμός.'
 unknown-player: '&cΔεν ήταν δυνατή η εύρεση του παίκτη: &b%player%'
+unknown-account: '&cΟ λογαριασμός δεν βρέθηκε: &b%account%'
 unknown-command: '&cΑγνωστη εντολή: &b%input%'
 invalid-argument: '&cΆκυρο όρισμα: %message%.'
 command-usage: '&cΧρήση: &b/%cmd% %args%'
@@ -104,6 +105,16 @@ command-convert-invalid: '&b%plugin% &cδεν είναι μετατρέψιμο 
 command-convert-success: '&aΤα δεδομένα νομίσματος από το &b%plugin% &aμετατρέπονται.'
 command-convert-failure: '&cΠαρουσιάστηκε σφάλμα κατά την προσπάθεια μετατροπής των δεδομένων. Ελέξτε το console σας και αναφέρετε τυχόν σφάλματα στον συντάκτη του PlayerPoints plugin.'
 command-convert-warning: '&cΠροσοχλη: Αυτή η ενέργεια θα διαγράψει όλα τα δεδομένα data από την ενεργή βαση δεδομένων και θα τα αντικαταστήσει με τα δεδομενα από το &b%plugin%&c. &cΑν είστε σίγουροι για αυτο χρησιμοποιήστε την εντολή &b/points convert %plugin% confirm&c.'
+
+# Account Command
+command-account-description: 'Διαχειρίζεται τη δημιουργία και τη διαγραφή λογαριασμών'
+command-account-create-success: '&aΔημιουργήθηκε επιτυχώς λογαριασμός: %account%'
+command-account-create-exists: '&cΑπέτυχε η δημιουργία λογαριασμού. Ένας λογαριασμός με όνομα %account% υπάρχει ήδη.'
+command-account-create-name-invalid: '&cΑπέτυχε η δημιουργία λογαριασμού. Τα ονόματα λογαριασμών πρέπει να έχουν μήκος μεταξύ 3-16 χαρακτήρων και μπορούν να περιέχουν μόνο γράμματα, αριθμούς και υπογράμμιση.'
+command-account-create-warning: '&cΑνακοίνωση: Αυτή η λειτουργία θα δημιουργήσει έναν λογαριασμό μη παίκτη με το όνομα "account". Αν είστε απολύτως σίγουροι γι'' αυτό, χρησιμοποιήστε &b/points account create %account% confirm&c.'
+command-account-delete-success: '&aΔιαγράφηκε επιτυχώς ο λογαριασμός.'
+command-account-delete-does-not-exist: '&cΑπέτυχε η διαγραφή λογαριασμού. Ένας λογαριασμός με όνομα %account% δεν υπάρχει.'
+command-account-delete-warning: '&cΑνακοίνωση: Αυτή η λειτουργία θα διαγράψει όλα τα δεδομένα λογαριασμού για το λογαριασμό %account%. Αν είστε απολύτως σίγουροι γι'' αυτό, χρησιμοποιήστε &b/points account delete %account% confirm&c.'
 
 # Import Legacy Command
 command-importlegacy-description: 'Εισαγάγεται εναν legacy πίνακα.'
