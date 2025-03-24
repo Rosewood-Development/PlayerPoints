@@ -157,40 +157,35 @@ public final class PointsUtils {
     }
 
     /**
-     * @return a list of online players excluding vanished players
+     * @return a list of all accounts + online players excluding vanished players
      */
     public static List<String> getPlayerTabComplete(CommandContext context) {
-        List<String> onlinePlayers =  Bukkit.getOnlinePlayers().stream()
-                .filter(PointsUtils::isVisible)
-                .map(Player::getName)
-                .collect(Collectors.toList());
+        Map<UUID, String> accountUUIDMap;
+        if (org.black_ixx.playerpoints.config.SettingKey.ONLY_SUGGEST_ACCOUNTS_GREATER_THAN_STARTING_BALANCE.get()) {
+            accountUUIDMap = PlayerPoints.getInstance().getManager(DataManager.class).getAccountsGreaterThanStartingBalanceUUIDMap();
+        } else {
+            accountUUIDMap = PlayerPoints.getInstance().getManager(DataManager.class).getAccountUUIDMap();
+        }
 
-        List<String> accountList = PlayerPoints.getInstance().getManager(DataManager.class).getCachedAccountsList();
+        List<String> onlinePlayers = Bukkit.getOnlinePlayers().stream()
+            .filter(PointsUtils::isVisible)
+            .map(Player::getName)
+            .collect(Collectors.toList());
 
-        // Remove duplicates
-        accountList.removeAll(onlinePlayers);
-        onlinePlayers.addAll(accountList);
+        onlinePlayers.addAll(accountUUIDMap.values());
 
         return onlinePlayers;
     }
 
     /**
-     * @return a list of online players excluding vanished players
+     * @return a list of online players excluding vanished players and the command sender
      */
     public static List<String> getPlayerPayTabComplete(CommandContext context) {
-        List<String> onlinePlayers = Bukkit.getOnlinePlayers().stream()
-            .filter(PointsUtils::isVisible)
-            .filter(x -> !Objects.equals(x, context.getSender()))
-            .map(Player::getName)
-            .collect(Collectors.toList());
-
-        List<String> accountList = PlayerPoints.getInstance().getManager(DataManager.class).getCachedAccountsList();
-
-        // Remove duplicates
-        accountList.removeAll(onlinePlayers);
-        onlinePlayers.addAll(accountList);
-
-        return onlinePlayers;
+      return Bukkit.getOnlinePlayers().stream()
+          .filter(PointsUtils::isVisible)
+          .filter(x -> !Objects.equals(x, context.getSender()))
+          .map(Player::getName)
+          .collect(Collectors.toList());
     }
 
     public static boolean isVisible(Player player) {

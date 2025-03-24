@@ -1,5 +1,6 @@
 package org.black_ixx.playerpoints;
 
+import com.google.common.collect.HashBiMap;
 import org.black_ixx.playerpoints.event.PlayerPointsChangeEvent;
 import org.black_ixx.playerpoints.event.PlayerPointsResetEvent;
 import org.black_ixx.playerpoints.manager.DataManager;
@@ -189,6 +190,29 @@ public class PlayerPointsAPI {
         return this.plugin.getManager(DataManager.class).getTopSortedPoints(null);
     }
 
-    // #TODO: Add method to look up account UUID by username
+    /**
+     * Gets an account UUID from a cached map of UUID's and usernames
+     *
+     * @param name The name of the player/account
+     * @return The UUID of the account
+     */
+    public UUID getAccountUUIDFromCache(@NotNull String name) {
+        Objects.requireNonNull(name);
 
+        HashBiMap<UUID, String> accountUUIDMap = this.plugin.getManager(DataManager.class).getAccountUUIDMap();
+
+        return accountUUIDMap.inverse().get(name);
+    }
+
+    /**
+     * Gets an account UUID from the database
+     *
+     * @param name The name of the player/account
+     * @return The UUID of the account
+     */
+    public UUID getAccountUUIDFromDatabase(@NotNull String name) {
+        Objects.requireNonNull(name);
+
+        return this.plugin.getManager(DataManager.class).lookupCachedUUID(name);
+    }
 }
