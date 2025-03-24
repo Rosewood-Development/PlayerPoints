@@ -30,6 +30,7 @@ public class SettingKey {
     public static final RoseSetting<Integer> STARTING_BALANCE = create("starting-balance", INTEGER, 0, "The amount of points new players will start with");
     public static final RoseSetting<Boolean> ONLY_SUGGEST_ACCOUNTS_GREATER_THAN_STARTING_BALANCE = create("only-suggest-accounts-greater-than-starting-balance", BOOLEAN, false, "When using the account/player name argument in commands, only suggest accounts with a balance greater than the starting balance.", "If false, all accounts will be suggested.");
     public static final RoseSetting<Integer> CACHED_ACCOUNT_LIST_REFRESH_INTERVAL = create("cached-account-list-refresh-interval", INTEGER, 300, "How often (in seconds) we update the list of accounts for tab completion purposes.");
+    public static final RoseSetting<Boolean> SHOW_NON_PLAYER_ACCOUNTS_ON_LEADERBOARDS = create("show-non-player-accounts-on-leaderboards", BOOLEAN, false, "Should we show non-player accounts on leaderboards?");
     public static final RoseSetting<CommentedConfigurationSection> VOTE = create("vote", "Votifier hook settings");
     public static final RoseSetting<Boolean> VOTE_ENABLED = create("vote.enabled", BOOLEAN, false, "If the votifier hook should be enabled");
     public static final RoseSetting<Integer> VOTE_AMOUNT = create("vote.amount", INTEGER, 100, "How many points should be awarded per vote");

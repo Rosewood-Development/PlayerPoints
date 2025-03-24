@@ -373,7 +373,13 @@ public class DataManager extends AbstractDataManager implements Listener {
                         pointsValue = result.getInt(3);
 
                     if (username != null) {
-                        players.add(new SortedPlayer(uuid, username, pointsValue));
+                        if (org.black_ixx.playerpoints.config.SettingKey.SHOW_NON_PLAYER_ACCOUNTS_ON_LEADERBOARDS.get()) {
+                            players.add(new SortedPlayer(uuid, username, pointsValue));
+                        } else {
+                            if (!username.startsWith("*")) {
+                                players.add(new SortedPlayer(uuid, username, pointsValue));
+                            }
+                        }
                     } else {
                         players.add(new SortedPlayer(uuid, pointsValue));
                     }
