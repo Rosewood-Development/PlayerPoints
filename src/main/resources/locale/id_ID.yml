@@ -15,6 +15,7 @@ no-permission: '&cKamu tidak punya izin untuk itu!'
 only-player: '&cPerintah ini hanya dapat dijalankan oleh pemain.'
 invalid-amount: '&cJumlah harus berupa bilangan bulat positif.'
 unknown-player: '&cPemain tidak dapat ditemukan: &b%player%'
+unknown-account: '&cAkun tidak dapat ditemukan: &b%account%'
 unknown-command: '&cPerintah tidak diketahui: &b%input%'
 invalid-argument: '&cInvalid argument: %message%.'
 command-usage: '&cPenggunaan: &b/%cmd% %args%'
@@ -104,6 +105,16 @@ command-convert-invalid: '&b%plugin% &cbukan nama plugin mata uang yang dapat di
 command-convert-success: '&aData mata uang dari &b%plugin% &asedang dikonversi.'
 command-convert-failure: '&cTerjadi kesalahan saat mencoba mengonversi data. Silakan cek konsolmu dan laporkan kesalahan apa pun ke pembuat plugin PlayerPoints.'
 command-convert-warning: '&cCatatan: operasi ini akan menghapus semua data dari basis data yang aktif dan menggantinya dengan data dari &b%plugin%&c. &cJika kamu benar-benar yakin tentang hal ini, gunakan &b/points convert %plugin% confirm&c.'
+
+# Account Command
+command-account-description: 'Mengelola pembuatan dan penghapusan akun'
+command-account-create-success: '&aBerhasil membuat akun: %account%'
+command-account-create-exists: '&cGagal membuat akun. Akun bernama %account% sudah ada.'
+command-account-create-name-invalid: '&cGagal membuat akun. Nama akun harus terdiri dari 3-16 karakter dan hanya boleh terdiri dari huruf, angka, dan garis bawah.'
+command-account-create-warning: '&cPerhatian: Operasi ini akan membuat akun non-pemain yang disebut %account%. Jika Anda benar-benar yakin tentang hal ini, gunakan &b/points account create %account% confirm&c.'
+command-account-delete-success: '&aAkun berhasil dihapus.'
+command-account-delete-does-not-exist: '&cGagal menghapus akun. Akun bernama %account% tidak ada.'
+command-account-delete-warning: '&cPerhatian: Operasi ini akan menghapus semua data akun untuk akun %akun%. Jika Anda benar-benar yakin akan hal ini, gunakan &b/points account delete %account% confirm&c.'
 
 # Import Legacy Command
 command-importlegacy-description: 'Impor tabel lama'
