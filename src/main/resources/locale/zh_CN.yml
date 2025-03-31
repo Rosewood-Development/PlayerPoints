@@ -61,6 +61,7 @@ command-pay-self: '&c您不能给自己转账。'
 command-pay-sent: '&a您向玩家 &b%player% 转账了 %amount% &a%currency%。'
 command-pay-received: '&e您收到了来自玩家 &b%player% &e的 &b%amount% &e%currency% 。'
 command-pay-lacking-funds: '&c您没有多于 %currency% 的点劵来那么做。'
+command-pay-minimum-amount: '&c您可以支付的最低金额为 &b%amount% &c%currency%。'
 
 # 设置命令
 command-set-description: '设置一名玩家的点劵'

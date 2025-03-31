@@ -10,6 +10,7 @@ import dev.rosewood.rosegarden.command.framework.annotation.RoseExecutable;
 import dev.rosewood.rosegarden.utils.StringPlaceholders;
 import org.black_ixx.playerpoints.PlayerPoints;
 import org.black_ixx.playerpoints.commands.arguments.StringSuggestingArgumentHandler;
+import org.black_ixx.playerpoints.config.SettingKey;
 import org.black_ixx.playerpoints.util.PointsUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -54,6 +55,12 @@ public class PayCommand extends BasePointsCommand {
 
             if (amount <= 0) {
                 this.localeManager.sendCommandMessage(player, "invalid-amount");
+                return;
+            }
+
+            int minAmount = SettingKey.MINIMUM_PAY_AMOUNT.get();
+            if (amount < minAmount) {
+                this.localeManager.sendCommandMessage(player, "command-pay-minimum-amount", StringPlaceholders.of("amount", PointsUtils.formatPoints(minAmount), "currency", this.localeManager.getCurrencyName(amount)));
                 return;
             }
 

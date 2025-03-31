@@ -61,6 +61,7 @@ command-pay-self: '&cΔεν μπορείς να πληρώσεις τον ευα
 command-pay-sent: '&aΠλήρωσες &b%player% %amount% &a%currency%.'
 command-pay-received: '&eΠληρώθηκες &b%amount% &e%currency% από τον &b%player%&e.'
 command-pay-lacking-funds: '&cΔεν έχεις αρκετά %currency% για αυτό.'
+command-pay-minimum-amount: '&cΤο ελάχιστο ποσό που μπορείτε να πληρώσετε είναι &b%amount% &c%currency%.'
 
 # Set Command
 command-set-description: 'Δήλωσε τους πόντους ενός παίκτη.'

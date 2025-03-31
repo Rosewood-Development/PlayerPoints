@@ -61,6 +61,7 @@ command-pay-self: '&c你不能支付給自己.'
 command-pay-sent: '&a你支付了 &b%player% %amount% &a點&a%currency%.'
 command-pay-received: '&b%player% &e支付了 &b%amount% &e點&e%currency%給你&e.'
 command-pay-lacking-funds: '&c你沒有足夠的%currency%.'
+command-pay-minimum-amount: '&c您可以支付的最低金額為 &b%amount% &c%currency%。'
 
 # Set Command
 command-set-description: '&8 - &d/points set <玩家> <數量> &7- 設定玩家點數'

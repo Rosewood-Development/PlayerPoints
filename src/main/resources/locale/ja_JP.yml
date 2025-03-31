@@ -61,6 +61,7 @@ command-pay-self: '&c自分で支払うことはできない！'
 command-pay-sent: '&aあなたは &b%player% に %amount% &a%currency% 支払いました。'
 command-pay-received: '&eあなたは &b%player% から &b%amount% &e%currency% 受け取りました。'
 command-pay-lacking-funds: '&c%currency% 不足です。'
+command-pay-minimum-amount: 'お支払い可能な最低金額は &b%amount% &c%currency% です。'
 
 # Set Command
 command-set-description: 'プレイヤーのポイントを新たな値に設定する。'
