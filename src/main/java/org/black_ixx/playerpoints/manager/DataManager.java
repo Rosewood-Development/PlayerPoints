@@ -101,7 +101,7 @@ public class DataManager extends AbstractDataManager implements Listener {
 
         for (Map.Entry<UUID, Deque<PendingTransaction>> entry : processingPendingTransactions.entrySet()) {
             UUID uuid = entry.getKey();
-            int points = this.getEffectivePoints(uuid, entry.getValue());
+            int points = this.getEffectivePoints(uuid, entry.getValue(), null);
             this.pointsCache.put(uuid, points);
             transactions.put(uuid, points);
         }
@@ -134,17 +134,22 @@ public class DataManager extends AbstractDataManager implements Listener {
      * @return the effective points value
      */
     public int getEffectivePoints(UUID playerId) {
-        return this.getEffectivePoints(playerId, this.pendingTransactions.get(playerId));
+        return this.getEffectivePoints(playerId, this.pendingTransactions.get(playerId), null);
     }
 
-    private int getEffectivePoints(UUID playerId, Deque<PendingTransaction> transactions) {
+    public int getEffectivePoints(UUID playerId, int points) {
+        return this.getEffectivePoints(playerId, this.pendingTransactions.get(playerId), points);
+    }
+
+    private int getEffectivePoints(UUID playerId, Deque<PendingTransaction> transactions, Integer points) {
         // Get the cached amount or fetch it fresh from the database
-        int points;
-        try {
-            points = this.pointsCache.get(playerId);
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-            points = 0;
+        if (points == null) {
+            try {
+                points = this.pointsCache.get(playerId);
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+                points = 0;
+            }
         }
 
         // Apply any pending transactions
@@ -315,9 +320,7 @@ public class DataManager extends AbstractDataManager implements Listener {
                 while (result.next()) {
                     UUID uuid = UUID.fromString(result.getString(1));
                     String username = result.getString(2);
-                    Integer pointsValue = this.pointsCache.getIfPresent(uuid);
-                    if (pointsValue == null)
-                        pointsValue = result.getInt(3);
+                    int pointsValue = this.getEffectivePoints(uuid, result.getInt(3));
 
                     if (username != null) {
                         players.add(new SortedPlayer(uuid, username, pointsValue));
