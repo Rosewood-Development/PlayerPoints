@@ -58,6 +58,7 @@ command-pay-self: '&cBạn không thể chuyển cho chính mình.'
 command-pay-sent: '&aBạn đã chuyển cho &b%player% %amount% &a%currency%.'
 command-pay-received: '&eBạn đã được chuyển &b%amount% &e%currency% bởi &b%player%&e.'
 command-pay-lacking-funds: '&cBạn không có đủ %currency% cho điều này.'
+command-pay-minimum-amount: '&cSố tiền tối thiểu bạn có thể thanh toán là &b%amount% &c%currency%.'
 
 # Set Command
 command-set-description: 'Đặt số points của người chơi'

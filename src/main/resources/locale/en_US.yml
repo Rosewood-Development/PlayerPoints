@@ -60,6 +60,7 @@ command-pay-self: '&cYou cannot pay yourself!'
 command-pay-sent: '&aYou paid &b%player% %amount% &a%currency%.'
 command-pay-received: '&eYou were paid &b%amount% &e%currency% by &b%player%&e.'
 command-pay-lacking-funds: '&cYou do not have enough %currency% for that.'
+command-pay-minimum-amount: '&cThe minimum amount you can pay is &b%amount%&c %currency%.'
 
 # Set Command
 command-set-description: 'Set a player''s points'

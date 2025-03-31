@@ -60,6 +60,7 @@ command-pay-self: '&cKamu tidak dapat membayar diri sendiri!'
 command-pay-sent: '&aKamu membayar &b%player% %amount% &a%currency%.'
 command-pay-received: '&eKamu dibayar &b%amount% &e%currency% oleh &b%player%&e.'
 command-pay-lacking-funds: '&cKamu tidak punya %currency% yang cukup untuk itu.'
+command-pay-minimum-amount: '&cJumlah minimum yang dapat Anda bayarkan adalah &b%amount% &c%currency%.'
 
 # Set Command
 command-set-description: 'Atur poin pemain'

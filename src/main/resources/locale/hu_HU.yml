@@ -60,6 +60,7 @@ command-pay-self: '&cNem tudsz magadnak fizetni.'
 command-pay-sent: '&aFizettél &b%player%-nak/nek %amount% &a%currency%ot.'
 command-pay-received: '&eFizetett neked &b%amount% &e%currency%ot &b%player%&e.'
 command-pay-lacking-funds: '&cNincs elég %currency%od ehhez.'
+command-pay-minimum-amount: '&cA minimálisan fizethető összeg &b%összeg% &c%pénz%.'
 
 # Set Command
 command-set-description: 'Beállítja egy játékos pontját'

@@ -60,6 +60,7 @@ command-pay-self: '&cNão se pode pagar a si próprio!'
 command-pay-sent: '&aTu pagaste a &b%player% %amount% &a%currency%.'
 command-pay-received: '&b%player%&e te pagou &b%amount% &e%currency%.'
 command-pay-lacking-funds: '&cTu não tens %currency% suficientes para isso.'
+command-pay-minimum-amount: '&cO montante mínimo que pode pagar é &b%amount% &c%currency%.'
 
 # Comando de Set
 command-set-description: 'Define os pontos de um jogador'
