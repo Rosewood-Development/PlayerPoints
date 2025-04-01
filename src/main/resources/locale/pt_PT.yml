@@ -15,6 +15,7 @@ no-permission: '&cTu não tens permissão para isso!'
 only-player: '&cEste comando só pode ser executado por um jogador.'
 invalid-amount: '&cQuantidade deve ser um numero inteiro positivo.'
 unknown-player: '&cJogador não pode ser encontrado: &b%player%'
+unknown-account: '&cNão foi possível encontrar a conta: &b%account%'
 unknown-command: '&cComando desconhecido: &b%input%'
 invalid-argument: '&cArgumento inválido: %message%.'
 command-usage: '&cUtilização: &b/%cmd% %args%'
@@ -105,6 +106,15 @@ command-convert-invalid: '&b%plugin% &cnão é o nome de um plugin de moeda conv
 command-convert-success: '&aDados da moeda de &b%plugin% &aforam convertidos com sucesso.'
 command-convert-failure: '&cOcorreu um erro enquanto se tentava converter os dados. Por favor verifica na tua consola e informa quaisquer erros ao autor do plugin PlayerPoints.'
 command-convert-warning: '&cAviso: Esta operação vai apagar todos os dados da base de dados ativa e substitui-los pelos dados de &b%plugin%&c. &cSe tu tens a certeza absoluta sobre isto, utiliza &b/points convert %plugin% confirm&c.'
+
+# Account Command
+command-account-description: 'Gere a criação e a supressão de contas'
+command-account-create-success: '&aConta criada com sucesso: &b%account%'
+command-account-create-exists: '&cFalha ao criar a conta. Já existe uma conta com o nome &b%account%&c.'
+command-account-create-name-invalid: '&cFalha ao criar a conta. Os nomes das contas devem ter entre 3 e 16 caracteres e só podem conter letras, números e sublinhados.'
+command-account-delete-success: '&aConta eliminada com sucesso.'
+command-account-delete-does-not-exist: '&cFalha ao eliminar a conta. Não existe uma conta com o nome &b%account%&c.'
+command-account-delete-warning: '&cAviso: Esta operação irá eliminar todos os dados da conta &b%account%&c. Se tiver a certeza absoluta disso, utilize &b/points account delete %account% confirm&c.'
 
 # Comando de Import Legacy
 command-importlegacy-description: 'Importa uma tabela antiga'

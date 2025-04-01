@@ -15,6 +15,7 @@ no-permission: '&c権限不足です！'
 only-player: '&cこのコマンドはプレイヤーのだけ使うができる。'
 invalid-amount: '&c値は正の整数で指定してください。'
 unknown-player: '&c&b%player% という名前のプレイヤーは見つかりませんでした。'
+unknown-account: '&cアカウントが見つかりません: &b%account%'
 unknown-command: '&c無効なコマンド: &b%input%'
 invalid-argument: '無効な引数: %message%。'
 command-usage: '&c使い方: &b/%cmd% %args%'
@@ -105,6 +106,15 @@ command-convert-invalid: '&b%plugin% &cからの通貨の読み込みははサ�
 command-convert-success: '&b%plugin% &aから通貨データが読み込まれました。'
 command-convert-failure: '&cデータの読み込み中にエラーが発生しました。コンソールでエラーを確認し、PlayerPointsの作者に報告してください。'
 command-convert-warning: '&c注意：この処理は現在使用中のデータベースのデータを削除し、&b%plugin%&cの中身で置き換えます。 &cデータのバックアップを取ったうえで本当にこの処理を実行したい場合のみ &b/points convert %plugin% confirm&cコマンドを使用してください。'
+
+# Account Command
+command-account-description: 'アカウントの作成と削除を管理'
+command-account-create-success: '&aアカウントの作成に成功しました: &b%account%'
+command-account-create-exists: '&cアカウントの作成に失敗しました。アカウント &b%account% &cという名前のアカウントが既に存在します。'
+command-account-create-name-invalid: '&cアカウントの作成に失敗しました。アカウント名の長さは3～16文字で、文字、数字、アンダースコアのみ使用できます。'
+command-account-delete-success: '&a指定されたアカウントの削除に成功しました。'
+command-account-delete-does-not-exist: '&cアカウントの削除に失敗しました。&b%account% &cという名前のアカウントは存在しません。'
+command-account-delete-warning: '&c注意 この操作により、アカウント &b%account% &cのすべてのアカウント・データが削除されます。これが確実であれば、コマンド &b/points account delete %account% confirm&c.'
 
 # Import Legacy Command
 command-importlegacy-description: 'レガシーテーブルをインポートします'

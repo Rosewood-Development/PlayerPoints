@@ -15,6 +15,7 @@ no-permission: '&cBạn không có quyền để sử dụng!'
 only-player: '&cLệnh này chỉ có thể được thực hiện bởi người chơi.'
 invalid-amount: '&cSố tiền phải là một số nguyên dương.'
 unknown-player: '&cKhông thể tìm thấy người chơi: &b%player%'
+unknown-account: '&cKhông tìm thấy tài khoản: &b%account%'
 unknown-command: '&cLệnh không xác định: &b%input%'
 invalid-argument: '&cĐối số không hợp lệ: %message%.'
 command-usage: '&cCách sử dụng: &b/%cmd% %args%'
@@ -103,6 +104,14 @@ command-convert-invalid: '&b%plugin% &ckhông phải là tên plugin tiền tệ
 command-convert-success: '&aDữ liệu tiền tệ từ &b%plugin% &ađã được chuyển đổi.'
 command-convert-failure: '&cĐã xảy ra lỗi khi cố gắng chuyển đổi dữ liệu. Vui lòng kiểm tra bảng điều khiển của bạn và báo cáo bất kỳ lỗi nào cho tác giả plugin PlayerPoints.'
 command-convert-warning: '&cLưu ý: Thao tác này sẽ xóa tất cả dữ liệu khỏi cơ sở dữ liệu đang hoạt động và thay thế bằng dữ liệu từ &b%plugin%&c. &cNếu bạn hoàn toàn chắc chắn về điều này, hãy sử dụng &b/points convert %plugin% confirm&c.'
+
+# Account Command
+command-account-description: 'Quản lý việc tạo và xóa tài khoản'
+command-account-create-success: '&aTài khoản được tạo thành công: &b%account%'
+command-account-create-exists: '&cKhông tạo được tài khoản. Tài khoản có tên %account% đã tồn tại.'
+command-account-delete-success: '&aĐã xóa tài khoản thành công.'
+command-account-delete-does-not-exist: '&cKhông xóa được tài khoản. Tài khoản có tên &b%account% &ckhông tồn tại.'
+command-account-delete-warning: '&cLưu ý: Thao tác này sẽ xóa tất cả dữ liệu tài khoản cho tài khoản &b%account%&c. Nếu bạn hoàn toàn chắc chắn về điều này, hãy sử dụng lệnh &b/points account delete %account% confirm&c.'
 
 # Import Legacy Command
 command-importlegacy-description: 'Nhập một bảng kế thừa'

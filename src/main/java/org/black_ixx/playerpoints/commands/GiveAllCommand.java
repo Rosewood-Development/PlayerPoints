@@ -11,7 +11,6 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import org.black_ixx.playerpoints.PlayerPoints;
 import org.black_ixx.playerpoints.manager.DataManager;
-import org.black_ixx.playerpoints.manager.LocaleManager;
 import org.black_ixx.playerpoints.util.PointsUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;

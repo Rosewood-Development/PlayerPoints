@@ -1,6 +1,5 @@
 package org.black_ixx.playerpoints.commands;
 
-import dev.rosewood.rosegarden.command.argument.ArgumentHandlers;
 import dev.rosewood.rosegarden.command.framework.ArgumentsDefinition;
 import dev.rosewood.rosegarden.command.framework.CommandContext;
 import dev.rosewood.rosegarden.command.framework.CommandInfo;
@@ -22,7 +21,11 @@ public class BroadcastCommand extends BasePointsCommand {
     public void execute(CommandContext context, String target) {
         PointsUtils.getPlayerByName(target, player -> {
             if (player == null) {
-                this.localeManager.sendCommandMessage(context.getSender(), "unknown-player", StringPlaceholders.of("player", target));
+                if (target.startsWith("*")) {
+                    this.localeManager.sendCommandMessage(context.getSender(), "unknown-account", StringPlaceholders.of("account", target));
+                } else {
+                    this.localeManager.sendCommandMessage(context.getSender(), "unknown-player", StringPlaceholders.of("player", target));
+                }
                 return;
             }
 

@@ -39,7 +39,11 @@ public class PayCommand extends BasePointsCommand {
 
         PointsUtils.getPlayerByName(targetName, target -> {
             if (target == null) {
-                this.localeManager.sendCommandMessage(player, "unknown-player", StringPlaceholders.of("player", targetName));
+                if (targetName.startsWith("*")) {
+                    this.localeManager.sendCommandMessage(player, "unknown-account", StringPlaceholders.of("account", targetName));
+                } else {
+                    this.localeManager.sendCommandMessage(player, "unknown-player", StringPlaceholders.of("player", targetName));
+                }
                 return;
             }
 
@@ -86,7 +90,7 @@ public class PayCommand extends BasePointsCommand {
                 .descriptionKey("command-pay-description")
                 .permission("playerpoints.pay")
                 .arguments(ArgumentsDefinition.builder()
-                        .required("target", new StringSuggestingArgumentHandler(PointsUtils::getPlayerTabComplete))
+                        .required("target", new StringSuggestingArgumentHandler(PointsUtils::getPlayerTabCompleteWithoutSelf))
                         .required("amount", ArgumentHandlers.INTEGER)
                         .build())
                 .playerOnly()

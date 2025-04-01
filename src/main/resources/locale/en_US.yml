@@ -15,6 +15,7 @@ no-permission: '&cYou don''t have permission for that!'
 only-player: '&cThis command can only be executed by a player.'
 invalid-amount: '&cAmount must be a positive whole number.'
 unknown-player: '&cPlayer could not be found: &b%player%'
+unknown-account: '&cAccount could not be found: &b%account%'
 unknown-command: '&cUnknown command: &b%input%'
 invalid-argument: '&cInvalid argument: %message%.'
 command-usage: '&cUsage: &b/%cmd% %args%'
@@ -105,6 +106,15 @@ command-convert-invalid: '&b%plugin% &cis not a convertible currency plugin name
 command-convert-success: '&aCurrency data from &b%plugin% &ais being converted.'
 command-convert-failure: '&cAn error occurred while attempting to convert the data. Please check your console and report any errors to the PlayerPoints plugin author.'
 command-convert-warning: '&cNotice: This operation will delete all data from the active database and replace it with the data from &b%plugin%&c. &cIf you are absolutely sure about this, use &b/points convert %plugin% confirm&c.'
+
+# Account Command
+command-account-description: 'Create or delete an accounts'
+command-account-create-success: '&aSuccessfully created account: &b%account%'
+command-account-create-exists: '&cFailed to create account. An account named &b%account% &calready exists.'
+command-account-create-name-invalid: '&cFailed to create account. Account names must be between 3-16 characters long and can only contain letters, numbers, and underscores.'
+command-account-delete-success: '&aSuccessfully deleted account &b%account%&a.'
+command-account-delete-does-not-exist: '&cFailed to delete account. An account named &b%account% &cdoes not exist.'
+command-account-delete-warning: '&cNotice: This operation will delete all account data for the account &b%account%&c. If you are absolutely sure about this, use &b/points account delete %account% confirm&c.'
 
 # Import Legacy Command
 command-importlegacy-description: 'Import a legacy table'

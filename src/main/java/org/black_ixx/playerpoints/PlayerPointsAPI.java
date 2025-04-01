@@ -188,4 +188,18 @@ public class PlayerPointsAPI {
         return this.plugin.getManager(DataManager.class).getTopSortedPoints(null);
     }
 
+    /**
+     * Gets a known PlayerPoints account UUID by its name.
+     * If the name is for a Player account, returns the Player UUID.
+     * Returns {@code null} for accounts that do not exist.
+     *
+     * @param name The name of the player/account
+     * @return The UUID of the account
+     */
+    public UUID getAccountUUIDByName(@NotNull String name) {
+        Objects.requireNonNull(name);
+
+        return this.plugin.getManager(DataManager.class).lookupCachedUUID(name);
+    }
+
 }

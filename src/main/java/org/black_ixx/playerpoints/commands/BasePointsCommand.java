@@ -7,11 +7,13 @@ import org.black_ixx.playerpoints.manager.LocaleManager;
 
 public abstract class BasePointsCommand extends BaseRoseCommand {
 
+    protected final PlayerPoints playerPoints;
     protected final PlayerPointsAPI api;
     protected final LocaleManager localeManager;
 
     public BasePointsCommand(PlayerPoints playerPoints) {
         super(playerPoints);
+        this.playerPoints = playerPoints;
         this.api = playerPoints.getAPI();
         this.localeManager = playerPoints.getManager(LocaleManager.class);
     }

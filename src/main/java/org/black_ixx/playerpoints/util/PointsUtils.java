@@ -11,21 +11,21 @@ import java.util.List;
 import java.util.Map;
 import java.util.NavigableMap;
 import java.util.Objects;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import org.black_ixx.playerpoints.PlayerPoints;
+import org.black_ixx.playerpoints.config.SettingKey;
 import org.black_ixx.playerpoints.manager.DataManager;
 import org.black_ixx.playerpoints.manager.LocaleManager;
 import org.black_ixx.playerpoints.models.Tuple;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.MetadataValue;
-import org.bukkit.util.StringUtil;
 
 public final class PointsUtils {
 
@@ -158,15 +158,28 @@ public final class PointsUtils {
         return null;
     }
 
-    /**
-     * @return a list of online players excluding vanished players
-     */
+    public static List<String> getPlayerTabCompleteWithoutSelf(CommandContext context) {
+        return getPlayerTabComplete(context, SettingKey.TAB_COMPLETE_SHOW_ALL_PLAYERS.get(), true);
+    }
+
     public static List<String> getPlayerTabComplete(CommandContext context) {
-        return Bukkit.getOnlinePlayers().stream()
+        return getPlayerTabComplete(context, SettingKey.TAB_COMPLETE_SHOW_ALL_PLAYERS.get(), false);
+    }
+
+    /**
+     * @return a list of all accounts + online players excluding vanished players
+     */
+    public static List<String> getPlayerTabComplete(CommandContext context, boolean showAllPlayers, boolean hideSelf) {
+        Set<String> usernames = Bukkit.getOnlinePlayers().stream()
                 .filter(PointsUtils::isVisible)
-                .filter(x -> !Objects.equals(x, context.getSender()))
+                .filter(x -> !hideSelf || !Objects.equals(x, context.getSender()))
                 .map(Player::getName)
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
+
+        if (showAllPlayers)
+            usernames.addAll(context.getRosePlugin().getManager(DataManager.class).getAccountToNameMap().values());
+
+        return new ArrayList<>(usernames);
     }
 
     public static boolean isVisible(Player player) {

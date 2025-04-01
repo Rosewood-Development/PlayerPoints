@@ -15,6 +15,7 @@ no-permission: '&c您没有权限那么做!'
 only-player: '&c该命令只能由玩家执行。'
 invalid-amount: '&c数值必须为正数。'
 unknown-player: '&c找不到玩家: &b%player%'
+unknown-account: '&c无法找到帐户: &b%account%'
 unknown-command: '&c未知命令: &b%input%'
 invalid-argument: '无效参数: %message%。'
 command-usage: '&c使用方法: &b/%cmd% %args%'
@@ -105,6 +106,15 @@ command-convert-invalid: '&b%plugin% &c不是一个可转换的插件名。'
 command-convert-success: '&a来自 &b%plugin% &a的货币数据已被迁移。'
 command-convert-failure: '&c尝试迁移数据时发生了错误。请检查您的控制台并将您所看到的报告给 PlayerPoint 作者。'
 command-convert-warning: '&c注意: 这个操作会删除所有现存的数据并使用来自插件 &b%plugin%&c 的数据结构。 &c如果您知道您在做什么，请使用 &b/points convert %plugin% confirm&c 来确认操作。'
+
+# Account Command
+command-account-description: '管理账户的创建和删除'
+command-account-create-success: '&a成功创建账户: &b%account%'
+command-account-create-exists: '&c创建账户失败。名为 &b%account% &c的帐户已经存在。'
+command-account-create-name-invalid: '&c创建账户失败。账户名称长度必须在 3-16 个字符之间，且只能包含字母、数字和下划线。'
+command-account-delete-success: '&a成功删除账户。'
+command-account-delete-does-not-exist: '&c删除账户失败。名为 &b%account% &c的帐户不存在。'
+command-account-delete-warning: '&c注意 此操作将删除 &b%account% &c账户的所有账户数据。如果您对此有绝对把握，请使用 &b/points account delete %account% confirm&c.'
 
 # Import Legacy Command
 command-importlegacy-description: '导入一个遗留的表格'
