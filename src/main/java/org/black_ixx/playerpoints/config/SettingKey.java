@@ -3,15 +3,11 @@ package org.black_ixx.playerpoints.config;
 import dev.rosewood.rosegarden.config.CommentedConfigurationSection;
 import dev.rosewood.rosegarden.config.RoseSetting;
 import dev.rosewood.rosegarden.config.RoseSettingSerializer;
-import org.black_ixx.playerpoints.PlayerPoints;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import static dev.rosewood.rosegarden.config.RoseSettingSerializers.BOOLEAN;
-import static dev.rosewood.rosegarden.config.RoseSettingSerializers.INTEGER;
-import static dev.rosewood.rosegarden.config.RoseSettingSerializers.STRING;
+import org.black_ixx.playerpoints.PlayerPoints;
+import static dev.rosewood.rosegarden.config.RoseSettingSerializers.*;
 
 public class SettingKey {
 
@@ -29,8 +25,8 @@ public class SettingKey {
     public static final RoseSetting<Integer> LEADERBOARD_PLACEHOLDER_REFRESH_INTERVAL = create("leaderboard-placeholder-refresh-interval", INTEGER, 15, "The number of seconds between leaderboard placeholder updates");
     public static final RoseSetting<Integer> STARTING_BALANCE = create("starting-balance", INTEGER, 0, "The amount of points new players will start with");
     public static final RoseSetting<Integer> MINIMUM_PAY_AMOUNT = create("minimum-pay-amount", INTEGER, -1, "The minimum number of points you must send when using the pay command", "Set to -1 for no minimum amount");
-    public static final RoseSetting<Boolean> ONLY_SUGGEST_ACCOUNTS_GREATER_THAN_STARTING_BALANCE = create("only-suggest-accounts-greater-than-starting-balance", BOOLEAN, false, "When using the account/player name argument in commands, only suggest accounts with a balance greater than the starting balance.", "If false, all accounts will be suggested.");
-    public static final RoseSetting<Integer> CACHED_ACCOUNT_LIST_REFRESH_INTERVAL = create("cached-account-list-refresh-interval", INTEGER, 300, "How often (in seconds) we update the list of accounts for tab completion purposes.");
+    public static final RoseSetting<Boolean> TAB_COMPLETE_SHOW_ALL_PLAYERS = create("tab-complete-show-all-players", BOOLEAN, false, "When true, all players that have a PlayerPoints balance will show in tab complete.", "If false, only non-vanished online players will be displayed.");
+    public static final RoseSetting<Integer> CACHED_ACCOUNT_LIST_REFRESH_INTERVAL = create("cached-account-list-refresh-interval", INTEGER, 300, "How often (in seconds) should we update the list of accounts for tab completion purposes?");
     public static final RoseSetting<Boolean> SHOW_NON_PLAYER_ACCOUNTS_ON_LEADERBOARDS = create("show-non-player-accounts-on-leaderboards", BOOLEAN, false, "Should we show non-player accounts on leaderboards?");
     public static final RoseSetting<CommentedConfigurationSection> VOTE = create("vote", "Votifier hook settings");
     public static final RoseSetting<Boolean> VOTE_ENABLED = create("vote.enabled", BOOLEAN, false, "If the votifier hook should be enabled");

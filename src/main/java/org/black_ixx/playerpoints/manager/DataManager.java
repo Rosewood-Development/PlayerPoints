@@ -3,7 +3,6 @@ package org.black_ixx.playerpoints.manager;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
-import com.google.common.collect.HashBiMap;
 import com.google.common.collect.Iterables;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
@@ -11,19 +10,7 @@ import dev.rosewood.rosegarden.RosePlugin;
 import dev.rosewood.rosegarden.database.DataMigration;
 import dev.rosewood.rosegarden.database.SQLiteConnector;
 import dev.rosewood.rosegarden.manager.AbstractDataManager;
-import org.black_ixx.playerpoints.database.migrations._1_Create_Tables;
-import org.black_ixx.playerpoints.database.migrations._2_Add_Table_Username_Cache;
-import org.black_ixx.playerpoints.listeners.PointsMessageListener;
-import org.black_ixx.playerpoints.models.PendingTransaction;
-import org.black_ixx.playerpoints.models.SortedPlayer;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-
+import dev.rosewood.rosegarden.scheduler.task.ScheduledTask;
 import java.nio.charset.StandardCharsets;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -45,26 +32,38 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import org.black_ixx.playerpoints.database.migrations._1_Create_Tables;
+import org.black_ixx.playerpoints.database.migrations._2_Add_Table_Username_Cache;
+import org.black_ixx.playerpoints.listeners.PointsMessageListener;
+import org.black_ixx.playerpoints.models.PendingTransaction;
+import org.black_ixx.playerpoints.models.SortedPlayer;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 
 public class DataManager extends AbstractDataManager implements Listener {
 
+    private ScheduledTask updateTask;
+    private ScheduledTask accountUpdateTask;
     private LoadingCache<UUID, Integer> pointsCache;
     private final Map<UUID, Deque<PendingTransaction>> pendingTransactions;
     private final Map<UUID, String> pendingUsernameUpdates;
-    private final HashBiMap<UUID, String> accountUUIDMap;
-    private final Map<UUID, String> accountsGreaterThanStartingBalanceUUIDMap;
+    private final Map<UUID, String> accountToNameMap;
+    private final Map<String, UUID> nameToAccountMap;
 
     public DataManager(RosePlugin rosePlugin) {
         super(rosePlugin);
 
         this.pendingTransactions = new ConcurrentHashMap<>();
         this.pendingUsernameUpdates = new ConcurrentHashMap<>();
-        this.accountUUIDMap = HashBiMap.create();
-        this.accountsGreaterThanStartingBalanceUUIDMap = new HashMap<>();
+        this.accountToNameMap = new ConcurrentHashMap<>();
+        this.nameToAccountMap = new ConcurrentHashMap<>();
 
         Bukkit.getPluginManager().registerEvents(this, rosePlugin);
-        rosePlugin.getScheduler().runTaskTimerAsync(this::update, 10L, 10L);
-        rosePlugin.getScheduler().runTaskTimerAsync(this::updateAccountUUIDMap, 10L, org.black_ixx.playerpoints.config.SettingKey.CACHED_ACCOUNT_LIST_REFRESH_INTERVAL.get() * 20);
     }
 
     @Override
@@ -77,19 +76,33 @@ public class DataManager extends AbstractDataManager implements Listener {
                 .refreshAfterWrite(org.black_ixx.playerpoints.config.SettingKey.CACHE_DURATION.get(), TimeUnit.SECONDS)
                 .build(new CacheLoader<UUID, Integer>() {
                     @Override
-                    public Integer load(UUID uuid) throws Exception {
+                    public Integer load(UUID uuid) {
                         return DataManager.this.getPoints(uuid);
                     }
                 });
+
+        this.updateTask = this.rosePlugin.getScheduler().runTaskTimerAsync(this::update, 10L, 10L);
+        this.accountUpdateTask = this.rosePlugin.getScheduler().runTaskTimerAsync(this::updateAccountUUIDMaps, 10L, org.black_ixx.playerpoints.config.SettingKey.CACHED_ACCOUNT_LIST_REFRESH_INTERVAL.get() * 20);
     }
 
     @Override
     public void disable() {
+        if (this.updateTask != null) {
+            this.updateTask.cancel();
+            this.updateTask = null;
+        }
+
+        if (this.accountUpdateTask != null) {
+            this.accountUpdateTask.cancel();
+            this.accountUpdateTask = null;
+        }
+
         this.update();
 
         this.pointsCache.invalidateAll();
         this.pendingTransactions.clear();
         this.pendingUsernameUpdates.clear();
+        this.accountToNameMap.clear();
 
         super.disable();
     }
@@ -122,10 +135,9 @@ public class DataManager extends AbstractDataManager implements Listener {
         }
     }
 
-    private void updateAccountUUIDMap() {
-        this.accountUUIDMap.clear();
-        this.accountsGreaterThanStartingBalanceUUIDMap.clear();
-
+    private void updateAccountUUIDMaps() {
+        Map<UUID, String> accountToNameMap = new HashMap<>();
+        Map<String, UUID> nameToAccountMap = new HashMap<>();
         this.databaseConnector.connect(connection -> {
             String accountUUIDMapQuery = "SELECT uuid, username FROM " + this.getTablePrefix() + "username_cache";
             try (Statement statement = connection.createStatement()) {
@@ -133,37 +145,20 @@ public class DataManager extends AbstractDataManager implements Listener {
                 while (result.next()) {
                     UUID uuid = UUID.fromString(result.getString(1));
                     String username = result.getString(2);
-                    this.accountUUIDMap.put(uuid, username);
-                }
-            }
-            String accountsGreaterThanStartingBalanceUUIDMapQuery = "SELECT uuid, username FROM " + this.getTablePrefix() +
-                "username_cache WHERE uuid IN (SELECT uuid FROM "+ this.getPointsTableName() + " WHERE points > ?)";
-            try (PreparedStatement statement = connection.prepareStatement(accountsGreaterThanStartingBalanceUUIDMapQuery)) {
-                statement.setInt(1, org.black_ixx.playerpoints.config.SettingKey.STARTING_BALANCE.get());
-                ResultSet result = statement.executeQuery();
-                while (result.next()) {
-                    UUID uuid = UUID.fromString(result.getString(1));
-                    String username = result.getString(2);
-                    this.accountsGreaterThanStartingBalanceUUIDMap.put(uuid, username);
+                    accountToNameMap.put(uuid, username);
+                    nameToAccountMap.put(username, uuid);
                 }
             }
         });
+
+        this.accountToNameMap.clear();
+        this.accountToNameMap.putAll(accountToNameMap);
+        this.nameToAccountMap.clear();
+        this.nameToAccountMap.putAll(nameToAccountMap);
     }
 
-    public List<String> getAllAccountNames() {
-        return new ArrayList<>(this.accountUUIDMap.values());
-    }
-
-    public List<String> getAllAccountUUIDs() {
-        return this.accountUUIDMap.keySet().stream().map(UUID::toString).collect(Collectors.toList());
-    }
-
-    public HashBiMap<UUID, String> getAccountUUIDMap() {
-        return this.accountUUIDMap;
-    }
-
-    public Map<UUID, String> getAccountsGreaterThanStartingBalanceUUIDMap() {
-        return this.accountsGreaterThanStartingBalanceUUIDMap;
+    public Map<UUID, String> getAccountToNameMap() {
+        return this.accountToNameMap;
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -176,6 +171,8 @@ public class DataManager extends AbstractDataManager implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         this.pendingUsernameUpdates.put(player.getUniqueId(), player.getName());
+        this.accountToNameMap.put(player.getUniqueId(), player.getName());
+        this.nameToAccountMap.put(player.getName(), player.getUniqueId());
     }
 
     /**
@@ -277,7 +274,6 @@ public class DataManager extends AbstractDataManager implements Listener {
             return false;
 
         this.getPendingTransactions(playerId).add(new PendingTransaction(PendingTransaction.TransactionType.SET, amount));
-        this.updateAccountUUIDMap();
         return true;
     }
 
@@ -294,7 +290,6 @@ public class DataManager extends AbstractDataManager implements Listener {
             return false;
 
         this.getPendingTransactions(playerId).add(new PendingTransaction(PendingTransaction.TransactionType.OFFSET, amount));
-        this.updateAccountUUIDMap();
         return true;
     }
 
@@ -344,10 +339,11 @@ public class DataManager extends AbstractDataManager implements Listener {
             }
         });
 
+        boolean result = true;
         for (Player player : Bukkit.getOnlinePlayers())
-            this.offsetPoints(player.getUniqueId(), amount);
+            result &= this.offsetPoints(player.getUniqueId(), amount);
 
-        return true;
+        return result;
     }
 
     public boolean doesDataExist() {
@@ -414,12 +410,19 @@ public class DataManager extends AbstractDataManager implements Listener {
         return players;
     }
 
-    public void createNonPlayerAccount(UUID accountID, String accountName) {
-        this.pendingUsernameUpdates.put(accountID, accountName);
+    public UUID createNonPlayerAccount(String accountName) {
+        UUID existing = this.lookupCachedUUID(accountName);
+        if (existing != null)
+            return existing;
+
+        UUID uuid = UUID.randomUUID();
+        this.pendingUsernameUpdates.put(uuid, accountName);
         int startingBalance = org.black_ixx.playerpoints.config.SettingKey.STARTING_BALANCE.get();
-        this.setPoints(accountID, startingBalance);
-        this.pointsCache.put(accountID, startingBalance);
-        this.updateAccountUUIDMap();
+        this.setPoints(uuid, startingBalance);
+        this.pointsCache.put(uuid, startingBalance);
+        this.accountToNameMap.put(uuid, accountName);
+        this.nameToAccountMap.put(accountName, uuid);
+        return uuid;
     }
 
     public void deleteAccount(UUID accountID) {
@@ -439,7 +442,10 @@ public class DataManager extends AbstractDataManager implements Listener {
             }
         });
 
-        this.updateAccountUUIDMap();
+        String username = this.accountToNameMap.get(accountID);
+        if (username != null)
+            this.nameToAccountMap.remove(username);
+        this.accountToNameMap.remove(accountID);
     }
 
     public void importData(SortedSet<SortedPlayer> data, Map<UUID, String> cachedUsernames) {
@@ -557,6 +563,10 @@ public class DataManager extends AbstractDataManager implements Listener {
     }
 
     public UUID lookupCachedUUID(String username) {
+        UUID uuid = this.nameToAccountMap.get(username);
+        if (uuid != null)
+            return uuid;
+
         AtomicReference<UUID> value = new AtomicReference<>();
         this.databaseConnector.connect(connection -> {
             String query = "SELECT uuid FROM " + this.getTablePrefix() + "username_cache WHERE LOWER(username) = LOWER(?)";
@@ -594,4 +604,5 @@ public class DataManager extends AbstractDataManager implements Listener {
                 _2_Add_Table_Username_Cache::new
         );
     }
+
 }

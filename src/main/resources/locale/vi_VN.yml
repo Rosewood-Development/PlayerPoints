@@ -107,13 +107,11 @@ command-convert-warning: '&cLưu ý: Thao tác này sẽ xóa tất cả dữ li
 
 # Account Command
 command-account-description: 'Quản lý việc tạo và xóa tài khoản'
-command-account-create-success: '&aTài khoản được tạo thành công: %account%'
+command-account-create-success: '&aTài khoản được tạo thành công: &b%account%'
 command-account-create-exists: '&cKhông tạo được tài khoản. Tài khoản có tên %account% đã tồn tại.'
-command-account-create-name-invalid: '&cKhông tạo được tài khoản. Tên tài khoản phải dài từ 3-16 ký tự và chỉ có thể chứa chữ cái, số và dấu gạch dưới.'
-command-account-create-warning: '&cLưu ý: Thao tác này sẽ tạo một tài khoản không phải của người chơi có tên là %account%. Nếu bạn hoàn toàn chắc chắn về điều này, hãy sử dụng lệnh &b/points account create %account% confirm&c.'
 command-account-delete-success: '&aĐã xóa tài khoản thành công.'
-command-account-delete-does-not-exist: '&cKhông xóa được tài khoản. Tài khoản có tên %account% không tồn tại.'
-command-account-delete-warning: '&cLưu ý: Thao tác này sẽ xóa tất cả dữ liệu tài khoản cho tài khoản %account%. Nếu bạn hoàn toàn chắc chắn về điều này, hãy sử dụng lệnh &b/points account delete %account% confirm&c.'
+command-account-delete-does-not-exist: '&cKhông xóa được tài khoản. Tài khoản có tên &b%account% &ckhông tồn tại.'
+command-account-delete-warning: '&cLưu ý: Thao tác này sẽ xóa tất cả dữ liệu tài khoản cho tài khoản &b%account%&c. Nếu bạn hoàn toàn chắc chắn về điều này, hãy sử dụng lệnh &b/points account delete %account% confirm&c.'
 
 # Import Legacy Command
 command-importlegacy-description: 'Nhập một bảng kế thừa'

@@ -108,14 +108,13 @@ command-convert-failure: '&cAn error occurred while attempting to convert the da
 command-convert-warning: '&cNotice: This operation will delete all data from the active database and replace it with the data from &b%plugin%&c. &cIf you are absolutely sure about this, use &b/points convert %plugin% confirm&c.'
 
 # Account Command
-command-account-description: 'Manages the creation and deletion of accounts'
-command-account-create-success: '&aSuccessfully created account: %account%'
-command-account-create-exists: '&cFailed to create account. An account named %account% already exists.'
+command-account-description: 'Create or delete an accounts'
+command-account-create-success: '&aSuccessfully created account: &b%account%'
+command-account-create-exists: '&cFailed to create account. An account named &b%account% &calready exists.'
 command-account-create-name-invalid: '&cFailed to create account. Account names must be between 3-16 characters long and can only contain letters, numbers, and underscores.'
-command-account-create-warning: '&cNotice: This operation will create a non-player account called %account%. If you are absolutely sure about this, use &b/points account create %account% confirm&c.'
-command-account-delete-success: '&aSuccessfully deleted account.'
-command-account-delete-does-not-exist: '&cFailed to delete account. An account named %account% does not exist.'
-command-account-delete-warning: '&cNotice: This operation will delete all account data for the account %account%. If you are absolutely sure about this, use &b/points account delete %account% confirm&c.'
+command-account-delete-success: '&aSuccessfully deleted account &b%account%&a.'
+command-account-delete-does-not-exist: '&cFailed to delete account. An account named &b%account% &cdoes not exist.'
+command-account-delete-warning: '&cNotice: This operation will delete all account data for the account &b%account%&c. If you are absolutely sure about this, use &b/points account delete %account% confirm&c.'
 
 # Import Legacy Command
 command-importlegacy-description: 'Import a legacy table'

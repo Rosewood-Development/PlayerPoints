@@ -8,15 +8,14 @@ import dev.rosewood.rosegarden.command.framework.CommandContext;
 import dev.rosewood.rosegarden.command.framework.CommandInfo;
 import dev.rosewood.rosegarden.command.framework.annotation.RoseExecutable;
 import dev.rosewood.rosegarden.utils.StringPlaceholders;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 import org.black_ixx.playerpoints.PlayerPoints;
 import org.black_ixx.playerpoints.commands.arguments.StringSuggestingArgumentHandler;
 import org.black_ixx.playerpoints.config.SettingKey;
 import org.black_ixx.playerpoints.util.PointsUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-
-import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 
 public class PayCommand extends BasePointsCommand {
 
@@ -91,7 +90,7 @@ public class PayCommand extends BasePointsCommand {
                 .descriptionKey("command-pay-description")
                 .permission("playerpoints.pay")
                 .arguments(ArgumentsDefinition.builder()
-                        .required("target", new StringSuggestingArgumentHandler(PointsUtils::getPlayerPayTabComplete))
+                        .required("target", new StringSuggestingArgumentHandler(PointsUtils::getPlayerTabCompleteWithoutSelf))
                         .required("amount", ArgumentHandlers.INTEGER)
                         .build())
                 .playerOnly()

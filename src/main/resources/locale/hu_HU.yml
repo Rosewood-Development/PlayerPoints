@@ -109,13 +109,12 @@ command-convert-warning: '&cFigyelmeztetés: Ez a művelet törli az összes edd
 
 # Account Command
 command-account-description: 'Kezeli a számlák létrehozását és törlését'
-command-account-create-success: '&aSikeresen létrehozott fiók: %account%'
-command-account-create-exists: '&cNem sikerült fiókot létrehozni. Egy %account% nevű fiók már létezik.'
+command-account-create-success: '&aSikeresen létrehozott fiók: &b%account%'
+command-account-create-exists: '&cNem sikerült fiókot létrehozni. Egy &b%account% &cnevű fiók már létezik.'
 command-account-create-name-invalid: '&cNem sikerült fiókot létrehozni. A fiókneveknek 3-16 karakter hosszúságúnak kell lenniük, és csak betűket, számokat és aláhúzásokat tartalmazhatnak.'
-command-account-create-warning: '&cÉrtesítés: Ez a művelet egy %account% nevű nem játékos fiókot hoz létre. Ha teljesen biztos vagy benne, használd &b/points account create %account% confirm&c.'
 command-account-delete-success: '&aSikeresen törölte a fiókot.'
-command-account-delete-does-not-exist: '&cNem sikerült törölni a fiókot. A %account% nevű fiók nem létezik.'
-command-account-delete-warning: '&cÉrtesítés: Ez a művelet törli a %account% fiók összes fiókadatát. Ha teljesen biztos vagy benne, használd &b/points account delete %account% confirm&c.'
+command-account-delete-does-not-exist: '&cNem sikerült törölni a fiókot. A &b%account% &cnevű fiók nem létezik.'
+command-account-delete-warning: '&cÉrtesítés: Ez a művelet törli a &b%account% &cfiók összes fiókadatát. Ha teljesen biztos vagy benne, használd &b/points account delete %account% confirm&c.'
 
 # Import Legacy Command
 command-importlegacy-description: 'Importálja a régebbi táblát'

@@ -109,13 +109,12 @@ command-convert-warning: '&c警告: 此動作將會刪除數據庫內所有資�
 
 # Account Command
 command-account-description: '管理帳戶的建立和刪除'
-command-account-create-success: '&a成功建立帳號: %account%'
-command-account-create-exists: '&c建立帳戶失敗。名為 %account% 的帳戶已經存在。'
+command-account-create-success: '&a成功建立帳號: &b%account%'
+command-account-create-exists: '&c建立帳戶失敗。名為 &b%account% &c的帳戶已經存在。'
 command-account-create-name-invalid: '&c建立帳戶失敗。帳戶名稱的長度必須在 3-16 個字元之間，且只能包含字母、數字和底線。'
-command-account-create-warning: '&c注意： 此操作將建立一個名為 %account% 的非玩家帳戶。如果您有絕對的把握，請使用 &b/points account create %account% confirm&c.'
 command-account-delete-success: '&a成功刪除帳戶。'
-command-account-delete-does-not-exist: '&c刪除帳戶失敗。名為 %account% 的帳戶不存在。'
-command-account-delete-warning: '&c注意： 此操作將刪除帳戶 %account% 的所有帳戶資料。如果您有絕對的把握，請使用 &b/points account delete %account% confirm&c.'
+command-account-delete-does-not-exist: '&c刪除帳戶失敗。名為 &b%account% &c的帳戶不存在。'
+command-account-delete-warning: '&c注意： 此操作將刪除帳戶 &b%account% &c的所有帳戶資料。如果您有絕對的把握，請使用 &b/points account delete %account% confirm&c.'
 
 # Import Legacy Command
 command-importlegacy-description: '導入舊表'

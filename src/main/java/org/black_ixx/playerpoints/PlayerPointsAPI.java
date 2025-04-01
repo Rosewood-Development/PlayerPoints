@@ -1,6 +1,9 @@
 package org.black_ixx.playerpoints;
 
-import com.google.common.collect.HashBiMap;
+import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 import org.black_ixx.playerpoints.event.PlayerPointsChangeEvent;
 import org.black_ixx.playerpoints.event.PlayerPointsResetEvent;
 import org.black_ixx.playerpoints.manager.DataManager;
@@ -8,11 +11,6 @@ import org.black_ixx.playerpoints.models.SortedPlayer;
 import org.black_ixx.playerpoints.util.PointsUtils;
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
 
 /**
  * The API for the PlayerPoints plugin.
@@ -191,28 +189,17 @@ public class PlayerPointsAPI {
     }
 
     /**
-     * Gets an account UUID from a cached map of UUID's and usernames
+     * Gets a known PlayerPoints account UUID by its name.
+     * If the name is for a Player account, returns the Player UUID.
+     * Returns {@code null} for accounts that do not exist.
      *
      * @param name The name of the player/account
      * @return The UUID of the account
      */
-    public UUID getAccountUUIDFromCache(@NotNull String name) {
-        Objects.requireNonNull(name);
-
-        HashBiMap<UUID, String> accountUUIDMap = this.plugin.getManager(DataManager.class).getAccountUUIDMap();
-
-        return accountUUIDMap.inverse().get(name);
-    }
-
-    /**
-     * Gets an account UUID from the database
-     *
-     * @param name The name of the player/account
-     * @return The UUID of the account
-     */
-    public UUID getAccountUUIDFromDatabase(@NotNull String name) {
+    public UUID getAccountUUIDByName(@NotNull String name) {
         Objects.requireNonNull(name);
 
         return this.plugin.getManager(DataManager.class).lookupCachedUUID(name);
     }
+
 }

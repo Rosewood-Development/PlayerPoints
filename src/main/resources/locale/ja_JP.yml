@@ -109,13 +109,12 @@ command-convert-warning: '&c注意：この処理は現在使用中のデータ�
 
 # Account Command
 command-account-description: 'アカウントの作成と削除を管理'
-command-account-create-success: '&aアカウントの作成に成功しました: %account%'
-command-account-create-exists: '&cアカウントの作成に失敗しました。アカウント %account% という名前のアカウントが既に存在します。'
+command-account-create-success: '&aアカウントの作成に成功しました: &b%account%'
+command-account-create-exists: '&cアカウントの作成に失敗しました。アカウント &b%account% &cという名前のアカウントが既に存在します。'
 command-account-create-name-invalid: '&cアカウントの作成に失敗しました。アカウント名の長さは3～16文字で、文字、数字、アンダースコアのみ使用できます。'
-command-account-create-warning: '&cお知らせ この操作により、%account%というプレイヤー以外のアカウントが作成されます。このことが確実であれば、コマンド &b/points account create %account% confirm&c.'
 command-account-delete-success: '&a指定されたアカウントの削除に成功しました。'
-command-account-delete-does-not-exist: '&cアカウントの削除に失敗しました。%account% という名前のアカウントは存在しません。'
-command-account-delete-warning: '&c注意 この操作により、アカウント %account% のすべてのアカウント・データが削除されます。これが確実であれば、コマンド &b/points account delete %account% confirm&c.'
+command-account-delete-does-not-exist: '&cアカウントの削除に失敗しました。&b%account% &cという名前のアカウントは存在しません。'
+command-account-delete-warning: '&c注意 この操作により、アカウント &b%account% &cのすべてのアカウント・データが削除されます。これが確実であれば、コマンド &b/points account delete %account% confirm&c.'
 
 # Import Legacy Command
 command-importlegacy-description: 'レガシーテーブルをインポートします'

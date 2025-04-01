@@ -109,13 +109,12 @@ command-convert-warning: '&c注意: 这个操作会删除所有现存的数据�
 
 # Account Command
 command-account-description: '管理账户的创建和删除'
-command-account-create-success: '&a成功创建账户: %account%'
-command-account-create-exists: '&c创建账户失败。名为 %account% 的帐户已经存在。'
+command-account-create-success: '&a成功创建账户: &b%account%'
+command-account-create-exists: '&c创建账户失败。名为 &b%account% &c的帐户已经存在。'
 command-account-create-name-invalid: '&c创建账户失败。账户名称长度必须在 3-16 个字符之间，且只能包含字母、数字和下划线。'
-command-account-create-warning: '&c注意 此操作将创建一个名为 %account% 的非玩家账户。如果您对此有绝对把握，请使用 &b/points account create %account% confirm&c.'
 command-account-delete-success: '&a成功删除账户。'
-command-account-delete-does-not-exist: '&c删除账户失败。名为 %account% 的帐户不存在。'
-command-account-delete-warning: '&c注意 此操作将删除 %account% 账户的所有账户数据。如果您对此有绝对把握，请使用 &b/points account delete %account% confirm&c.'
+command-account-delete-does-not-exist: '&c删除账户失败。名为 &b%account% &c的帐户不存在。'
+command-account-delete-warning: '&c注意 此操作将删除 &b%account% &c账户的所有账户数据。如果您对此有绝对把握，请使用 &b/points account delete %account% confirm&c.'
 
 # Import Legacy Command
 command-importlegacy-description: '导入一个遗留的表格'

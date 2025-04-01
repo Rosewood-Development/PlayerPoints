@@ -109,13 +109,12 @@ command-convert-warning: '&cAviso: Esta operação vai apagar todos os dados da 
 
 # Account Command
 command-account-description: 'Gere a criação e a supressão de contas'
-command-account-create-success: '&aConta criada com sucesso: %account%'
-command-account-create-exists: '&cFalha ao criar a conta. Já existe uma conta com o nome %account%.'
+command-account-create-success: '&aConta criada com sucesso: &b%account%'
+command-account-create-exists: '&cFalha ao criar a conta. Já existe uma conta com o nome &b%account%&c.'
 command-account-create-name-invalid: '&cFalha ao criar a conta. Os nomes das contas devem ter entre 3 e 16 caracteres e só podem conter letras, números e sublinhados.'
-command-account-create-warning: '&cAviso: Esta operação irá criar uma conta de não-jogador chamada %account%. Se tiveres a certeza absoluta disso, utiliza &b/points account create %account% confirm&c.'
 command-account-delete-success: '&aConta eliminada com sucesso.'
-command-account-delete-does-not-exist: '&cFalha ao eliminar a conta. Não existe uma conta com o nome %account%.'
-command-account-delete-warning: '&cAviso: Esta operação irá eliminar todos os dados da conta %account%. Se tiver a certeza absoluta disso, utilize &b/points account delete %account% confirm&c.'
+command-account-delete-does-not-exist: '&cFalha ao eliminar a conta. Não existe uma conta com o nome &b%account%&c.'
+command-account-delete-warning: '&cAviso: Esta operação irá eliminar todos os dados da conta &b%account%&c. Se tiver a certeza absoluta disso, utilize &b/points account delete %account% confirm&c.'
 
 # Comando de Import Legacy
 command-importlegacy-description: 'Importa uma tabela antiga'

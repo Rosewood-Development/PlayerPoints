@@ -109,13 +109,12 @@ command-convert-warning: '&cRemarque: Cette opération supprimera toutes les don
 
 # Account Command
 command-account-description: 'Gère la création et la suppression des comptes'
-command-account-create-success: '&aCompte créé avec succès: %account%'
-command-account-create-exists: '&cÉchec de la création d''un compte. Un compte nommé %account% existe déjà.'
+command-account-create-success: '&aCompte créé avec succès: &b%account%'
+command-account-create-exists: '&cÉchec de la création d''un compte. Un compte nommé &b%account% &cexiste déjà.'
 command-account-create-name-invalid: '&cÉchec de la création d''un compte. Les noms de compte doivent être composés de 3 à 16 caractères et ne peuvent contenir que des lettres, des chiffres et des traits de soulignement.'
-command-account-create-warning: '&cAvis: Cette opération créera un compte non-joueur appelé %account%. Si vous êtes absolument sûr de vous, utilisez &b/points account create %account% confirm&c.'
 command-account-delete-success: '&aSuppression réussie du compte.'
-command-account-delete-does-not-exist: '&cÉchec de la suppression du compte. Le compte nommé %account% n''existe pas.'
-command-account-delete-warning: '&cAvis: Cette opération supprimera toutes les données du compte %account%. Si vous êtes absolument sûr de vous, utilisez &b/points account delete %account% confirm&c.'
+command-account-delete-does-not-exist: '&cÉchec de la suppression du compte. Le compte nommé &b%account% &cn''existe pas.'
+command-account-delete-warning: '&cAvis: Cette opération supprimera toutes les données du compte &b%account%&c. Si vous êtes absolument sûr de vous, utilisez &b/points account delete %account% confirm&c.'
 
 # Import Legacy Command
 command-importlegacy-description: 'Importe une table hérité'

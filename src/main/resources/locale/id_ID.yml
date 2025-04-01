@@ -109,13 +109,13 @@ command-convert-warning: '&cCatatan: operasi ini akan menghapus semua data dari 
 
 # Account Command
 command-account-description: 'Mengelola pembuatan dan penghapusan akun'
-command-account-create-success: '&aBerhasil membuat akun: %account%'
-command-account-create-exists: '&cGagal membuat akun. Akun bernama %account% sudah ada.'
+command-account-create-success: '&aBerhasil membuat akun: &b%account%'
+command-account-create-exists: '&cGagal membuat akun. Akun bernama &b%account% &csudah ada.'
 command-account-create-name-invalid: '&cGagal membuat akun. Nama akun harus terdiri dari 3-16 karakter dan hanya boleh terdiri dari huruf, angka, dan garis bawah.'
-command-account-create-warning: '&cPerhatian: Operasi ini akan membuat akun non-pemain yang disebut %account%. Jika Anda benar-benar yakin tentang hal ini, gunakan &b/points account create %account% confirm&c.'
+command-account-create-warning: '&cPerhatian: Operasi ini akan membuat akun non-pemain yang disebut &b%account%&c. Jika Anda benar-benar yakin tentang hal ini, gunakan &b/points account create %account% confirm&c.'
 command-account-delete-success: '&aAkun berhasil dihapus.'
-command-account-delete-does-not-exist: '&cGagal menghapus akun. Akun bernama %account% tidak ada.'
-command-account-delete-warning: '&cPerhatian: Operasi ini akan menghapus semua data akun untuk akun %akun%. Jika Anda benar-benar yakin akan hal ini, gunakan &b/points account delete %account% confirm&c.'
+command-account-delete-does-not-exist: '&cGagal menghapus akun. Akun bernama &b%account% &ctidak ada.'
+command-account-delete-warning: '&cPerhatian: Operasi ini akan menghapus semua data akun untuk akun &b%account%&c. Jika Anda benar-benar yakin akan hal ini, gunakan &b/points account delete %account% confirm&c.'
 
 # Import Legacy Command
 command-importlegacy-description: 'Impor tabel lama'
