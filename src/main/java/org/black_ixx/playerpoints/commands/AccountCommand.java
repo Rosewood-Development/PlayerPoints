@@ -16,7 +16,7 @@ import org.black_ixx.playerpoints.util.PointsUtils;
 
 public class AccountCommand extends BasePointsCommand {
 
-    private static final Pattern ACCOUNT_PATTERN = Pattern.compile("^\\*?\\w+$");
+    private static final Pattern ACCOUNT_PATTERN = Pattern.compile("^\\*?\\w{3,16}$");
 
     public AccountCommand(PlayerPoints playerPoints) {
         super(playerPoints);
@@ -38,7 +38,7 @@ public class AccountCommand extends BasePointsCommand {
                 return;
             }
 
-            context.getRosePlugin().getScheduler().runTaskAsync(() -> {
+            this.rosePlugin.getScheduler().runTaskAsync(() -> {
                 if (dataManager.lookupCachedUUID(prefixedAccountName) != null) {
                     this.localeManager.sendCommandMessage(context.getSender(), "command-account-create-exists", StringPlaceholders.of("account", accountName));
                     return;
@@ -80,7 +80,7 @@ public class AccountCommand extends BasePointsCommand {
                 return;
             }
 
-            context.getRosePlugin().getScheduler().runTaskAsync(() -> {
+            this.rosePlugin.getScheduler().runTaskAsync(() -> {
                 dataManager.deleteAccount(accountID);
                 this.localeManager.sendCommandMessage(context.getSender(), "command-account-delete-success", StringPlaceholders.of("account", accountName));
             });

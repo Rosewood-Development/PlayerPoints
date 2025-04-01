@@ -419,7 +419,6 @@ public class DataManager extends AbstractDataManager implements Listener {
         this.pendingUsernameUpdates.put(uuid, accountName);
         int startingBalance = org.black_ixx.playerpoints.config.SettingKey.STARTING_BALANCE.get();
         this.setPoints(uuid, startingBalance);
-        this.pointsCache.put(uuid, startingBalance);
         this.accountToNameMap.put(uuid, accountName);
         this.nameToAccountMap.put(accountName, uuid);
         return uuid;
