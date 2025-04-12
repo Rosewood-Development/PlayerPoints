@@ -362,7 +362,7 @@ public class DataManager extends AbstractDataManager implements Listener {
         List<SortedPlayer> players = new ArrayList<>();
         this.databaseConnector.connect(connection -> {
             String query = "SELECT t." + this.getUuidColumnName() + ", username, points FROM " + this.getPointsTableName() + " t " +
-                           "LEFT JOIN " + this.getTablePrefix() + "username_cache c ON t.uuid = c.uuid " +
+                           "LEFT JOIN " + this.getTablePrefix() + "username_cache c ON t." + this.getUuidColumnName() + " = c.uuid " +
                            "ORDER BY points DESC" + (limit != null ? " LIMIT " + limit : "");
             try (Statement statement = connection.createStatement()) {
                 ResultSet result = statement.executeQuery(query);
@@ -398,7 +398,7 @@ public class DataManager extends AbstractDataManager implements Listener {
             String tableName = this.getPointsTableName();
             String query = "SELECT t." + this.getUuidColumnName() + ", (SELECT COUNT(*) FROM " + tableName + " x WHERE x.points >= t.points) AS position " +
                            "FROM " + tableName + " t " +
-                           "WHERE t.uuid IN (" + uuidList + ")";
+                           "WHERE t." + this.getUuidColumnName() + " IN (" + uuidList + ")";
             try (Statement statement = connection.createStatement()) {
                 ResultSet result = statement.executeQuery(query);
                 while (result.next()) {
