@@ -103,9 +103,12 @@ command-import-warning: '&cΠροσοχή: Αυτή η ενέργεια θα δ�
 # Convert Command
 command-convert-description: 'Φορτώνει τα δεδομένα νομίσματος από άλλο plugin'
 command-convert-invalid: '&b%plugin% &cδεν είναι μετατρέψιμο νόμισμα στο plugin.'
+command-convert-invalid-currency: '&cΤο &b%currency% &cδεν είναι έγκυρο μετατρέψιμο νόμισμα.'
+command-convert-currency-required: '&cΠρέπει να καθορίσετε ένα νόμισμα προς μετατροπή για αυτό το πρόσθετο.'
 command-convert-success: '&aΤα δεδομένα νομίσματος από το &b%plugin% &aμετατρέπονται.'
 command-convert-failure: '&cΠαρουσιάστηκε σφάλμα κατά την προσπάθεια μετατροπής των δεδομένων. Ελέξτε το console σας και αναφέρετε τυχόν σφάλματα στον συντάκτη του PlayerPoints plugin.'
 command-convert-warning: '&cΠροσοχλη: Αυτή η ενέργεια θα διαγράψει όλα τα δεδομένα data από την ενεργή βαση δεδομένων και θα τα αντικαταστήσει με τα δεδομενα από το &b%plugin%&c. &cΑν είστε σίγουροι για αυτο χρησιμοποιήστε την εντολή &b/points convert %plugin% confirm&c.'
+command-convert-warning-currency: '&cΠροσοχλη: Αυτή η ενέργεια θα διαγράψει όλα τα δεδομένα data από την ενεργή βαση δεδομένων και θα τα αντικαταστήσει με τα δεδομενα από το &b%plugin%&c. &cΑν είστε σίγουροι για αυτο χρησιμοποιήστε την εντολή &b/points convert %plugin% %currency% confirm&c.'
 
 # Account Command
 command-account-description: 'Διαχειρίζεται τη δημιουργία και τη διαγραφή λογαριασμών'

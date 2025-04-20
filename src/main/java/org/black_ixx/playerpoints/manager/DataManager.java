@@ -447,7 +447,7 @@ public class DataManager extends AbstractDataManager implements Listener {
         this.accountToNameMap.remove(accountID);
     }
 
-    public void importData(SortedSet<SortedPlayer> data, Map<UUID, String> cachedUsernames) {
+    public void importData(Map<UUID, Integer> data, Map<UUID, String> cachedUsernames) {
         this.pointsCache.invalidateAll();
         this.pendingTransactions.clear();
 
@@ -459,9 +459,9 @@ public class DataManager extends AbstractDataManager implements Listener {
 
             String batchInsert = "INSERT INTO " + this.getPointsTableName() + " (" + this.getUuidColumnName() + ", points) VALUES (?, ?)";
             try (PreparedStatement statement = connection.prepareStatement(batchInsert)) {
-                for (SortedPlayer playerData : data) {
-                    statement.setString(1, playerData.getUniqueId().toString());
-                    statement.setInt(2, playerData.getPoints());
+                for (Map.Entry<UUID, Integer> entry : data.entrySet()) {
+                    statement.setString(1, entry.getKey().toString());
+                    statement.setInt(2, entry.getValue());
                     statement.addBatch();
                 }
                 statement.executeBatch();

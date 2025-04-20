@@ -103,9 +103,12 @@ command-import-warning: '&c注意：この処理は現在使用中のデータ�
 # Convert Command
 command-convert-description: 'ほかのプラグインから通貨のデータを読み込む。'
 command-convert-invalid: '&b%plugin% &cからの通貨の読み込みははサポートされていません。'
+command-convert-invalid-currency: '&b%currency%&bは有効な兌換通貨ではありません。'
+command-convert-currency-required: '&cこのプラグインで変換する通貨を指定する必要があります。'
 command-convert-success: '&b%plugin% &aから通貨データが読み込まれました。'
 command-convert-failure: '&cデータの読み込み中にエラーが発生しました。コンソールでエラーを確認し、PlayerPointsの作者に報告してください。'
 command-convert-warning: '&c注意：この処理は現在使用中のデータベースのデータを削除し、&b%plugin%&cの中身で置き換えます。 &cデータのバックアップを取ったうえで本当にこの処理を実行したい場合のみ &b/points convert %plugin% confirm&cコマンドを使用してください。'
+command-convert-warning-currency: '&c注意：この処理は現在使用中のデータベースのデータを削除し、&b%plugin%&cの中身で置き換えます。 &cデータのバックアップを取ったうえで本当にこの処理を実行したい場合のみ &b/points convert %plugin% %currency% confirm&cコマンドを使用してください。'
 
 # Account Command
 command-account-description: 'アカウントの作成と削除を管理'

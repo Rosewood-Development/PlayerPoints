@@ -103,9 +103,12 @@ command-import-warning: '&cCatatan: Operasi ini akan menghapus semua data dari b
 # Convert Command
 command-convert-description: 'Memuat data mata uang dari plugin lain'
 command-convert-invalid: '&b%plugin% &cbukan nama plugin mata uang yang dapat dikonversi.'
+command-convert-invalid-currency: '&b%currency% &bbukan merupakan mata uang konversi yang valid.'
+command-convert-currency-required: '&cAnda harus menentukan mata uang yang akan dikonversi untuk plugin ini.'
 command-convert-success: '&aData mata uang dari &b%plugin% &asedang dikonversi.'
 command-convert-failure: '&cTerjadi kesalahan saat mencoba mengonversi data. Silakan cek konsolmu dan laporkan kesalahan apa pun ke pembuat plugin PlayerPoints.'
 command-convert-warning: '&cCatatan: operasi ini akan menghapus semua data dari basis data yang aktif dan menggantinya dengan data dari &b%plugin%&c. &cJika kamu benar-benar yakin tentang hal ini, gunakan &b/points convert %plugin% confirm&c.'
+command-convert-warning-currency: '&cCatatan: operasi ini akan menghapus semua data dari basis data yang aktif dan menggantinya dengan data dari &b%plugin%&c. &cJika kamu benar-benar yakin tentang hal ini, gunakan &b/points convert %plugin% %currency% confirm&c.'
 
 # Account Command
 command-account-description: 'Mengelola pembuatan dan penghapusan akun'

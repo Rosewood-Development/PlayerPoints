@@ -26,7 +26,7 @@ public class GamePointsConverter extends CurrencyConverter {
     }
 
     @Override
-    public void convert() {
+    public void convert(String currencyId) {
         PointsDataHandler pointsDataHandler = ((GamePoints) Bukkit.getPluginManager().getPlugin("GamePoints")).getData();
         try {
             Method method_getConnection = AbstractDataHandler.class.getDeclaredMethod("getConnection");
@@ -36,28 +36,32 @@ public class GamePointsConverter extends CurrencyConverter {
             this.rosePlugin.getLogger().warning("Converting data from GamePoints, this may take a while if you have a lot of data...");
             String query = "SELECT uuid, name, balance FROM gamepoints_users";
             try (Statement statement = connection.createStatement()) {
-                SortedSet<SortedPlayer> players = new TreeSet<>();
+                Map<UUID, Integer> players = new HashMap<>();
                 Map<UUID, String> usernameMap = new HashMap<>();
 
                 int count = 0;
                 ResultSet resultSet = statement.executeQuery(query);
                 while (resultSet.next()) {
+                    UUID uuid = null;
                     try {
-                        UUID uuid = UUID.fromString(resultSet.getString("uuid"));
+                        uuid = UUID.fromString(resultSet.getString("uuid"));
                         String name = resultSet.getString("name");
                         int balance = resultSet.getInt("balance");
-                        if (balance > 0)
-                            players.add(new SortedPlayer(uuid, name, balance));
-                        usernameMap.put(uuid, name);
+                        if (balance > 0) {
+                            players.put(uuid, balance);
+                            usernameMap.put(uuid, name);
+                        }
 
                         if (++count % 500 == 0)
                             this.rosePlugin.getLogger().warning(String.format("Converted %d entries...", count));
-                    } catch (Exception ignored) { }
+                    } catch (Exception ignored) {
+                        if (uuid != null)
+                            this.rosePlugin.getLogger().warning(String.format("Data entry [%s] skipped due to invalid data", uuid));
+                    }
                 }
 
                 DataManager dataManager = this.rosePlugin.getManager(DataManager.class);
-                dataManager.importData(players, Collections.emptyMap());
-                dataManager.updateCachedUsernames(usernameMap);
+                dataManager.importData(players, usernameMap);
 
                 this.rosePlugin.getLogger().warning(String.format("Successfully converted %d entries!", count));
             }

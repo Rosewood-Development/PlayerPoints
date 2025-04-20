@@ -21,8 +21,11 @@ public class ConversionManager extends Manager {
 
     @Override
     public void reload() {
-        for (CurrencyPlugin currencyPlugin : CurrencyPlugin.values())
-            this.converters.put(currencyPlugin, currencyPlugin.getConverter());
+        this.rosePlugin.getScheduler().runTask(() -> {
+            for (CurrencyPlugin currencyPlugin : CurrencyPlugin.values())
+                if (currencyPlugin.isAvailable())
+                    this.converters.put(currencyPlugin, currencyPlugin.getConverter());
+        });
     }
 
     @Override
@@ -30,22 +33,25 @@ public class ConversionManager extends Manager {
         this.converters.clear();
     }
 
-    public boolean convert(CurrencyPlugin currencyPlugin) {
+    public boolean canConvert(CurrencyPlugin currencyPlugin, String currencyId) {
         CurrencyConverter converter = this.converters.get(currencyPlugin);
-        if (!converter.canConvert())
-            return false;
+        return converter.isAvailable(currencyId);
+    }
 
+    public boolean convert(CurrencyPlugin currencyPlugin, String currencyId) {
+        CurrencyConverter converter = this.converters.get(currencyPlugin);
         try {
-            converter.convert();
+            converter.convert(currencyId);
             return true;
         } catch (Exception e) {
+            e.printStackTrace();
             return false;
         }
     }
 
     public Set<CurrencyPlugin> getEnabledConverters() {
         return this.converters.entrySet().stream()
-                .filter(x -> x.getValue().canConvert())
+                .filter(x -> x.getValue().isAvailable())
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toSet());
     }

@@ -103,9 +103,12 @@ command-import-warning: '&cAviso: Esta operação vai apagar todos os dados da b
 # Comando de Convert
 command-convert-description: 'Carrega os dados da moeda de outro plugin'
 command-convert-invalid: '&b%plugin% &cnão é o nome de um plugin de moeda convertível.'
+command-convert-invalid-currency: '&b%currency% &cnão é uma moeda convertível válida.'
+command-convert-currency-required: '&cTem de especificar a moeda a converter com este plugin.'
 command-convert-success: '&aDados da moeda de &b%plugin% &aforam convertidos com sucesso.'
 command-convert-failure: '&cOcorreu um erro enquanto se tentava converter os dados. Por favor verifica na tua consola e informa quaisquer erros ao autor do plugin PlayerPoints.'
 command-convert-warning: '&cAviso: Esta operação vai apagar todos os dados da base de dados ativa e substitui-los pelos dados de &b%plugin%&c. &cSe tu tens a certeza absoluta sobre isto, utiliza &b/points convert %plugin% confirm&c.'
+command-convert-warning-currency: '&cAviso: Esta operação vai apagar todos os dados da base de dados ativa e substitui-los pelos dados de &b%plugin%&c. &cSe tu tens a certeza absoluta sobre isto, utiliza &b/points convert %plugin% %currency% confirm&c.'
 
 # Account Command
 command-account-description: 'Gere a criação e a supressão de contas'

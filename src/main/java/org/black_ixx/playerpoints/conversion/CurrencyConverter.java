@@ -14,10 +14,14 @@ public abstract class CurrencyConverter {
         this.plugin = Bukkit.getPluginManager().getPlugin(pluginName);
     }
 
-    public boolean canConvert() {
+    public boolean isAvailable(String currencyId) {
+        return this.isAvailable();
+    }
+
+    public boolean isAvailable() {
         return this.plugin != null && this.plugin.isEnabled();
     }
 
-    public abstract void convert();
+    public abstract void convert(String currencyId);
 
 }

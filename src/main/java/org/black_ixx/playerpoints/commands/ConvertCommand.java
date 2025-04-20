@@ -18,7 +18,7 @@ public class ConvertCommand extends BasePointsCommand {
     }
 
     @RoseExecutable
-    public void execute(CommandContext context, CurrencyPlugin currencyPlugin, String confirm) {
+    public void execute(CommandContext context, CurrencyPlugin currencyPlugin, String currencyId, String confirm) {
         CommandSender sender = context.getSender();
         ConversionManager conversionManager = this.rosePlugin.getManager(ConversionManager.class);
         if (!conversionManager.getEnabledConverters().contains(currencyPlugin)) {
@@ -26,17 +26,29 @@ public class ConvertCommand extends BasePointsCommand {
             return;
         }
 
+        if (currencyId == null && currencyPlugin.hasMultipleCurrencies()) {
+            this.localeManager.sendCommandMessage(sender, "command-convert-currency-required");
+            return;
+        }
+
         if (confirm == null) {
-            this.localeManager.sendCommandMessage(sender, "command-convert-warning", StringPlaceholders.of("plugin", currencyPlugin.name().toLowerCase()));
+            if (currencyPlugin.hasMultipleCurrencies()) {
+                this.localeManager.sendCommandMessage(sender, "command-convert-warning-currency", StringPlaceholders.of("plugin", currencyPlugin.name().toLowerCase(), "currency", currencyPlugin));
+            } else {
+                this.localeManager.sendCommandMessage(sender, "command-convert-warning", StringPlaceholders.of("plugin", currencyPlugin.name().toLowerCase()));
+            }
+            return;
+        }
+
+        if (!conversionManager.canConvert(currencyPlugin, currencyId)) {
+            this.localeManager.sendCommandMessage(sender, "command-convert-invalid-currency", StringPlaceholders.of("currency", currencyId));
             return;
         }
 
         this.rosePlugin.getScheduler().runTaskAsync(() -> {
-            if (conversionManager.convert(currencyPlugin)) {
-                this.localeManager.sendCommandMessage(sender, "command-convert-success", StringPlaceholders.of("plugin", currencyPlugin.name().toLowerCase()));
-            } else {
+            this.localeManager.sendCommandMessage(sender, "command-convert-success", StringPlaceholders.of("plugin", currencyPlugin.name().toLowerCase()));
+            if (!conversionManager.convert(currencyPlugin, currencyId))
                 this.localeManager.sendCommandMessage(sender, "command-convert-failure");
-            }
         });
     }
 
@@ -47,6 +59,7 @@ public class ConvertCommand extends BasePointsCommand {
                 .permission("playerpoints.convert")
                 .arguments(ArgumentsDefinition.builder()
                         .required("plugin", ArgumentHandlers.forEnum(CurrencyPlugin.class))
+                        .optional("currencyId", ArgumentHandlers.STRING, context -> context.get(CurrencyPlugin.class).hasMultipleCurrencies())
                         .optional("confirm", ArgumentHandlers.forValues(String.class, "confirm"))
                         .build())
                 .build();

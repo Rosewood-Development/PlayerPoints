@@ -3,6 +3,8 @@ package org.black_ixx.playerpoints.conversion.converter;
 import dev.rosewood.rosegarden.RosePlugin;
 import java.lang.reflect.Field;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.UUID;
@@ -20,7 +22,7 @@ public class TokenManagerConverter extends CurrencyConverter {
     }
 
     @Override
-    public void convert() {
+    public void convert(String currencyId) {
         TokenManagerPlugin tokenManager = (TokenManagerPlugin) this.plugin;
         DataManager dataManager = tokenManager.getDataManager();
         try {
@@ -41,7 +43,8 @@ public class TokenManagerConverter extends CurrencyConverter {
                 }
 
                 int count = 0;
-                SortedSet<SortedPlayer> pointsData = new TreeSet<>();
+                Map<UUID, Integer> pointsData = new HashMap<>();
+                Map<UUID, String> usernameMap = new HashMap<>();
                 for (Database.TopElement entry : data) {
                     try {
                         UUID uuid;
@@ -55,7 +58,10 @@ public class TokenManagerConverter extends CurrencyConverter {
                         }
 
                         int amount = Math.toIntExact(entry.getTokens());
-                        pointsData.add(new SortedPlayer(uuid, name, amount));
+                        if (amount > 0) {
+                            pointsData.put(uuid, amount);
+                            usernameMap.put(uuid, name);
+                        }
 
                         if (++count % 500 == 0)
                             this.rosePlugin.getLogger().warning(String.format("Converted %d entries...", count));
@@ -64,7 +70,7 @@ public class TokenManagerConverter extends CurrencyConverter {
                     }
                 }
 
-                this.rosePlugin.getManager(org.black_ixx.playerpoints.manager.DataManager.class).importData(pointsData, Collections.emptyMap());
+                this.rosePlugin.getManager(org.black_ixx.playerpoints.manager.DataManager.class).importData(pointsData, usernameMap);
                 this.rosePlugin.getLogger().warning(String.format("Successfully converted %d entries!", count));
             });
         } catch (ReflectiveOperationException e) {

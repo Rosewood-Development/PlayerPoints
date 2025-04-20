@@ -103,9 +103,12 @@ command-import-warning: '&cNotice: This operation will delete all data from the 
 # Convert Command
 command-convert-description: 'Loads currency data from another plugin'
 command-convert-invalid: '&b%plugin% &cis not a convertible currency plugin name.'
+command-convert-invalid-currency: '&b%currency% &cis not a valid convertible currency.'
+command-convert-currency-required: '&cYou must specify a currency to convert for this plugin.'
 command-convert-success: '&aCurrency data from &b%plugin% &ais being converted.'
 command-convert-failure: '&cAn error occurred while attempting to convert the data. Please check your console and report any errors to the PlayerPoints plugin author.'
 command-convert-warning: '&cNotice: This operation will delete all data from the active database and replace it with the data from &b%plugin%&c. &cIf you are absolutely sure about this, use &b/points convert %plugin% confirm&c.'
+command-convert-warning-currency: '&cNotice: This operation will delete all data from the active database and replace it with the data from &b%plugin%&c. &cIf you are absolutely sure about this, use &b/points convert %plugin% %currency% confirm&c.'
 
 # Account Command
 command-account-description: 'Create or delete an accounts'

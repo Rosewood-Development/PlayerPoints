@@ -101,9 +101,12 @@ command-import-warning: '&cLưu ý: Thao tác này sẽ xóa tất cả dữ li�
 # Convert Command
 command-convert-description: 'Load dữ liệu tiền tệ từ một plugin khác'
 command-convert-invalid: '&b%plugin% &ckhông phải là tên plugin tiền tệ có thể chuyển đổi.'
+command-convert-invalid-currency: '&b%currency% &ckhông phải là loại tiền tệ có thể chuyển đổi hợp lệ.'
+command-convert-currency-required: '&cBạn phải chỉ định loại tiền tệ cần chuyển đổi bằng plugin này.'
 command-convert-success: '&aDữ liệu tiền tệ từ &b%plugin% &ađã được chuyển đổi.'
 command-convert-failure: '&cĐã xảy ra lỗi khi cố gắng chuyển đổi dữ liệu. Vui lòng kiểm tra bảng điều khiển của bạn và báo cáo bất kỳ lỗi nào cho tác giả plugin PlayerPoints.'
 command-convert-warning: '&cLưu ý: Thao tác này sẽ xóa tất cả dữ liệu khỏi cơ sở dữ liệu đang hoạt động và thay thế bằng dữ liệu từ &b%plugin%&c. &cNếu bạn hoàn toàn chắc chắn về điều này, hãy sử dụng &b/points convert %plugin% confirm&c.'
+command-convert-warning-currency: '&cLưu ý: Thao tác này sẽ xóa tất cả dữ liệu khỏi cơ sở dữ liệu đang hoạt động và thay thế bằng dữ liệu từ &b%plugin%&c. &cNếu bạn hoàn toàn chắc chắn về điều này, hãy sử dụng &b/points convert %plugin% %currency% confirm&c.'
 
 # Account Command
 command-account-description: 'Quản lý việc tạo và xóa tài khoản'

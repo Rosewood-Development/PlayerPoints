@@ -103,9 +103,12 @@ command-import-warning: '&c警告: 此動作將會刪除數據庫內所有資料
 # Convert Command
 command-convert-description: '從另一個插件加載數據庫'
 command-convert-invalid: '&b%plugin% &c不是可以轉換數據庫的插件.'
+command-convert-invalid-currency: '&b%currency% &c不是有效的可兌換貨幣。'
+command-convert-currency-required: '&c您必須指定要使用此外掛程式轉換的貨幣。'
 command-convert-success: '&a來自 &b%plugin% &a的數據庫已成功轉移.'
 command-convert-failure: '&c嘗試轉換數據庫時發生錯誤. 請檢查你的控制台並且回報錯誤給 PlayerPoints 的作者.'
 command-convert-warning: '&c警告: 此動作將會刪除數據庫內所有資料, 並將數據庫替換為 &b%plugin%&c 的資料. &c如果你確定要繼續, 請使用 &b/points convert %plugin% confirm&c.'
+command-convert-warning-currency: '&c警告: 此動作將會刪除數據庫內所有資料, 並將數據庫替換為 &b%plugin%&c 的資料. &c如果你確定要繼續, 請使用 &b/points convert %plugin% %currency% confirm&c.'
 
 # Account Command
 command-account-description: '管理帳戶的建立和刪除'

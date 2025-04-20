@@ -103,9 +103,12 @@ command-import-warning: '&c注意: 这个操作会删除现有的所有数据并
 # 迁移命令
 command-convert-description: '从另一个插件迁移数据'
 command-convert-invalid: '&b%plugin% &c不是一个可转换的插件名。'
+command-convert-invalid-currency: '&b%currency% &c不是有效的可兑换货币。'
+command-convert-currency-required: '&c您必须指定使用此插件转换的货币。'
 command-convert-success: '&a来自 &b%plugin% &a的货币数据已被迁移。'
 command-convert-failure: '&c尝试迁移数据时发生了错误。请检查您的控制台并将您所看到的报告给 PlayerPoint 作者。'
 command-convert-warning: '&c注意: 这个操作会删除所有现存的数据并使用来自插件 &b%plugin%&c 的数据结构。 &c如果您知道您在做什么，请使用 &b/points convert %plugin% confirm&c 来确认操作。'
+command-convert-warning-currency: '&c注意: 这个操作会删除所有现存的数据并使用来自插件 &b%plugin%&c 的数据结构。 &c如果您知道您在做什么，请使用 &b/points convert %plugin% %currency% confirm&c 来确认操作。'
 
 # Account Command
 command-account-description: '管理账户的创建和删除'

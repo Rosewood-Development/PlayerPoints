@@ -55,29 +55,23 @@ public class ImportCommand extends BasePointsCommand {
             }
 
             ConfigurationSection uuidSection = configuration.getConfigurationSection("UUIDs");
-            Map<UUID, String> uuidMap = new HashMap<>();
+            Map<UUID, String> usernameMap = new HashMap<>();
             if (uuidSection != null) {
                 for (String uuidString : uuidSection.getKeys(false)) {
                     String name = uuidSection.getString(uuidString);
                     UUID uuidObj = UUID.fromString(uuidString);
-                    uuidMap.put(uuidObj, name);
+                    usernameMap.put(uuidObj, name);
                 }
             }
 
-            SortedSet<SortedPlayer> data = new TreeSet<>();
+            Map<UUID, Integer> data = new HashMap<>();
             for (String uuidString : pointsSection.getKeys(false)) {
                 UUID uuid = UUID.fromString(uuidString);
                 int points = pointsSection.getInt(uuidString);
-
-                String username = uuidMap.get(uuid);
-                if (username != null) {
-                    data.add(new SortedPlayer(uuid, username, points));
-                } else {
-                    data.add(new SortedPlayer(uuid, points));
-                }
+                data.put(uuid, points);
             }
 
-            dataManager.importData(data, uuidMap);
+            dataManager.importData(data, usernameMap);
             this.localeManager.sendCommandMessage(sender, "command-import-success");
         });
     }

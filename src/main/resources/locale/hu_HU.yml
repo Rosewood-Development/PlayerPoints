@@ -103,9 +103,12 @@ command-import-warning: '&cFigyelmeztetés: Ez a művelet törli az összes eddi
 # Convert Command
 command-convert-description: 'Betölti a valuta adatot egy másik pluginból'
 command-convert-invalid: '&b%plugin% &cnem konvertálható valuta plugin.'
+command-convert-invalid-currency: '&b%currency% &cnem érvényes konvertibilis valuta.'
+command-convert-currency-required: '&cEhhez a bővítményhez meg kell adnia a konvertálandó pénznemet.'
 command-convert-success: '&aValuta adat a &b%plugin%-ból/ből &aát konvertálva.'
 command-convert-failure: '&cHiba történt az adat konvertálás közben. Kérlek ellenőrizd a konzolt és jelezd a hibákat a PlayerPoints plugin készítőjének.'
 command-convert-warning: '&cFigyelmeztetés: Ez a művelet törli az összes eddigi adatot és importálja az adatokat a &b%plugin%-ból/ből&c. &cHa teljesen biztos vagy ebben, akkor használd a &b/points convert %plugin% confirm &cparancsot.'
+command-convert-warning-currency: '&cFigyelmeztetés: Ez a művelet törli az összes eddigi adatot és importálja az adatokat a &b%plugin%-ból/ből&c. &cHa teljesen biztos vagy ebben, akkor használd a &b/points convert %plugin% %currency% confirm &cparancsot.'
 
 # Account Command
 command-account-description: 'Kezeli a számlák létrehozását és törlését'
