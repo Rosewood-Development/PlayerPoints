@@ -59,7 +59,12 @@ public class ConvertCommand extends BasePointsCommand {
                 .permission("playerpoints.convert")
                 .arguments(ArgumentsDefinition.builder()
                         .required("plugin", ArgumentHandlers.forEnum(CurrencyPlugin.class))
-                        .optional("currencyId", ArgumentHandlers.STRING, context -> context.get(CurrencyPlugin.class).hasMultipleCurrencies())
+                        .optional("currencyId", ArgumentHandlers.STRING, context -> {
+                            CurrencyPlugin plugin = context.get(CurrencyPlugin.class);
+                            if (plugin == null)
+                                return false;
+                            return plugin.hasMultipleCurrencies();
+                        })
                         .optional("confirm", ArgumentHandlers.forValues(String.class, "confirm"))
                         .build())
                 .build();
