@@ -58,7 +58,7 @@ public final class PointsUtils {
 
     /**
      * Formats a number from 1100 to 1.1k
-     * Adapted from <a>https://stackoverflow.com/questions/4753251/how-to-go-about-formatting-1200-to-1-2k-in-java</a>
+     * Adapted from <a href="https://stackoverflow.com/questions/4753251/how-to-go-about-formatting-1200-to-1-2k-in-java"></a>
      *
      * @param points The points value to format
      * @return The formatted shorthand value
@@ -143,7 +143,7 @@ public final class PointsUtils {
      * @return a tuple of the player's UUID and name, or null if not found
      */
     public static Tuple<UUID, String> getPlayerByName(String name) {
-        Player player = Bukkit.getPlayer(name);
+        Player player = Bukkit.getPlayerExact(name);
         if (player != null)
             return new Tuple<>(player.getUniqueId(), player.getName());
 
