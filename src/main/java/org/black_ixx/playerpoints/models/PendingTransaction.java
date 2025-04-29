@@ -18,9 +18,4 @@ public class PendingTransaction {
         return this.amount;
     }
 
-    public enum TransactionType {
-        OFFSET,
-        SET
-    }
-
 }

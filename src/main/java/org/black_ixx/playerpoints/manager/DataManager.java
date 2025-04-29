@@ -37,6 +37,7 @@ import org.black_ixx.playerpoints.database.migrations._2_Add_Table_Username_Cach
 import org.black_ixx.playerpoints.listeners.PointsMessageListener;
 import org.black_ixx.playerpoints.models.PendingTransaction;
 import org.black_ixx.playerpoints.models.SortedPlayer;
+import org.black_ixx.playerpoints.models.TransactionType;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -211,6 +212,9 @@ public class DataManager extends AbstractDataManager implements Listener {
                     case OFFSET:
                         points += transaction.getAmount();
                         break;
+
+                    default:
+                        throw new IllegalStateException("Invalid transaction type being persisted to database");
                 }
             }
         }
@@ -273,7 +277,7 @@ public class DataManager extends AbstractDataManager implements Listener {
         if (amount < 0)
             return false;
 
-        this.getPendingTransactions(playerId).add(new PendingTransaction(PendingTransaction.TransactionType.SET, amount));
+        this.getPendingTransactions(playerId).add(new PendingTransaction(TransactionType.SET, amount));
         return true;
     }
 
@@ -289,7 +293,7 @@ public class DataManager extends AbstractDataManager implements Listener {
         if (points + amount < 0)
             return false;
 
-        this.getPendingTransactions(playerId).add(new PendingTransaction(PendingTransaction.TransactionType.OFFSET, amount));
+        this.getPendingTransactions(playerId).add(new PendingTransaction(TransactionType.OFFSET, amount));
         return true;
     }
 

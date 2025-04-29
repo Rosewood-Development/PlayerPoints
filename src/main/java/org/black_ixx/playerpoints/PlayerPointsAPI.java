@@ -8,6 +8,7 @@ import org.black_ixx.playerpoints.event.PlayerPointsChangeEvent;
 import org.black_ixx.playerpoints.event.PlayerPointsResetEvent;
 import org.black_ixx.playerpoints.manager.DataManager;
 import org.black_ixx.playerpoints.models.SortedPlayer;
+import org.black_ixx.playerpoints.models.TransactionType;
 import org.black_ixx.playerpoints.util.PointsUtils;
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
@@ -36,7 +37,7 @@ public class PlayerPointsAPI {
     public boolean give(@NotNull UUID playerId, int amount) {
         Objects.requireNonNull(playerId);
 
-        PlayerPointsChangeEvent event = new PlayerPointsChangeEvent(playerId, amount);
+        PlayerPointsChangeEvent event = new PlayerPointsChangeEvent(playerId, amount, TransactionType.OFFSET);
         Bukkit.getPluginManager().callEvent(event);
         if (event.isCancelled())
             return false;
@@ -116,18 +117,27 @@ public class PlayerPointsAPI {
      *
      * @param source The player to take points from
      * @param target The player to give points to
-     * @param amount The amount of points to take/give
+     * @param amount The amount of points to take/give, must be positive
      * @return true if the transaction was successful, false otherwise
      */
     public boolean pay(@NotNull UUID source, @NotNull UUID target, int amount) {
         Objects.requireNonNull(source);
         Objects.requireNonNull(target);
 
-        if (!this.take(source, amount))
+        PlayerPointsChangeEvent takeEvent = new PlayerPointsChangeEvent(source, -amount, TransactionType.PAY_SENDER);
+        Bukkit.getPluginManager().callEvent(takeEvent);
+        if (takeEvent.isCancelled() || -takeEvent.getChange() <= 0) // If the giving amount is now 0 or negative, cancel the payment
             return false;
 
-        if (!this.give(target, amount)) {
-            this.give(source, amount);
+        DataManager dataManager = this.plugin.getManager(DataManager.class);
+        if (!dataManager.offsetPoints(source, takeEvent.getChange())) // Sender balance is not enough, cancel the payment
+            return false;
+
+        PlayerPointsChangeEvent giveEvent = new PlayerPointsChangeEvent(target, amount, TransactionType.PAY_RECEIVER);
+        Bukkit.getPluginManager().callEvent(giveEvent);
+        // If the receiving amount is now 0 or negative, or the amount could not be given, cancel the payment and refund the sender
+        if (giveEvent.isCancelled() || giveEvent.getChange() <= 0 || !dataManager.offsetPoints(target, giveEvent.getChange())) {
+            dataManager.offsetPoints(source, -takeEvent.getChange());
             return false;
         }
 
@@ -146,7 +156,7 @@ public class PlayerPointsAPI {
 
         DataManager dataManager = this.plugin.getManager(DataManager.class);
         int points = dataManager.getEffectivePoints(playerId);
-        PlayerPointsChangeEvent event = new PlayerPointsChangeEvent(playerId, amount - points);
+        PlayerPointsChangeEvent event = new PlayerPointsChangeEvent(playerId, amount - points, TransactionType.SET);
         Bukkit.getPluginManager().callEvent(event);
         if (event.isCancelled())
             return false;
