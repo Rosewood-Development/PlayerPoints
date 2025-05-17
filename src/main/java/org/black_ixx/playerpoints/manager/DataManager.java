@@ -21,7 +21,6 @@ import java.util.Deque;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.SortedSet;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedDeque;
@@ -109,26 +108,20 @@ public class DataManager extends AbstractDataManager implements Listener {
     }
 
     /**
-     * Pushes any points changes to the database and removes stale cache entries
+     * Pushes any pending points changes to the database
      */
     private void update() {
         // Push any points changes to the database
-        Map<UUID, Integer> transactions = new HashMap<>();
         Map<UUID, Deque<PendingTransaction>> processingPendingTransactions;
         synchronized (this.pendingTransactions) {
+            if (this.pendingTransactions.isEmpty())
+                return;
+
             processingPendingTransactions = new HashMap<>(this.pendingTransactions);
             this.pendingTransactions.clear();
         }
 
-        for (Map.Entry<UUID, Deque<PendingTransaction>> entry : processingPendingTransactions.entrySet()) {
-            UUID uuid = entry.getKey();
-            int points = this.getEffectivePoints(uuid, entry.getValue(), null);
-            this.pointsCache.put(uuid, points);
-            transactions.put(uuid, points);
-        }
-
-        if (!transactions.isEmpty())
-            this.updatePoints(transactions);
+        this.updatePoints(processingPendingTransactions);
 
         if (!this.pendingUsernameUpdates.isEmpty()) {
             this.updateCachedUsernames(this.pendingUsernameUpdates);
@@ -214,7 +207,7 @@ public class DataManager extends AbstractDataManager implements Listener {
                         break;
 
                     default:
-                        throw new IllegalStateException("Invalid transaction type being persisted to database");
+                        throw new IllegalStateException("Invalid transaction type");
                 }
             }
         }
@@ -228,7 +221,7 @@ public class DataManager extends AbstractDataManager implements Listener {
      * @param uuid The player's UUID
      */
     public void refreshPoints(UUID uuid) {
-        this.pointsCache.invalidate(uuid);
+        this.rosePlugin.getScheduler().runTaskAsync(() -> this.pointsCache.put(uuid, this.getPoints(uuid)));
     }
 
     /**
@@ -297,42 +290,74 @@ public class DataManager extends AbstractDataManager implements Listener {
         return true;
     }
 
-    private void updatePoints(Map<UUID, Integer> transactions) {
+    private void updatePoints(Map<UUID, Deque<PendingTransaction>> transactionsMap) {
         this.databaseConnector.connect(connection -> {
-            String query = "REPLACE INTO " + this.getPointsTableName() + " (" + this.getUuidColumnName() + ", points) VALUES (?, ?)";
-            try (PreparedStatement statement = connection.prepareStatement(query)) {
-                for (Map.Entry<UUID, Integer> entry : transactions.entrySet()) {
-                    statement.setString(1, entry.getKey().toString());
-                    statement.setInt(2, Math.max(0, entry.getValue()));
-                    statement.addBatch();
+            String offsetQuery = "INSERT INTO " + this.getPointsTableName() + " (" + this.getUuidColumnName() + ", points) VALUES (?, ?) ";
+            String setQuery = offsetQuery;
+            String getQuery = "SELECT points FROM " + this.getPointsTableName() + " WHERE " + this.getUuidColumnName() + " = ?";
+            if (this.databaseConnector instanceof SQLiteConnector) {
+                offsetQuery += "ON CONFLICT(" + this.getUuidColumnName() + ") DO UPDATE SET points = MAX(0, points + ?)";
+                setQuery += "ON CONFLICT(" + this.getUuidColumnName() + ") DO UPDATE SET points = ?";
+            } else {
+                offsetQuery += "ON DUPLICATE KEY UPDATE points = GREATEST(0, points + ?)";
+                setQuery += "ON DUPLICATE KEY UPDATE points = ?";
+            }
 
-                    // Update cached value
-                    this.pointsCache.put(entry.getKey(), entry.getValue());
+            for (Map.Entry<UUID, Deque<PendingTransaction>> entry : transactionsMap.entrySet()) {
+                UUID uuid = entry.getKey();
+                for (PendingTransaction transaction : entry.getValue()) {
+                    String query;
+                    switch (transaction.getType()) {
+                        case OFFSET:
+                            query = offsetQuery;
+                            break;
+                        case SET:
+                            query = setQuery;
+                            break;
+                        default:
+                            throw new IllegalStateException("Invalid transaction type");
+                    }
 
-                    // Send update to BungeeCord if enabled
-                    if (org.black_ixx.playerpoints.config.SettingKey.BUNGEECORD_SEND_UPDATES.get() && this.rosePlugin.isEnabled()) {
-                        ByteArrayDataOutput output = ByteStreams.newDataOutput();
-                        output.writeUTF("Forward");
-                        output.writeUTF("ONLINE");
-                        output.writeUTF(PointsMessageListener.REFRESH_SUBCHANNEL);
-
-                        byte[] bytes = entry.getKey().toString().getBytes(StandardCharsets.UTF_8);
-                        output.writeShort(bytes.length);
-                        output.write(bytes);
-
-                        Player attachedPlayer = Iterables.getFirst(Bukkit.getOnlinePlayers(), null);
-                        if (attachedPlayer != null)
-                            attachedPlayer.sendPluginMessage(this.rosePlugin, PointsMessageListener.CHANNEL, output.toByteArray());
+                    try (PreparedStatement statement = connection.prepareStatement(query)) {
+                        statement.setString(1, uuid.toString());
+                        statement.setInt(2, transaction.getAmount());
+                        statement.setInt(3, transaction.getAmount());
+                        statement.executeUpdate();
                     }
                 }
-                statement.executeBatch();
+
+                try (PreparedStatement statement = connection.prepareStatement(getQuery)) {
+                    statement.setString(1, uuid.toString());
+                    ResultSet result = statement.executeQuery();
+                    if (result.next()) {
+                        this.pointsCache.put(uuid, result.getInt(1));
+                    } else {
+                        this.pointsCache.invalidate(uuid);
+                    }
+                }
+
+                // Send update to BungeeCord if enabled
+                if (org.black_ixx.playerpoints.config.SettingKey.BUNGEECORD_SEND_UPDATES.get() && this.rosePlugin.isEnabled()) {
+                    ByteArrayDataOutput output = ByteStreams.newDataOutput();
+                    output.writeUTF("Forward");
+                    output.writeUTF("ONLINE");
+                    output.writeUTF(PointsMessageListener.REFRESH_SUBCHANNEL);
+
+                    byte[] bytes = entry.getKey().toString().getBytes(StandardCharsets.UTF_8);
+                    output.writeShort(bytes.length);
+                    output.write(bytes);
+
+                    Player attachedPlayer = Iterables.getFirst(Bukkit.getOnlinePlayers(), null);
+                    if (attachedPlayer != null)
+                        attachedPlayer.sendPluginMessage(this.rosePlugin, PointsMessageListener.CHANNEL, output.toByteArray());
+                }
             }
         });
     }
 
-    public boolean offsetAllPoints(int amount) {
+    public void offsetAllPoints(int amount) {
         if (amount == 0)
-            return true;
+            return;
 
         this.databaseConnector.connect(connection -> {
             String function = this.databaseConnector instanceof SQLiteConnector ? "MAX" : "GREATEST";
@@ -343,11 +368,8 @@ public class DataManager extends AbstractDataManager implements Listener {
             }
         });
 
-        boolean result = true;
         for (Player player : Bukkit.getOnlinePlayers())
-            result &= this.offsetPoints(player.getUniqueId(), amount);
-
-        return result;
+            this.pointsCache.put(player.getUniqueId(), this.getPoints(player.getUniqueId()));
     }
 
     public boolean doesDataExist() {
