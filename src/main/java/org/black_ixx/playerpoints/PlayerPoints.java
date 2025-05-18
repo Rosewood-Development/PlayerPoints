@@ -2,6 +2,7 @@ package org.black_ixx.playerpoints;
 
 import dev.rosewood.rosegarden.RosePlugin;
 import dev.rosewood.rosegarden.config.RoseSetting;
+import dev.rosewood.rosegarden.config.SettingHolder;
 import dev.rosewood.rosegarden.manager.Manager;
 import java.util.Arrays;
 import java.util.List;
@@ -22,6 +23,7 @@ import org.black_ixx.playerpoints.util.PointsUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.ServicePriority;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Main plugin class for PlayerPoints.
@@ -136,8 +138,8 @@ public class PlayerPoints extends RosePlugin {
     }
 
     @Override
-    protected List<RoseSetting<?>> getRoseConfigSettings() {
-        return SettingKey.getKeys();
+    protected SettingHolder getRoseConfigSettingHolder() {
+        return SettingKey.INSTANCE;
     }
 
     @Override

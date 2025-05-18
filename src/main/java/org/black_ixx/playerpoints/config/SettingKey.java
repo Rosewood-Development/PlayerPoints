@@ -1,16 +1,17 @@
 package org.black_ixx.playerpoints.config;
 
-import dev.rosewood.rosegarden.config.CommentedConfigurationSection;
 import dev.rosewood.rosegarden.config.RoseSetting;
-import dev.rosewood.rosegarden.config.RoseSettingSerializer;
+import dev.rosewood.rosegarden.config.SettingHolder;
+import dev.rosewood.rosegarden.config.SettingSerializer;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import org.black_ixx.playerpoints.PlayerPoints;
-import static dev.rosewood.rosegarden.config.RoseSettingSerializers.*;
+import org.bukkit.configuration.ConfigurationSection;
+import static dev.rosewood.rosegarden.config.SettingSerializers.*;
 
-public class SettingKey {
+public class SettingKey implements SettingHolder {
 
+    public static final SettingKey INSTANCE = new SettingKey();
     private static final List<RoseSetting<?>> KEYS = new ArrayList<>();
 
     public static final RoseSetting<Boolean> VAULT = create("vault", BOOLEAN, false, "Should we register with Vault as a currency manager?");
@@ -28,31 +29,32 @@ public class SettingKey {
     public static final RoseSetting<Boolean> TAB_COMPLETE_SHOW_ALL_PLAYERS = create("tab-complete-show-all-players", BOOLEAN, false, "When true, all players that have a PlayerPoints balance will show in tab complete.", "If false, only non-vanished online players will be displayed.");
     public static final RoseSetting<Integer> CACHED_ACCOUNT_LIST_REFRESH_INTERVAL = create("cached-account-list-refresh-interval", INTEGER, 300, "How often (in seconds) should we update the list of accounts for tab completion purposes?");
     public static final RoseSetting<Boolean> SHOW_NON_PLAYER_ACCOUNTS_ON_LEADERBOARDS = create("show-non-player-accounts-on-leaderboards", BOOLEAN, false, "Should we show non-player accounts on leaderboards?");
-    public static final RoseSetting<CommentedConfigurationSection> VOTE = create("vote", "Votifier hook settings");
+    public static final RoseSetting<ConfigurationSection> VOTE = create("vote", "Votifier hook settings");
     public static final RoseSetting<Boolean> VOTE_ENABLED = create("vote.enabled", BOOLEAN, false, "If the votifier hook should be enabled");
     public static final RoseSetting<Integer> VOTE_AMOUNT = create("vote.amount", INTEGER, 100, "How many points should be awarded per vote");
     public static final RoseSetting<Boolean> VOTE_ONLINE = create("vote.online", BOOLEAN, false, "Should points only be awarded when the player who voted is online?");
     public static final RoseSetting<String> BASE_COMMAND_REDIRECT = create("base-command-redirect", STRING, "me", "Which command should we redirect to when using '/points' with no subcommand specified?", "You can use any points command here that does not take any arguments", "If left as blank, the default behavior of showing '/points me' with bypassed permissions will be used");
-    public static final RoseSetting<CommentedConfigurationSection> LEGACY_DATABASE = create("legacy-database-mode", "Are you upgrading from a much older version of PlayerPoints?", "If you have done anything special with the database settings previously, you may need this", "WARNING: This setting may be removed in the future. Try to get your database updated to use the new format!");
+    public static final RoseSetting<ConfigurationSection> LEGACY_DATABASE = create("legacy-database-mode", "Are you upgrading from a much older version of PlayerPoints?", "If you have done anything special with the database settings previously, you may need this", "WARNING: This setting may be removed in the future. Try to get your database updated to use the new format!");
     public static final RoseSetting<Boolean> LEGACY_DATABASE_MODE = create("legacy-database-mode.enabled", BOOLEAN, false, "Should we use legacy database mode?");
     public static final RoseSetting<String> LEGACY_DATABASE_NAME = create("legacy-database-mode.table-name", STRING, "playerpoints", "The name of the legacy database table");
 
-    private static <T> RoseSetting<T> create(String key, RoseSettingSerializer<T> serializer, T defaultValue, String... comments) {
-        RoseSetting<T> setting = RoseSetting.backed(PlayerPoints.getInstance(), key, serializer, defaultValue, comments);
+    private static <T> RoseSetting<T> create(String key, SettingSerializer<T> serializer, T defaultValue, String... comments) {
+        RoseSetting<T> setting = RoseSetting.ofBackedValue(key, PlayerPoints.getInstance(), serializer, defaultValue, comments);
         KEYS.add(setting);
         return setting;
     }
 
-    private static RoseSetting<CommentedConfigurationSection> create(String key, String... comments) {
-        RoseSetting<CommentedConfigurationSection> setting = RoseSetting.backedSection(PlayerPoints.getInstance(), key, comments);
+    private static RoseSetting<ConfigurationSection> create(String key, String... comments) {
+        RoseSetting<ConfigurationSection> setting = RoseSetting.ofBackedSection(key, PlayerPoints.getInstance(), comments);
         KEYS.add(setting);
         return setting;
-    }
-
-    public static List<RoseSetting<?>> getKeys() {
-        return Collections.unmodifiableList(KEYS);
     }
 
     private SettingKey() {}
+
+    @Override
+    public List<RoseSetting<?>> get() {
+        return KEYS;
+    }
 
 }
