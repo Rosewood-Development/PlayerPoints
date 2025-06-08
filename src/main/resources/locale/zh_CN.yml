@@ -3,7 +3,7 @@ prefix: '&7[<g:#E8A230:#ECD32D>{{PLUGIN_NAME}}&7] '
 
 # 货币名称
 currency-singular: '个点劵'
-currency-plural: '多个点劵'
+currency-plural: '个点劵'
 currency-separator: ','
 currency-decimal: '.'
 number-abbreviation-thousands: 'k'
