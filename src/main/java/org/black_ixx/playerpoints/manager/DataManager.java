@@ -12,6 +12,8 @@ import dev.rosewood.rosegarden.database.SQLiteConnector;
 import dev.rosewood.rosegarden.manager.AbstractDataManager;
 import dev.rosewood.rosegarden.scheduler.task.ScheduledTask;
 import java.nio.charset.StandardCharsets;
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -54,6 +56,7 @@ public class DataManager extends AbstractDataManager implements Listener {
     private final Map<UUID, String> pendingUsernameUpdates;
     private final Map<UUID, String> accountToNameMap;
     private final Map<String, UUID> nameToAccountMap;
+    private Boolean isModernSqlite;
 
     public DataManager(RosePlugin rosePlugin) {
         super(rosePlugin);
@@ -83,6 +86,25 @@ public class DataManager extends AbstractDataManager implements Listener {
 
         this.updateTask = this.rosePlugin.getScheduler().runTaskTimerAsync(this::update, 10L, 10L);
         this.accountUpdateTask = this.rosePlugin.getScheduler().runTaskTimerAsync(this::updateAccountUUIDMaps, 10L, org.black_ixx.playerpoints.config.SettingKey.CACHED_ACCOUNT_LIST_REFRESH_INTERVAL.get() * 20);
+
+        if (this.isModernSqlite == null) {
+            if (this.databaseConnector instanceof SQLiteConnector) {
+                this.databaseConnector.connect(connection -> {
+                    // Get SQLite version
+                    try (Statement stmt = connection.createStatement();
+                         ResultSet rs = stmt.executeQuery("SELECT sqlite_version()")) {
+                        if (rs.next()) {
+                            String version = rs.getString(1);
+                            // Parse version to check if it's >= 3.24.0
+                            String[] parts = version.split("\\.");
+                            int major = Integer.parseInt(parts[0]);
+                            int minor = Integer.parseInt(parts[1]);
+                            this.isModernSqlite = (major > 3) || (major == 3 && minor >= 24);
+                        }
+                    }
+                });
+            }
+        }
     }
 
     @Override
@@ -296,8 +318,14 @@ public class DataManager extends AbstractDataManager implements Listener {
             String setQuery = offsetQuery;
             String getQuery = "SELECT points FROM " + this.getPointsTableName() + " WHERE " + this.getUuidColumnName() + " = ?";
             if (this.databaseConnector instanceof SQLiteConnector) {
-                offsetQuery += "ON CONFLICT(" + this.getUuidColumnName() + ") DO UPDATE SET points = MAX(0, points + ?)";
-                setQuery += "ON CONFLICT(" + this.getUuidColumnName() + ") DO UPDATE SET points = ?";
+                if (this.isModernSqlite == null || !this.isModernSqlite) {
+                    offsetQuery = "INSERT OR REPLACE INTO " + this.getPointsTableName() + " (" + this.getUuidColumnName() + ", points) " +
+                            "VALUES (?, COALESCE((SELECT MAX(0, points + ?) FROM " + this.getPointsTableName() + " WHERE " + this.getUuidColumnName() + " = ?), ?))";
+                    setQuery = "INSERT OR REPLACE INTO " + this.getPointsTableName() + " (" + this.getUuidColumnName() + ", points) VALUES (?, ?)";
+                } else {
+                    offsetQuery += "ON CONFLICT(" + this.getUuidColumnName() + ") DO UPDATE SET points = MAX(0, points + ?)";
+                    setQuery += "ON CONFLICT(" + this.getUuidColumnName() + ") DO UPDATE SET points = ?";
+                }
             } else {
                 offsetQuery += "ON DUPLICATE KEY UPDATE points = GREATEST(0, points + ?)";
                 setQuery += "ON DUPLICATE KEY UPDATE points = ?";
@@ -306,23 +334,37 @@ public class DataManager extends AbstractDataManager implements Listener {
             for (Map.Entry<UUID, Deque<PendingTransaction>> entry : transactionsMap.entrySet()) {
                 UUID uuid = entry.getKey();
                 for (PendingTransaction transaction : entry.getValue()) {
-                    String query;
                     switch (transaction.getType()) {
                         case OFFSET:
-                            query = offsetQuery;
+                            try (PreparedStatement statement = connection.prepareStatement(offsetQuery)) {
+                                if (this.isModernSqlite != null && this.isModernSqlite) {
+                                    statement.setString(1, uuid.toString());
+                                    statement.setInt(2, transaction.getAmount());
+                                    statement.setInt(3, transaction.getAmount());
+                                } else {
+                                    statement.setString(1, uuid.toString());
+                                    statement.setInt(2, transaction.getAmount());
+                                    statement.setString(3, uuid.toString());
+                                    statement.setInt(4, transaction.getAmount());
+                                }
+                                statement.executeUpdate();
+                            }
                             break;
                         case SET:
-                            query = setQuery;
+                            try (PreparedStatement statement = connection.prepareStatement(setQuery)) {
+                                if (this.isModernSqlite != null && this.isModernSqlite) {
+                                    statement.setString(1, uuid.toString());
+                                    statement.setInt(2, transaction.getAmount());
+                                    statement.setInt(3, transaction.getAmount());
+                                } else {
+                                    statement.setString(1, uuid.toString());
+                                    statement.setInt(2, transaction.getAmount());
+                                }
+                                statement.executeUpdate();
+                            }
                             break;
                         default:
                             throw new IllegalStateException("Invalid transaction type");
-                    }
-
-                    try (PreparedStatement statement = connection.prepareStatement(query)) {
-                        statement.setString(1, uuid.toString());
-                        statement.setInt(2, transaction.getAmount());
-                        statement.setInt(3, transaction.getAmount());
-                        statement.executeUpdate();
                     }
                 }
 
