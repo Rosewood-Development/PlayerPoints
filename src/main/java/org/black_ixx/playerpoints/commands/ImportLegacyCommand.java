@@ -26,11 +26,12 @@ public class ImportLegacyCommand extends BasePointsCommand {
             return;
         }
 
+        String safeTable = tableName.replaceAll("[^A-Za-z0-9_]", "");
         this.rosePlugin.getScheduler().runTaskAsync(() -> {
-            if (dataManager.importLegacyTable(tableName)) {
-                this.localeManager.sendCommandMessage(sender, "command-importlegacy-success", StringPlaceholders.of("table", tableName));
+            if (dataManager.importLegacyTable(safeTable)) {
+                this.localeManager.sendCommandMessage(sender, "command-importlegacy-success", StringPlaceholders.of("table", safeTable));
             } else {
-                this.localeManager.sendCommandMessage(sender, "command-importlegacy-failure", StringPlaceholders.of("table", tableName));
+                this.localeManager.sendCommandMessage(sender, "command-importlegacy-failure", StringPlaceholders.of("table", safeTable));
             }
         });
     }
