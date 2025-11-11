@@ -1,17 +1,37 @@
 package org.black_ixx.playerpoints.models;
 
+import java.util.UUID;
+
 public class PendingTransaction {
 
-    private final TransactionType type;
+    private final UpdateType updateType;
+    private final TransactionType transactionType;
+    private final String sourceDescription;
+    private final UUID source;
     private final int amount;
 
-    public PendingTransaction(TransactionType type, int amount) {
-        this.type = type;
+    public PendingTransaction(UpdateType updateType, TransactionType transactionType, String sourceDescription, UUID source, int amount) {
+        this.updateType = updateType;
+        this.transactionType = transactionType;
+        this.sourceDescription = sourceDescription;
+        this.source = source;
         this.amount = amount;
     }
 
-    public TransactionType getType() {
-        return this.type;
+    public UpdateType getUpdateType() {
+        return this.updateType;
+    }
+
+    public TransactionType getTransactionType() {
+        return this.transactionType;
+    }
+
+    public String getSourceDescription() {
+        return this.sourceDescription;
+    }
+
+    public UUID getSource() {
+        return this.source;
     }
 
     public int getAmount() {

@@ -90,7 +90,7 @@ public class AccountCommand extends BasePointsCommand {
         protected CommandInfo createCommandInfo() {
             return CommandInfo.builder("delete")
                     .arguments(ArgumentsDefinition.builder()
-                            .required("target", new StringSuggestingArgumentHandler(x -> PointsUtils.getPlayerTabComplete(x, true, false)))
+                            .required("target", new StringSuggestingArgumentHandler(PointsUtils::getPlayerTabComplete))
                             .optional("confirm", ArgumentHandlers.forValues(String.class, "confirm"))
                             .build())
                     .build();

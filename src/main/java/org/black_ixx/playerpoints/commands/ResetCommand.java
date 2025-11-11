@@ -29,7 +29,7 @@ public class ResetCommand extends BasePointsCommand {
                 return;
             }
 
-            if (this.api.reset(player.getFirst())) {
+            if (this.api.reset(player.getFirst(), PointsUtils.getSenderUUID(sender))) {
                 this.localeManager.sendCommandMessage(sender, "command-reset-success", StringPlaceholders.builder("player", player.getSecond())
                         .add("currency", this.localeManager.getCurrencyName(0))
                         .build());

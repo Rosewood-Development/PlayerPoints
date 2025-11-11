@@ -36,7 +36,7 @@ public class SetCommand extends BasePointsCommand {
             }
 
             // Try to set the points for the player
-            if (this.api.set(player.getFirst(), amount) && silentFlag == null) {
+            if (this.api.set(player.getFirst(), PointsUtils.getSenderUUID(sender), amount) && silentFlag == null) {
                 this.localeManager.sendCommandMessage(sender, "command-set-success", StringPlaceholders.builder("player", player.getSecond())
                         .add("currency", this.localeManager.getCurrencyName(amount))
                         .add("amount", PointsUtils.formatPoints(amount))

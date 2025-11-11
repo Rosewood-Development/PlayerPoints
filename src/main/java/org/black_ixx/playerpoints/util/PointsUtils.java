@@ -7,6 +7,7 @@ import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.NavigableMap;
@@ -24,6 +25,8 @@ import org.black_ixx.playerpoints.manager.LocaleManager;
 import org.black_ixx.playerpoints.models.Tuple;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.MetadataValue;
 
@@ -31,7 +34,8 @@ public final class PointsUtils {
 
     private static NumberFormat formatter = NumberFormat.getInstance();
     private static String decimal;
-    private static final NavigableMap<Long, String> suffixes = new TreeMap<>();
+    private static final NavigableMap<Long, String> SUFFIXES = new TreeMap<>();
+    private static final UUID CONSOLE_UUID = UUID.fromString("00000000-0000-0000-0000-000000000000");
 
     /**
      * Formats a number from 1100 to 1,100
@@ -68,7 +72,7 @@ public final class PointsUtils {
         if (points < 0) return "-" + formatPointsShorthand(-points);
         if (points < 1000) return Long.toString(points);
 
-        Map.Entry<Long, String> entry = suffixes.floorEntry(points);
+        Map.Entry<Long, String> entry = SUFFIXES.floorEntry(points);
         Long divideBy = entry.getKey();
         String suffix = entry.getValue();
 
@@ -92,10 +96,10 @@ public final class PointsUtils {
             formatter = null;
         }
 
-        suffixes.clear();
-        suffixes.put(1_000L, localeManager.getLocaleMessage("number-abbreviation-thousands"));
-        suffixes.put(1_000_000L, localeManager.getLocaleMessage("number-abbreviation-millions"));
-        suffixes.put(1_000_000_000L, localeManager.getLocaleMessage("number-abbreviation-billions"));
+        SUFFIXES.clear();
+        SUFFIXES.put(1_000L, localeManager.getLocaleMessage("number-abbreviation-thousands"));
+        SUFFIXES.put(1_000_000L, localeManager.getLocaleMessage("number-abbreviation-millions"));
+        SUFFIXES.put(1_000_000_000L, localeManager.getLocaleMessage("number-abbreviation-billions"));
         decimal = localeManager.getLocaleMessage("currency-decimal");
     }
 
@@ -159,31 +163,38 @@ public final class PointsUtils {
     }
 
     public static List<String> getPlayerTabCompleteWithoutSelf(CommandContext context) {
-        return getPlayerTabComplete(context, SettingKey.TAB_COMPLETE_SHOW_ALL_PLAYERS.get(), true);
+        return getPlayerTabComplete(context, true);
     }
 
     public static List<String> getPlayerTabComplete(CommandContext context) {
-        return getPlayerTabComplete(context, SettingKey.TAB_COMPLETE_SHOW_ALL_PLAYERS.get(), false);
+        return getPlayerTabComplete(context, false);
     }
 
     /**
      * @return a list of all accounts + online players excluding vanished players
      */
-    public static List<String> getPlayerTabComplete(CommandContext context, boolean showAllPlayers, boolean hideSelf) {
+    private static List<String> getPlayerTabComplete(CommandContext context, boolean hideSelf) {
         Set<String> usernames = Bukkit.getOnlinePlayers().stream()
                 .filter(PointsUtils::isVisible)
                 .filter(x -> !hideSelf || !Objects.equals(x, context.getSender()))
                 .map(Player::getName)
-                .collect(Collectors.toSet());
+                .collect(Collectors.toCollection(HashSet::new));
 
-        if (showAllPlayers)
-            usernames.addAll(context.getRosePlugin().getManager(DataManager.class).getAccountToNameMap().values());
+        usernames.addAll(context.getRosePlugin().getManager(DataManager.class).getAllAccountNames());
 
         return new ArrayList<>(usernames);
     }
 
     public static boolean isVisible(Player player) {
         return player.getMetadata("vanished").stream().noneMatch(MetadataValue::asBoolean);
+    }
+
+    public static UUID getSenderUUID(CommandSender sender) {
+        if (sender instanceof Entity) {
+            return ((Entity) sender).getUniqueId();
+        } else {
+            return CONSOLE_UUID;
+        }
     }
 
 }

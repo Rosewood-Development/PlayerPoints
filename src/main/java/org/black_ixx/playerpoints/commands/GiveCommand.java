@@ -37,7 +37,7 @@ public class GiveCommand extends BasePointsCommand {
                 return;
             }
 
-            if (this.api.give(player.getFirst(), amount) && silentFlag == null) {
+            if (this.api.give(player.getFirst(), PointsUtils.getSenderUUID(sender), amount) && silentFlag == null) {
                 // Send message to receiver
                 Player onlinePlayer = Bukkit.getPlayer(player.getFirst());
                 if (onlinePlayer != null) {

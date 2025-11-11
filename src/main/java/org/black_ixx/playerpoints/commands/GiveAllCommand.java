@@ -25,14 +25,14 @@ public class GiveAllCommand extends BasePointsCommand {
     @RoseExecutable
     public void execute(CommandContext context, Integer amount, String includeOffline, String silentFlag) {
         this.rosePlugin.getScheduler().runTaskAsync(() -> {
+            CommandSender sender = context.getSender();
             if (includeOffline != null) {
                 this.rosePlugin.getManager(DataManager.class).offsetAllPoints(amount);
             } else {
                 List<UUID> playerIds = Bukkit.getOnlinePlayers().stream().map(Player::getUniqueId).collect(Collectors.toList());
-                this.api.giveAll(playerIds, amount);
+                this.api.giveAll(playerIds, PointsUtils.getSenderUUID(sender), amount);
             }
 
-            CommandSender sender = context.getSender();
             if (silentFlag == null) {
                 for (Player player : Bukkit.getOnlinePlayers()) {
                     this.localeManager.sendCommandMessage(player, "command-give-received", StringPlaceholders.builder("amount", PointsUtils.formatPoints(amount))

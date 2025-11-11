@@ -12,15 +12,21 @@ import dev.rosewood.rosegarden.database.SQLiteConnector;
 import dev.rosewood.rosegarden.manager.AbstractDataManager;
 import dev.rosewood.rosegarden.scheduler.task.ScheduledTask;
 import java.nio.charset.StandardCharsets;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Deque;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedDeque;
@@ -31,12 +37,15 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import org.black_ixx.playerpoints.config.SettingKey;
 import org.black_ixx.playerpoints.database.migrations._1_Create_Tables;
 import org.black_ixx.playerpoints.database.migrations._2_Add_Table_Username_Cache;
+import org.black_ixx.playerpoints.database.migrations._3_Add_Table_Transaction_Log;
 import org.black_ixx.playerpoints.listeners.PointsMessageListener;
 import org.black_ixx.playerpoints.models.PendingTransaction;
 import org.black_ixx.playerpoints.models.SortedPlayer;
 import org.black_ixx.playerpoints.models.TransactionType;
+import org.black_ixx.playerpoints.models.UpdateType;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -52,8 +61,7 @@ public class DataManager extends AbstractDataManager implements Listener {
     private LoadingCache<UUID, Integer> pointsCache;
     private final Map<UUID, Deque<PendingTransaction>> pendingTransactions;
     private final Map<UUID, String> pendingUsernameUpdates;
-    private final Map<UUID, String> accountToNameMap;
-    private final Map<String, UUID> nameToAccountMap;
+    private final Set<String> accountToNameMap;
     private boolean isModernSqlite;
 
     public DataManager(RosePlugin rosePlugin) {
@@ -61,8 +69,7 @@ public class DataManager extends AbstractDataManager implements Listener {
 
         this.pendingTransactions = new ConcurrentHashMap<>();
         this.pendingUsernameUpdates = new ConcurrentHashMap<>();
-        this.accountToNameMap = new ConcurrentHashMap<>();
-        this.nameToAccountMap = new ConcurrentHashMap<>();
+        this.accountToNameMap = Collections.newSetFromMap(new ConcurrentHashMap<>());
 
         Bukkit.getPluginManager().registerEvents(this, rosePlugin);
     }
@@ -83,7 +90,8 @@ public class DataManager extends AbstractDataManager implements Listener {
                 });
 
         this.updateTask = this.rosePlugin.getScheduler().runTaskTimerAsync(this::update, 10L, 10L);
-        this.accountUpdateTask = this.rosePlugin.getScheduler().runTaskTimerAsync(this::updateAccountUUIDMaps, 10L, org.black_ixx.playerpoints.config.SettingKey.CACHED_ACCOUNT_LIST_REFRESH_INTERVAL.get() * 20);
+        if (SettingKey.TAB_COMPLETE_SHOW_ALL_PLAYERS.get())
+            this.accountUpdateTask = this.rosePlugin.getScheduler().runTaskTimerAsync(this::updateAccountUUIDMaps, 10L, org.black_ixx.playerpoints.config.SettingKey.CACHED_ACCOUNT_LIST_REFRESH_INTERVAL.get() * 20);
 
         if (this.databaseConnector instanceof SQLiteConnector) {
             this.databaseConnector.connect(connection -> {
@@ -150,28 +158,24 @@ public class DataManager extends AbstractDataManager implements Listener {
     }
 
     private void updateAccountUUIDMaps() {
-        Map<UUID, String> accountToNameMap = new HashMap<>();
-        Map<String, UUID> nameToAccountMap = new HashMap<>();
+        Set<String> accountToNameMap = new HashSet<>();
         this.databaseConnector.connect(connection -> {
-            String accountUUIDMapQuery = "SELECT uuid, username FROM " + this.getTablePrefix() + "username_cache";
+            String accountUUIDMapQuery = "SELECT username FROM " + this.getTablePrefix() + "username_cache";
             try (Statement statement = connection.createStatement()) {
                 ResultSet result = statement.executeQuery(accountUUIDMapQuery);
-                while (result.next()) {
-                    UUID uuid = UUID.fromString(result.getString(1));
-                    String username = result.getString(2);
-                    accountToNameMap.put(uuid, username);
-                    nameToAccountMap.put(username, uuid);
-                }
+                while (result.next())
+                    accountToNameMap.add(result.getString(1));
             }
         });
 
         this.accountToNameMap.clear();
-        this.accountToNameMap.putAll(accountToNameMap);
-        this.nameToAccountMap.clear();
-        this.nameToAccountMap.putAll(nameToAccountMap);
+        this.accountToNameMap.addAll(accountToNameMap);
     }
 
-    public Map<UUID, String> getAccountToNameMap() {
+    /**
+     * @return a set of all account names registered by PlayerPoints, will be empty if tab-complete-show-all-players is false
+     */
+    public Set<String> getAllAccountNames() {
         return this.accountToNameMap;
     }
 
@@ -185,8 +189,7 @@ public class DataManager extends AbstractDataManager implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         this.pendingUsernameUpdates.put(player.getUniqueId(), player.getName());
-        this.accountToNameMap.put(player.getUniqueId(), player.getName());
-        this.nameToAccountMap.put(player.getName(), player.getUniqueId());
+        this.accountToNameMap.add(player.getName());
     }
 
     /**
@@ -217,7 +220,7 @@ public class DataManager extends AbstractDataManager implements Listener {
         // Apply any pending transactions
         if (transactions != null) {
             for (PendingTransaction transaction : transactions) {
-                switch (transaction.getType()) {
+                switch (transaction.getUpdateType()) {
                     case SET:
                         points = transaction.getAmount();
                         break;
@@ -268,7 +271,7 @@ public class DataManager extends AbstractDataManager implements Listener {
 
         if (generate.get()) {
             int startingBalance = org.black_ixx.playerpoints.config.SettingKey.STARTING_BALANCE.get();
-            this.setPoints(playerId, startingBalance);
+            this.setPoints(TransactionType.SET, playerId, "Starting balance", null, startingBalance);
             value.set(startingBalance);
         }
 
@@ -282,31 +285,35 @@ public class DataManager extends AbstractDataManager implements Listener {
     /**
      * Adds a pending transaction to set the player's points to a specified amount
      *
+     * @param transactionType The type of transaction
      * @param playerId The Player to set the points of
+     * @param sourceDescription The description of how the points were given
+     * @param source The UUID source of the points, nullable
      * @param amount The amount to set to
      * @return true if the transaction was successful, false otherwise
      */
-    public boolean setPoints(UUID playerId, int amount) {
+    public boolean setPoints(TransactionType transactionType, UUID playerId, String sourceDescription, UUID source, int amount) {
         if (amount < 0)
             return false;
 
-        this.getPendingTransactions(playerId).add(new PendingTransaction(TransactionType.SET, amount));
+        this.getPendingTransactions(playerId).add(new PendingTransaction(UpdateType.SET, transactionType, sourceDescription, source, amount));
         return true;
     }
 
     /**
      * Adds a pending transaction to offset the player's points by a specified amount
      *
+     * @param transactionType The type of transaction
      * @param playerId The Player to offset the points of
      * @param amount The amount to offset by
      * @return true if the transaction was successful, false otherwise
      */
-    public boolean offsetPoints(UUID playerId, int amount) {
+    public boolean offsetPoints(TransactionType transactionType, UUID playerId, String sourceDescription, UUID source, int amount) {
         int points = this.getEffectivePoints(playerId);
         if (points + amount < 0)
             return false;
 
-        this.getPendingTransactions(playerId).add(new PendingTransaction(TransactionType.OFFSET, amount));
+        this.getPendingTransactions(playerId).add(new PendingTransaction(UpdateType.OFFSET, transactionType, sourceDescription, source, amount));
         return true;
     }
 
@@ -334,7 +341,7 @@ public class DataManager extends AbstractDataManager implements Listener {
             for (Map.Entry<UUID, Deque<PendingTransaction>> entry : transactionsMap.entrySet()) {
                 UUID uuid = entry.getKey();
                 for (PendingTransaction transaction : entry.getValue()) {
-                    switch (transaction.getType()) {
+                    switch (transaction.getUpdateType()) {
                         case OFFSET:
                             try (PreparedStatement statement = connection.prepareStatement(offsetQuery)) {
                                 statement.setString(1, uuid.toString());
@@ -363,6 +370,8 @@ public class DataManager extends AbstractDataManager implements Listener {
                         default:
                             throw new IllegalStateException("Invalid transaction type");
                     }
+
+                    this.logTransaction(connection, uuid, transaction);
                 }
 
                 try (PreparedStatement statement = connection.prepareStatement(getQuery)) {
@@ -483,9 +492,8 @@ public class DataManager extends AbstractDataManager implements Listener {
         UUID uuid = UUID.randomUUID();
         this.pendingUsernameUpdates.put(uuid, accountName);
         int startingBalance = org.black_ixx.playerpoints.config.SettingKey.STARTING_BALANCE.get();
-        this.setPoints(uuid, startingBalance);
-        this.accountToNameMap.put(uuid, accountName);
-        this.nameToAccountMap.put(accountName, uuid);
+        this.setPoints(TransactionType.SET, uuid, "Starting balance", null, startingBalance);
+        this.accountToNameMap.add(accountName);
         return uuid;
     }
 
@@ -506,9 +514,6 @@ public class DataManager extends AbstractDataManager implements Listener {
             }
         });
 
-        String username = this.accountToNameMap.get(accountID);
-        if (username != null)
-            this.nameToAccountMap.remove(username);
         this.accountToNameMap.remove(accountID);
     }
 
@@ -627,10 +632,6 @@ public class DataManager extends AbstractDataManager implements Listener {
     }
 
     public UUID lookupCachedUUID(String username) {
-        UUID uuid = this.nameToAccountMap.get(username);
-        if (uuid != null)
-            return uuid;
-
         AtomicReference<UUID> value = new AtomicReference<>();
         this.databaseConnector.connect(connection -> {
             String query = "SELECT uuid FROM " + this.getTablePrefix() + "username_cache WHERE LOWER(username) = LOWER(?)";
@@ -643,6 +644,22 @@ public class DataManager extends AbstractDataManager implements Listener {
         });
 
         return value.get();
+    }
+
+    private void logTransaction(Connection connection, UUID receiver, PendingTransaction transaction) throws SQLException {
+        String query = "INSERT INTO " + this.getTablePrefix() + "transaction_log (transaction_type, description, source, receiver, amount) VALUES (?, ?, ?, ?, ?)";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, transaction.getTransactionType().name());
+            statement.setString(2, transaction.getSourceDescription());
+            if (transaction.getSource() == null) {
+                statement.setNull(3, Types.VARCHAR);
+            } else {
+                statement.setString(3, transaction.getSource().toString());
+            }
+            statement.setString(4, receiver.toString());
+            statement.setInt(5, transaction.getAmount());
+            statement.executeUpdate();
+        }
     }
 
     private String getPointsTableName() {
@@ -665,7 +682,8 @@ public class DataManager extends AbstractDataManager implements Listener {
     public List<Supplier<? extends DataMigration>> getDataMigrations() {
         return Arrays.asList(
                 _1_Create_Tables::new,
-                _2_Add_Table_Username_Cache::new
+                _2_Add_Table_Username_Cache::new,
+                _3_Add_Table_Transaction_Log::new
         );
     }
 

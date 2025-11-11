@@ -36,7 +36,7 @@ public class TakeCommand extends BasePointsCommand {
             }
 
             // Try to take points from the player
-            if (this.api.take(player.getFirst(), amount) && silentFlag == null) {
+            if (this.api.take(player.getFirst(), PointsUtils.getSenderUUID(sender), amount) && silentFlag == null) {
                 this.localeManager.sendCommandMessage(sender, "command-take-success", StringPlaceholders.builder("player", player.getSecond())
                         .add("currency", this.localeManager.getCurrencyName(amount))
                         .add("amount", PointsUtils.formatPoints(amount))
