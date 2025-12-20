@@ -59,7 +59,7 @@ public class PayCommand extends BasePointsCommand {
 
             int minAmount = SettingKey.MINIMUM_PAY_AMOUNT.get();
             if (amount < minAmount) {
-                this.localeManager.sendCommandMessage(player, "command-pay-minimum-amount", StringPlaceholders.of("amount", PointsUtils.formatPoints(minAmount), "currency", this.localeManager.getCurrencyName(amount)));
+                this.localeManager.sendCommandMessage(player, "command-pay-minimum-amount", StringPlaceholders.of("amount", PointsUtils.formatPoints(minAmount), "currency", this.localeManager.getCurrencyName(minAmount)));
                 return;
             }
 
