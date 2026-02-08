@@ -63,12 +63,13 @@ public class LeadCommand extends BasePointsCommand {
 
     private void send(CommandContext context) {
         this.rosePlugin.getScheduler().runTaskAsync(() -> {
-            List<SortedPlayer> leaders = this.rosePlugin.getManager(DataManager.class).getTopSortedPoints(null);
+            DataManager dataManager = this.rosePlugin.getManager(DataManager.class);
+            int leaderboardSize = dataManager.getLeaderboardSize();
 
             CommandSender sender = context.getSender();
             int limit = SettingKey.LEADERBOARD_PER_PAGE.get();
             int currentPage = this.pageMap.getOrDefault(sender.getName(), 0);
-            int numPages = (int) Math.ceil(leaders.size() / (double) limit);
+            int numPages = (int) Math.ceil(leaderboardSize / (double) limit);
 
             // Bounds check
             if (currentPage < 0) {
@@ -79,23 +80,19 @@ public class LeadCommand extends BasePointsCommand {
                 this.pageMap.put(sender.getName(), currentPage);
             }
 
+            List<SortedPlayer> leaders = dataManager.getTopSortedPoints(limit, currentPage * limit);
             if (leaders.isEmpty()) {
                 currentPage = 0;
                 numPages = 0;
             }
 
-            List<SortedPlayer> listedPlayers = leaders.stream()
-                    .skip((long) currentPage * limit)
-                    .limit(limit)
-                    .collect(Collectors.toList());
-
             this.localeManager.sendCommandMessage(sender, "command-lead-title", StringPlaceholders.builder("page", currentPage + 1)
                     .add("pages", numPages).build());
 
             // Page through
-            for (int i = 0; i < listedPlayers.size(); i++) {
+            for (int i = 0; i < leaders.size(); i++) {
                 int position = currentPage * limit + i + 1;
-                SortedPlayer player = listedPlayers.get(i);
+                SortedPlayer player = leaders.get(i);
 
                 this.localeManager.sendSimpleCommandMessage(sender, "command-lead-entry", StringPlaceholders.builder("position", position)
                         .add("player", player.getUsername())

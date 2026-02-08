@@ -35,7 +35,7 @@ public class ExportCommand extends BasePointsCommand {
             if (file.exists())
                 file.delete();
 
-            List<SortedPlayer> data = this.rosePlugin.getManager(DataManager.class).getTopSortedPoints(null);
+            List<SortedPlayer> data = this.rosePlugin.getManager(DataManager.class).getTopSortedPoints();
             FileConfiguration configuration = YamlConfiguration.loadConfiguration(file);
             ConfigurationSection pointsSection = configuration.createSection("Points");
             ConfigurationSection uuidSection = configuration.createSection("UUIDs");

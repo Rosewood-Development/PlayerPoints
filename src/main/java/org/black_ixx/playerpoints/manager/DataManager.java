@@ -432,12 +432,20 @@ public class DataManager extends AbstractDataManager implements Listener {
         return count.get() > 0;
     }
 
+    public List<SortedPlayer> getTopSortedPoints() {
+        return this.getTopSortedPoints(null, null);
+    }
+
     public List<SortedPlayer> getTopSortedPoints(Integer limit) {
+        return this.getTopSortedPoints(limit, null);
+    }
+
+    public List<SortedPlayer> getTopSortedPoints(Integer limit, Integer offset) {
         List<SortedPlayer> players = new ArrayList<>();
         this.databaseConnector.connect(connection -> {
             String query = "SELECT t." + this.getUuidColumnName() + ", username, points FROM " + this.getPointsTableName() + " t " +
                            "LEFT JOIN " + this.getTablePrefix() + "username_cache c ON t." + this.getUuidColumnName() + " = c.uuid " +
-                           "ORDER BY points DESC" + (limit != null ? " LIMIT " + limit : "");
+                           "ORDER BY points DESC" + (limit != null ? " LIMIT " + limit : "") + (limit != null && offset != null ? " OFFSET " + offset : "");
             try (Statement statement = connection.createStatement()) {
                 ResultSet result = statement.executeQuery(query);
                 while (result.next()) {
@@ -460,6 +468,20 @@ public class DataManager extends AbstractDataManager implements Listener {
             }
         });
         return players;
+    }
+
+    public int getLeaderboardSize() {
+        AtomicInteger size = new AtomicInteger();
+        this.databaseConnector.connect(connection -> {
+            String query = "SELECT COUNT(*) FROM " + this.getPointsTableName();
+            try (Statement statement = connection.createStatement()) {
+                ResultSet result = statement.executeQuery(query);
+                if (result.next()) {
+                    size.set(result.getInt(1));
+                }
+            }
+        });
+        return size.get();
     }
 
     public Map<UUID, Long> getOnlineTopSortedPointPositions() {
@@ -536,10 +558,10 @@ public class DataManager extends AbstractDataManager implements Listener {
                 }
                 statement.executeBatch();
             }
-
-            if (!cachedUsernames.isEmpty())
-                this.updateCachedUsernames(cachedUsernames);
         });
+
+        if (!cachedUsernames.isEmpty())
+            this.updateCachedUsernames(cachedUsernames);
     }
 
     public boolean importLegacyTable(String tableName) {

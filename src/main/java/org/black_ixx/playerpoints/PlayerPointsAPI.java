@@ -259,7 +259,7 @@ public class PlayerPointsAPI {
      * @return a List of all players sorted by the number of points they have.
      */
     public List<SortedPlayer> getTopSortedPoints() {
-        return this.plugin.getManager(DataManager.class).getTopSortedPoints(null);
+        return this.plugin.getManager(DataManager.class).getTopSortedPoints();
     }
 
     /**
