@@ -29,6 +29,7 @@ public class SettingKey implements SettingHolder {
     public static final RoseSetting<Boolean> TAB_COMPLETE_SHOW_ALL_PLAYERS = create("tab-complete-show-all-players", BOOLEAN, false, "When true, all players that have a PlayerPoints balance will show in tab complete.", "If false, only non-vanished online players will be displayed.");
     public static final RoseSetting<Integer> CACHED_ACCOUNT_LIST_REFRESH_INTERVAL = create("cached-account-list-refresh-interval", INTEGER, 300, "How often (in seconds) should we update the list of accounts for tab completion purposes?");
     public static final RoseSetting<Boolean> SHOW_NON_PLAYER_ACCOUNTS_ON_LEADERBOARDS = create("show-non-player-accounts-on-leaderboards", BOOLEAN, false, "Should we show non-player accounts on leaderboards?");
+    public static final RoseSetting<Boolean> LOG_TRANSACTIONS = create("log-transactions", BOOLEAN, true, "Should points transactions be logged to the playerpoints_transaction_log table in the database?", "This table is only able to be be queried manually but can be disabled if you do not intend to use it.");
     public static final RoseSetting<ConfigurationSection> VOTE = create("vote", "Votifier hook settings");
     public static final RoseSetting<Boolean> VOTE_ENABLED = create("vote.enabled", BOOLEAN, false, "If the votifier hook should be enabled");
     public static final RoseSetting<Integer> VOTE_AMOUNT = create("vote.amount", INTEGER, 100, "How many points should be awarded per vote");

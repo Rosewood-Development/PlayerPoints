@@ -63,6 +63,7 @@ public class DataManager extends AbstractDataManager implements Listener {
     private final Map<UUID, String> pendingUsernameUpdates;
     private final Set<String> accountToNameMap;
     private boolean isModernSqlite;
+    private boolean logTransactions;
 
     public DataManager(RosePlugin rosePlugin) {
         super(rosePlugin);
@@ -111,6 +112,8 @@ public class DataManager extends AbstractDataManager implements Listener {
         } else {
             this.isModernSqlite = false;
         }
+
+        this.logTransactions = SettingKey.LOG_TRANSACTIONS.get();
     }
 
     @Override
@@ -669,6 +672,9 @@ public class DataManager extends AbstractDataManager implements Listener {
     }
 
     private void logTransaction(Connection connection, UUID receiver, PendingTransaction transaction) throws SQLException {
+        if (!this.logTransactions)
+            return;
+
         String query = "INSERT INTO " + this.getTablePrefix() + "transaction_log (transaction_type, description, source, receiver, amount) VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, transaction.getTransactionType().name());
