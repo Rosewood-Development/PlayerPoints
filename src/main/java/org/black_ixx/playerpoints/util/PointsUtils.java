@@ -15,6 +15,8 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.UUID;
+import java.util.concurrent.Callable;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -111,6 +113,12 @@ public final class PointsUtils {
      */
     @SuppressWarnings("deprecation")
     public static void getPlayerByName(String name, Consumer<Tuple<UUID, String>> callback) {
+
+        if (SettingKey.USE_EXACT_SEARCH.get()) {
+            getPlayerByNameExact(name, callback);
+            return;
+        }
+
         Player player = Bukkit.getPlayer(name);
         if (player != null) {
             callback.accept(new Tuple<>(player.getUniqueId(), player.getName()));
@@ -197,4 +205,41 @@ public final class PointsUtils {
         }
     }
 
+    private static void getPlayerByNameExact(String name, Consumer<Tuple<UUID, String>> callback) {
+
+        Player player = Bukkit.getPlayerExact(name);
+        if (player != null) {
+            callback.accept(new Tuple<>(player.getUniqueId(), player.getName()));
+            return;
+        }
+
+        PlayerPoints plugin = PlayerPoints.getInstance();
+        Callable<Tuple<UUID, String>> playerDataFuture = () -> getPlayerByName(name);
+        callAsync(playerDataFuture)
+                .thenAccept(playerData -> {
+                    if (playerData == null) {
+                        plugin.getLogger().warning("Could not get player by name " + name);
+                    }
+                    plugin.getScheduler().runTask(() -> callback.accept(playerData));
+                })
+                .exceptionally(e -> {
+                    plugin.getLogger().severe("Error on search for user " + name + "; error: " + e.getMessage());
+                    return null;
+                });
+    }
+
+    private static <T> CompletableFuture<T> callAsync(Callable<T> callable) {
+        CompletableFuture<T> future = new CompletableFuture<>();
+
+        PlayerPoints.getInstance().getScheduler().runTaskAsync(() -> {
+            try {
+                T result = callable.call();
+                future.complete(result);
+            } catch (Exception e) {
+                future.completeExceptionally(e);
+            }
+        });
+
+        return future;
+    }
 }
