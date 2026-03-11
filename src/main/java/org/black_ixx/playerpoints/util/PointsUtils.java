@@ -19,7 +19,6 @@ import java.util.function.Consumer;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import org.black_ixx.playerpoints.PlayerPoints;
-import org.black_ixx.playerpoints.config.SettingKey;
 import org.black_ixx.playerpoints.manager.DataManager;
 import org.black_ixx.playerpoints.manager.LocaleManager;
 import org.black_ixx.playerpoints.models.Tuple;
@@ -111,7 +110,7 @@ public final class PointsUtils {
      */
     @SuppressWarnings("deprecation")
     public static void getPlayerByName(String name, Consumer<Tuple<UUID, String>> callback) {
-        Player player = Bukkit.getPlayer(name);
+        Player player = Bukkit.getPlayerExact(name);
         if (player != null) {
             callback.accept(new Tuple<>(player.getUniqueId(), player.getName()));
             return;
