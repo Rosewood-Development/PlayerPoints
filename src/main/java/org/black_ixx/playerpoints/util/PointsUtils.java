@@ -111,7 +111,7 @@ public final class PointsUtils {
      */
     @SuppressWarnings("deprecation")
     public static void getPlayerByName(String name, Consumer<Tuple<UUID, String>> callback) {
-        Player player = Bukkit.getPlayer(name);
+        Player player = Bukkit.getPlayerExact(name);
         if (player != null) {
             callback.accept(new Tuple<>(player.getUniqueId(), player.getName()));
             return;
