@@ -1,17 +1,17 @@
 import org.apache.tools.ant.filters.ReplaceTokens
 
 plugins {
-    id 'com.gradleup.shadow' version '9.0.0-beta10'
+    id 'com.gradleup.shadow' version '9.2.2'
     id 'java-library'
     id 'maven-publish'
 }
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
 group = 'org.black_ixx'
 version = '3.3.4-SNAPSHOT'
 
 java {
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
     disableAutoTargetJvm()
 }
 
@@ -69,7 +69,7 @@ shadowJar {
 publishing {
     publications {
         shadow(MavenPublication) { publication ->
-            project.shadow.component(publication)
+            from components.shadow
             artifactId = 'playerpoints'
             pom {
                 name = 'playerpoints'
