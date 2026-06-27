@@ -1,0 +1,130 @@
+# Plugin Message Prefix
+prefix: '&7[<g:#E8A230:#ECD32D>PlayerPoints&7] '
+
+# Currency
+currency-singular: Очки
+currency-plural: Очков
+currency-separator: ','
+currency-decimal: .
+number-abbreviation-thousands: к
+number-abbreviation-millions: м
+number-abbreviation-billions: млрд
+
+# Misc
+no-permission: '&cУ вас нет прав для этого!'
+only-player: '&cЭту команду может выполнить только игрок.'
+invalid-amount: '&cСумма должна быть положительным целым числом.'
+unknown-player: '&cИгрок не найден: &b%player%'
+unknown-account: '&cАккаунт не найден: &b%account%'
+unknown-command: '&cНеизвестная команда: &b%input%'
+invalid-argument: '&cНеверный аргумент: %message%.'
+command-usage: '&cИспользование: &b/%cmd% %args%'
+argument-handler-string: Строка не может быть пустой
+argument-handler-enum: 'Тип перечисления [%input%] %enum% не существует'
+argument-handler-enum-list: 'Тип перечисления [%input%] %enum% не существует. Допустимые типы: %types%'
+argument-handler-value: Значение [%input%] неверно
+votifier-voted: '&eСпасибо за голосование на %service%! &b%amount% &eдобавлено к вашему балансу.'
+leaderboard-empty-entry: Это можешь быть ты!
+command-cooldown: '&cПожалуйста, подождите перед повторным использованием этой команды.'
+
+# Base Command Message
+base-command-color: '&e'
+base-command-help: '&eИспользуйте &b/%cmd% help &eдля информации о командах.'
+
+# Help Command
+command-help-description: Отображает меню помощи... Вы пришли
+command-help-title: '&eДоступные команды:'
+command-help-list-description: '&8 - &d/%cmd% %subcmd% %args% &7- %desc%'
+command-help-list-description-no-args: '&8 - &d/%cmd% %subcmd% &7- %desc%'
+
+# Give Command
+command-give-description: Дать игроку очки
+command-give-success: '&b%player% &aполучил &b%amount% &a%currency%.'
+command-give-received: '&eВы получили &b%amount% &e%currency%.'
+
+# Give All Command
+command-giveall-description: Даёт очки всем онлайн-игрокам
+command-giveall-success: '&aДал &b%amount% &a%currency% всем онлайн-игрокам.'
+
+# Take Command
+command-take-description: Забрать очки у игрока
+command-take-success: '&aЗабрал &b%amount% &a%currency% у &b%player%&a.'
+command-take-taken: ''
+command-take-not-enough: '&b%player% &cне имеет достаточно %currency% для этого.'
+
+# Look Command
+command-look-description: Посмотреть очки игрока
+command-look-success: '&b%player% &eимеет &b%amount% &e%currency%.'
+
+# Pay Command
+command-pay-description: Заплатить игроку
+command-pay-self: '&cВы не можете заплатить самому себе!'
+command-pay-sent: '&aВы заплатили &b%player% %amount% &a%currency%.'
+command-pay-received: '&eВам заплатили &b%amount% &e%currency% от &b%player%&e.'
+command-pay-lacking-funds: '&cУ вас недостаточно %currency% для этого.'
+command-pay-minimum-amount: '&cМинимальная сумма для оплаты составляет &b%amount%&c %currency%.'
+
+# Set Command
+command-set-description: Установить очки игрока
+command-set-success: '&aУстановил %currency% для &b%player% &в значение &b%amount%&a.'
+
+# Reset Command
+command-reset-description: Сбросить очки игрока
+command-reset-success: '&aСброшены %currency% для &b%player%&a.'
+
+# Me Command
+command-me-description: Посмотреть свои очки
+command-me-success: '&eУ вас есть &b%amount% &e%currency%.'
+
+# Lead Command
+command-lead-description: Просмотреть таблицу лидеров
+command-lead-title: '&eТаблица лидеров &7(Страница #%page%/%pages%)'
+command-lead-entry: '&b%position%). &e%player% &7- &6%amount% %currency%'
+command-lead-usage: '&cНедопустимый номер страницы таблицы лидеров.'
+
+# Broadcast Command
+command-broadcast-description: Оповестить всех об очках игрока
+command-broadcast-message: '&b%player% &eимеет &b%amount% &e%currency%.'
+
+# Reload Command
+command-reload-description: Перезагружает плагин
+command-reload-reloaded: '&aФайлы конфигурации и локализации были перезагружены.'
+
+# Export Command
+command-export-description: Экспортирует данные в storage.yml
+command-export-success: '&aДанные сохранений экспортированы в storage.yml.'
+command-export-warning: '&cВнимание: Файл storage.yml уже существует. Если вы хотите его перезаписать, используйте &b/points export confirm&c.'
+
+# Import Command
+command-import-description: Импортирует данные из storage.yml
+command-import-success: '&aДанные сохранений импортированы из storage.yml.'
+command-import-no-backup: '&cИмпорт невозможен, файл storage.yml не существует. Вы можете создать его с помощью &b/points export &cи использовать для переноса данных между типами баз данных.'
+command-import-warning: '&cВнимание: Эта операция удалит все данные из активной базы данных и заменит их содержимым файла storage.yml. &cТекущий активный тип базы данных — &b&o&l%type%&c. &cЕсли вы абсолютно уверены, используйте &b/points import confirm&c.'
+
+# Convert Command
+command-convert-description: Загружает валютные данные из другого плагина
+command-convert-invalid: '&b%plugin% &cне является названием конвертируемого плагина валюты.'
+command-convert-invalid-currency: '&b%currency% &cне является валидной конвертируемой валютой.'
+command-convert-currency-required: '&cВы должны указать валюту для конвертации для этого плагина.'
+command-convert-success: '&aВалютные данные из &b%plugin% &aконвертируются.'
+command-convert-failure: '&cПроизошла ошибка при попытке конвертации данных. Проверьте консоль и сообщите об ошибках автору плагина PlayerPoints.'
+command-convert-warning: '&cВнимание: Эта операция удалит все данные из активной базы данных и заменит их данными из &b%plugin%&c. &cЕсли вы абсолютно уверены, используйте &b/points convert %plugin% confirm&c.'
+command-convert-warning-currency: '&cВнимание: Эта операция удалит все данные из активной базы данных и заменит их данными из &b%plugin%&c. &cЕсли вы абсолютно уверены, используйте &b/points convert %plugin% %currency% confirm&c.'
+
+# Account Command
+command-account-description: Создать или удалить аккаунт
+command-account-create-success: '&aАккаунт успешно создан: &b%account%'
+command-account-create-exists: '&cНе удалось создать аккаунт. Аккаунт с именем &b%account% &cуже существует.'
+command-account-create-name-invalid: '&cНе удалось создать аккаунт. Имена аккаунтов должны содержать от 3 до 16 символов и могут включать только буквы, цифры и подчеркивания.'
+command-account-delete-success: '&aАккаунт &b%account% &aуспешно удалён.'
+command-account-delete-does-not-exist: '&cНе удалось удалить аккаунт. Аккаунта с именем &b%account% &cне существует.'
+command-account-delete-warning: '&cВнимание: Эта операция удалит все данные аккаунта &b%account%&c. Если вы абсолютно уверены, используйте &b/points account delete %account% confirm&c.'
+
+# Import Legacy Command
+command-importlegacy-description: Импортировать устаревшую таблицу
+command-importlegacy-success: '&aУспешно импортированы устаревшие данные из &b%table%&a.'
+command-importlegacy-failure: '&cНе удалось импортировать устаревшие данные из &b%table%&c. Существует ли эта таблица?'
+command-importlegacy-only-mysql: '&cЭта команда доступна только при включенном MySQL.'
+
+# Version Command
+command-version-description: Показать информацию о версии PlayerPoints
